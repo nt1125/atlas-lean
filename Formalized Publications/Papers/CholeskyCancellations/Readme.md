@@ -1,0 +1,101 @@
+# Accidental Cancellations in Cholesky Factorization — Paper and Lean Formalization
+
+> **Layout note:** this `Readme.md` describes the Atlas-style re-layout at `Formalized Publications/Papers/CholeskyCancellations/` (formalization split into per-section files under `Formalization/`). The original repository, with the buildable Lake project, is at <https://github.com/nt1125/CholeskyCancellations>.
+
+A Lean 4 formalization of **[Accidental Cancellations in Cholesky Factorization](Papers/cholesky_cancellations.pdf)**
+by Nam Trang and Meta AI.
+
+> **Read the paper with its formalization:**
+> [⬇ Download the interactive paper](https://raw.githubusercontent.com/nt1125/CholeskyCancellations/main/docs/paper.html)
+> — a single page rendering the paper with a Lean box at every definition and result.
+> Open the downloaded file in a browser (internet needed for the math rendering);
+> it also opens directly from a local clone at [`Papers/cholesky_cancellations_interactive.html`](Papers/cholesky_cancellations_interactive.html).
+
+Sparse Cholesky codes allocate storage from the symbolic fill pattern,
+assuming no predicted-nonzero entry ever cancels. The paper asks whether
+some ordering can always avoid cancellation, and answers no:
+Conjecture 2 fails at order 4 and Conjecture 1 at every even order at
+least 6, while forests, strips, fans, and two chordal classes are always
+clean. Every result below is formalized in Lean alongside the
+mathematics: the formalization is part of the presentation, not a
+footnote.
+
+## Formalization status
+
+The paper's challenges and their Lean counterparts (short names; hover any
+link for the full dotted path):
+
+| | Paper result | Lean | Status |
+|---|---|---|---|
+| C1 | Conjecture 2.26 ([p. 11](Papers/cholesky_cancellations.pdf#page=11)): first-Schur conjecture | `first_schur_conjecture` in [F_ConjecturesAndFeasibility.lean](Formalization/Section_2_SettingVocabularyAndConjectures/F_ConjecturesAndFeasibility.lean), refuted by `first_schur_conjecture_refuted` in [A_Astar.lean](Formalization/Section_5_EvenCounterexamplesAndOrderFour/A_Astar.lean) | refuted in Lean (paper Theorem 5.1) |
+| C2 | Conjecture 2.27 ([p. 11](Papers/cholesky_cancellations.pdf#page=11)): fill-graph conjecture | `fill_graph_conjecture` in [F_ConjecturesAndFeasibility.lean](Formalization/Section_2_SettingVocabularyAndConjectures/F_ConjecturesAndFeasibility.lean), refuted by `fill_graph_conjecture_refuted` in [F_M2mPosDef.lean](Formalization/Section_5_EvenCounterexamplesAndOrderFour/F_M2mPosDef.lean) | refuted in Lean at every even order ≥ 6 (paper Theorem 5.8, `m2m_counterexample_all_orders`) |
+| C3 | Theorem 4.1: forests, every ordering clean | `forest_clean` in [A_Theorem41Determinants.lean](Formalization/Section_4_PositiveResults/A_Theorem41Determinants.lean) | proved, axiom-clean |
+| C4 | Theorem 4.8: strips, fans, one-triangle, edge-disjoint triangles | `positives` in [J_EdgeDisjointAndAssembly.lean](Formalization/Section_4_PositiveResults/J_EdgeDisjointAndAssembly.lean) (parts `strips_perMatrix`, `fans_perMatrix`, `one_triangle_perMatrix`, `edge_disjoint_perMatrix`, in the per-matrix form `PatternAdmitsPerMatrixCleanOrdering`; the paper's strategy form `PatternAdmitsAdaptiveStrategy` is defined in [E_StrategyVocabulary.lean](Formalization/Section_2_SettingVocabularyAndConjectures/E_StrategyVocabulary.lean) but not proved) | proved, axiom-clean |
+| C5 | Theorem 5.1: Conjecture 2 fails at order 4 (`A*`) | `astar_counts` in [A_Astar.lean](Formalization/Section_5_EvenCounterexamplesAndOrderFour/A_Astar.lean) | proved, axiom-clean |
+| C6 | Theorem 5.2 ([p. 27](Papers/cholesky_cancellations.pdf#page=27)): Conjecture 1 for orders at most 4 | `clean_of_order_le_four` in [C_ExistsCleanFour.lean](Formalization/Section_5_EvenCounterexamplesAndOrderFour/C_ExistsCleanFour.lean) | proved, axiom-clean |
+| C7 | Lemma 5.5 ([p. 28](Papers/cholesky_cancellations.pdf#page=28)): Pairing Lemma | `pairing` in [D_PairingLemma.lean](Formalization/Section_5_EvenCounterexamplesAndOrderFour/D_PairingLemma.lean) | proved, axiom-clean |
+| C8 | Corollary 5.6 ([p. 29](Papers/cholesky_cancellations.pdf#page=29)): magnitudes forced | `magnitudes_forced` in [D_PairingLemma.lean](Formalization/Section_5_EvenCounterexamplesAndOrderFour/D_PairingLemma.lean) | proved, axiom-clean |
+| C9 | Theorem 5.8 ([p. 30](Papers/cholesky_cancellations.pdf#page=30)): Conjecture 1 fails at every even order at least 6 | `m2m_counterexample` (unconditional form: `m2m_counterexample_all_orders`) in [F_M2mPosDef.lean](Formalization/Section_5_EvenCounterexamplesAndOrderFour/F_M2mPosDef.lean) | proved, axiom-clean |
+
+All remaining definitions, propositions, lemmas, corollaries, and
+examples of Sections 2–5 are likewise formalized in the files above
+and in [Section_3_CoreLemmas](Formalization/Section_3_CoreLemmas/)
+(Section 3). The statements-first phase (2026-10-17, user-directed)
+is complete: every formalized result is now a proved theorem, and
+the two conjectures (C1, C2) are stated and refuted in Lean, as in the paper (Theorems 5.1 and 5.8).
+
+## Contents
+
+- [Paper (PDF)](Papers/cholesky_cancellations.pdf) · [Paper with Lean boxes](Papers/cholesky_cancellations_interactive.html)
+- 1. Introduction ([PDF p. 1](Papers/cholesky_cancellations.pdf#page=1))
+- 2. Setting, vocabulary, and conjectures ([PDF p. 6](Papers/cholesky_cancellations.pdf#page=6))
+    - Core definitions and Section 2 results. [Section_2_SettingVocabularyAndConjectures](Formalization/Section_2_SettingVocabularyAndConjectures/)
+- 3. Core lemmas ([PDF p. 14](Papers/cholesky_cancellations.pdf#page=14))
+    - Exchange through Monotone. [Section_3_CoreLemmas](Formalization/Section_3_CoreLemmas/)
+- 4. Positive results ([PDF p. 20](Papers/cholesky_cancellations.pdf#page=20))
+    - Forests, strips, fans. [Section_4_PositiveResults](Formalization/Section_4_PositiveResults/)
+- 5. Even counterexamples and order four ([PDF p. 27](Papers/cholesky_cancellations.pdf#page=27))
+    - `A*`, order four, Pairing Lemma, `M_{2m}`. [Section_5_EvenCounterexamplesAndOrderFour](Formalization/Section_5_EvenCounterexamplesAndOrderFour/)
+- 6–8 and appendices: consequences, open problems, computational protocol — paper only for now (HTML phase).
+
+## Trust
+
+* Library (`Formalization/`) contains no `sorry`, `axiom`, `native_decide`,
+  `unsafe`, `partial def`, or `Float` — no holes, period. Unproved
+  results are stated as `Prop` definitions, which assert nothing.
+* Top-level proofs (once present) depend only on `propext`, `Classical.choice`,
+  `Quot.sound`.
+* The original repository's `bash scripts/audit.sh` checks all of this and fails on anything else; its step-4 check is ported here as `Comparator/comparator.py`.
+* `Comparator/cholesky_cancellations_comparator.json` is the machine-readable statement of record (theorem names + permitted axioms + acknowledged holes, if any);
+  `Comparator/comparator.py` (audit step 4) checks the library against it.
+
+## Building
+
+```
+lake exe cache get
+```
+fetches prebuilt Mathlib oleans. Elaborate `Formalization/` in dependency order with `lake env lean --root=Formalization`, writing oleans to a directory on `LEAN_PATH` (root module `CholeskyCancellations` last). `Formalization/` uses Atlas-style unprefixed imports and has no Lake lib; see [lakefile.toml](../../../lakefile.toml).
+
+## Authorship
+
+The paper was written by Nam Trang with Muse Spark via meta.ai, and reviewed by Paul Bendich and Patrick Tam.
+
+The formalization was produced and reviewed by Nam Trang, using Muse Code.
+
+It was agent-built with Muse Code (model watermelon-preview) from the leanPaperTemplate scaffold, with human direction and review by Nam Trang.
+
+## Versions
+
+Current version pinned at the top level of this repository: Lean v4.35.0 and Mathlib v4.35.0 in [lean-toolchain](../../../lean-toolchain), [lakefile.toml](../../../lakefile.toml), and [lake-manifest.json](../../../lake-manifest.json).
+
+Originally verified with Lean v4.34.0 and Mathlib v4.34.0 (Mathlib rev `5ed2965256430c3649e86755f9576b54eca72435`, pinned at scaffolding). Re-verified with:
+
+- Lean v4.35.0
+- Mathlib v4.35.0
+- MathlibExt v2
+
+The formalization does not import MathlibExt, so MathlibExt v2 is listed as the environment version (Atlas convention); the substantive check is Lean/Mathlib v4.35.0.
+
+## License
+
+Apache-2.0 — see [LICENSE](LICENSE).

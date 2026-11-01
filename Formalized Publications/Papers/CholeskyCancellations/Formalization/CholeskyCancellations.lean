@@ -1,0 +1,43 @@
+/-
+Copyright (c) 2026 Nam Trang. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Nam Trang
+-/
+
+import Section_2_SettingVocabularyAndConjectures.A_SchurComplement
+import Section_2_SettingVocabularyAndConjectures.B_PatternGraphs
+import Section_2_SettingVocabularyAndConjectures.C_Chordality
+import Section_2_SettingVocabularyAndConjectures.D_CleanPivots
+import Section_2_SettingVocabularyAndConjectures.E_StrategyVocabulary
+import Section_2_SettingVocabularyAndConjectures.F_ConjecturesAndFeasibility
+import Section_3_CoreLemmas.A_FarkasAlternative
+import Section_3_CoreLemmas.B_CleanApexAndTriangle
+import Section_3_CoreLemmas.C_ExchangeLemma
+import Section_3_CoreLemmas.D_UniversalAndRefill
+import Section_3_CoreLemmas.E_PrefixAndFreshFill
+import Section_3_CoreLemmas.F_CyclesAndMonotone
+import Section_4_PositiveResults.A_Theorem41Determinants
+import Section_4_PositiveResults.B_StripMachinery
+import Section_4_PositiveResults.C_StripHelpers
+import Section_4_PositiveResults.D_StripContinuation
+import Section_4_PositiveResults.E_FanContinuation
+import Section_4_PositiveResults.F_PeelingAndCycles
+import Section_4_PositiveResults.G_ExistsPeelVertex
+import Section_4_PositiveResults.H_OneTriangleSetup
+import Section_4_PositiveResults.I_OneTriangleContinuation
+import Section_4_PositiveResults.J_EdgeDisjointAndAssembly
+import Section_5_EvenCounterexamplesAndOrderFour.A_Astar
+import Section_5_EvenCounterexamplesAndOrderFour.B_SmallOrders
+import Section_5_EvenCounterexamplesAndOrderFour.C_ExistsCleanFour
+import Section_5_EvenCounterexamplesAndOrderFour.D_PairingLemma
+import Section_5_EvenCounterexamplesAndOrderFour.E_M2mMatrix
+import Section_5_EvenCounterexamplesAndOrderFour.F_M2mPosDef
+
+/-! # CholeskyCancellations — library root
+
+Imports every library module above (single lake lib, dependency order —
+files are ordered so each imports its predecessor; new modules slot in
+after their dependencies, never reshuffle). Paper correspondence and
+per-result status: see `README.md`; web rendering with a Lean box per
+result: `Papers/cholesky_cancellations_interactive.html`. The paper is
+*Accidental Cancellations in Cholesky Factorization* (`Papers/cholesky_cancellations.pdf`). -/
