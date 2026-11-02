@@ -88,6 +88,8 @@ It was agent-built with Muse Code (model watermelon-preview) from the leanPaperT
 
 Current version pinned at the top level of this repository: Lean v4.35.0 and Mathlib v4.35.0 in [lean-toolchain](../../../lean-toolchain), [lakefile.toml](../../../lakefile.toml), and [lake-manifest.json](../../../lake-manifest.json).
 
+**Formalization published October 31, 2026.**
+
 Originally verified with Lean v4.34.0 and Mathlib v4.34.0 (Mathlib rev `5ed2965256430c3649e86755f9576b54eca72435`, pinned at scaffolding). Re-verified with:
 
 - Lean v4.35.0
