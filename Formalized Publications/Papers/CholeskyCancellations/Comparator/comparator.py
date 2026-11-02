@@ -15,17 +15,18 @@ Exit 0 iff all checks pass. Run as `python3 Comparator/comparator.py` from
 `Formalized Publications/Papers/CholeskyCancellations/` (audit step 4 of the
 original repository).
 
-Note: this is the project's audit comparator (it checks the library against
-the statement of record). It is not an independent restatement of the paper
-in Lean; that Atlas-style comparator does not exist yet. Step 3 (axioms)
-needs a Lake project at this root, which is not set up yet; until then it
-reports "no axiom blocks parsed" and the script exits 1.
+Step 3 (axioms) elaborates `Formalization/` into a temporary directory
+(import-dependency order, bare `lean --root=Formalization` under the repo's
+`lake env` search path), then runs `Comparator/axioms.lean` against those
+oleans. This takes a few minutes and writes nothing into the repository.
 """
 
 import json
+import os
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -35,6 +36,87 @@ LIB = ROOT / "Formalization"
 def fail(msg):
     print(f"COMPARATOR FAIL: {msg}")
     return 1
+
+
+def _local_modules():
+    mods = {}
+    for p in sorted(LIB.rglob("*.lean")):
+        mods[".".join(p.relative_to(LIB).with_suffix("").parts)] = p
+    return mods
+
+
+def _dependency_order(mods):
+    order, state = [], {}
+
+    def visit(m):
+        if state.get(m) == 2:
+            return
+        if state.get(m) == 1:
+            raise ValueError(f"import cycle at {m}")
+        state[m] = 1
+        for line in mods[m].read_text().splitlines():
+            mm = re.match(r"import\s+([A-Za-z0-9_.]+)", line.strip())
+            if mm and mm.group(1) in mods:
+                visit(mm.group(1))
+        state[m] = 2
+        order.append(m)
+
+    for m in mods:
+        visit(m)
+    return order
+
+
+def _repo_root():
+    """First ancestor of the project dir holding a lakefile (repo root)."""
+    for cand in [ROOT, *ROOT.parents]:
+        if (cand / "lakefile.toml").exists() or (cand / "lakefile.lean").exists():
+            return cand
+    return ROOT
+
+
+def _lean_tool():
+    out = subprocess.run(
+        ["lake", "env", "sh", "-c", "command -v lean; printenv LEAN_PATH"],
+        capture_output=True, text=True, cwd=_repo_root(),
+    )
+    lines = out.stdout.splitlines()
+    if len(lines) < 2:
+        return None, None
+    return lines[0].strip(), lines[1].strip()
+
+
+def _axioms_output():
+    """Elaborate Formalization/ into a temp dir; return axioms.lean output."""
+    lean_bin, lake_path = _lean_tool()
+    if not lean_bin:
+        print("  (could not resolve lean via `lake env`)")
+        return None
+    mods = _local_modules()
+    try:
+        order = _dependency_order(mods)
+    except ValueError as e:
+        print(f"  ({e})")
+        return None
+    tmp = tempfile.mkdtemp(prefix="comparator-oleans-")
+    env = dict(os.environ)
+    env["LEAN_PATH"] = tmp + ":" + lake_path
+    for m in order:
+        target = Path(tmp, *m.split(".")).with_suffix(".olean")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        r = subprocess.run(
+            [lean_bin, f"--root={LIB}", "-o", str(target), str(mods[m])],
+            capture_output=True, text=True, env=env,
+        )
+        if r.returncode != 0:
+            err = (r.stdout + r.stderr).splitlines()
+            print(f"  (elaboration failed for {m}: "
+                  f"{err[0] if err else 'no output'})")
+            return None
+    r = subprocess.run(
+        [lean_bin, str(ROOT / "Comparator" / "axioms.lean")],
+        capture_output=True, text=True, env=env,
+    )
+    return r.stdout + r.stderr
 
 
 def main():
@@ -70,10 +152,9 @@ def main():
             print(f"  ok (acknowledged, {hole['status']}): {hole['name']}")
 
     print("=== 4c. axioms subset of permitted (+sorryAx iff holes acknowledged) ===")
-    out = subprocess.run(
-        ["lake", "env", "lean", "Comparator/axioms.lean"],
-        capture_output=True, text=True, cwd=ROOT,
-    ).stdout
+    out = _axioms_output()
+    if out is None:
+        return 1
     blocks = re.findall(
         r"'([^']+)' depends on axioms: \[(.*?)\]", out, re.DOTALL
     )
