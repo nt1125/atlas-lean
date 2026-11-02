@@ -1,4 +1,4 @@
-Appendix: computational protocol.
+# Appendix: computational protocol.
 
 No Lean files: this appendix is the paper's account of how the numerical claims were computed and checked.
 

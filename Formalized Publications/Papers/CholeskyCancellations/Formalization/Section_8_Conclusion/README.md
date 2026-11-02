@@ -1,4 +1,4 @@
-Section 8: conclusion.
+# Section 8: conclusion.
 
 No Lean files: this section is a prose summary.
 

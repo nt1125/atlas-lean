@@ -1,4 +1,4 @@
-Section 7: status and open problems.
+# Section 7: status and open problems.
 
 No Lean files: this section is prose — the status of the conjectures and open problems.
 

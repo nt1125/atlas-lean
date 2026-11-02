@@ -1,4 +1,4 @@
-Section 1: introduction.
+# Section 1: introduction.
 
 No Lean files: this section is prose — motivation, the shape of the results, and the two conjectures stated informally.
 

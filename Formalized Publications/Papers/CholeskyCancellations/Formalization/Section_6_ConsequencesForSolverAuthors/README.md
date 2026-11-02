@@ -1,4 +1,4 @@
-Section 6: consequences for solver authors.
+# Section 6: consequences for solver authors.
 
 No Lean files: this section is prose guidance for solver authors — which patterns are safe and what the counterexamples imply in practice.
 
