@@ -17,7 +17,7 @@ Reads cholesky_cancellations_comparator.json, then:
 
 Empty theorem_names passes vacuously (seed state, pre-scaffolding).
 Exit 0 iff all checks pass. Run as `python3 Comparator/comparator.py` from
-`Formalized Publications/Papers/CholeskyCancellations/` (audit step 4 of the
+`FormalizedPublications/Papers/CholeskyCancellations/` (audit step 4 of the
 original repository).
 
 Step 3 (axioms) elaborates `Formalization/` into a temporary directory

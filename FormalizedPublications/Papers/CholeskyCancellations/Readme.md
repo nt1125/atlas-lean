@@ -1,6 +1,6 @@
 # Accidental Cancellations in Cholesky Factorization — Paper and Lean Formalization
 
-> **Layout note:** this `Readme.md` describes the Atlas-style re-layout at `Formalized Publications/Papers/CholeskyCancellations/` (formalization split into per-section files under `Formalization/`). The original repository, with the buildable Lake project, is at <https://github.com/nt1125/CholeskyCancellations>.
+> **Layout note:** this `Readme.md` describes the Atlas-style re-layout at `FormalizedPublications/Papers/CholeskyCancellations/` (formalization split into per-section files under `Formalization/`). The original repository, with the buildable Lake project, is at <https://github.com/nt1125/CholeskyCancellations>.
 
 A Lean 4 formalization of **[Accidental Cancellations in Cholesky Factorization](Papers/cholesky_cancellations.pdf)**
 by Nam Trang and Meta AI.
