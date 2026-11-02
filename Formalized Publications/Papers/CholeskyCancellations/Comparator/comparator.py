@@ -9,7 +9,11 @@ Reads cholesky_cancellations_comparator.json, then:
      `sorry` proofs) exists;
   3. the axioms reported by `Comparator/axioms.lean` are a subset of
      permitted_axioms (no `sorryAx`: the JSON has no acknowledged holes,
-     matching the model's field set).
+     matching the model's field set);
+  4. the comparator/formalization separation holds: `Formalization/`
+     imports no comparator module, `Challenge.lean` imports only
+     Mathlib/MathlibExt plus the companion `Definitions`, and
+     `Definitions.lean` imports only Mathlib/MathlibExt.
 
 Empty theorem_names passes vacuously (seed state, pre-scaffolding).
 Exit 0 iff all checks pass. Run as `python3 Comparator/comparator.py` from
@@ -32,11 +36,30 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 LIB = ROOT / "Formalization"
+COMPARATOR_MODULES = {"Challenge", "Definitions", "cholesky_cancellations_comparator"}
 
 
 def fail(msg):
     print(f"COMPARATOR FAIL: {msg}")
     return 1
+
+
+def _imports(path):
+    mods = []
+    for line in path.read_text().splitlines():
+        mm = re.match(r"import\s+([A-Za-z0-9_.]+)", line.strip())
+        if mm:
+            mods.append(mm.group(1))
+    return mods
+
+
+def _is_mathlib_or_ext(mod):
+    return (
+        mod == "Mathlib"
+        or mod.startswith("Mathlib.")
+        or mod == "MathlibExt"
+        or mod.startswith("MathlibExt.")
+    )
 
 
 def _local_modules():
@@ -158,6 +181,33 @@ def main():
             rc = fail(f"{full} resolves nowhere") or 1
         else:
             print(f"  ok: {full}")
+
+    print("=== 4s. comparator/formalization separation ===")
+    separation_ok = True
+    for p in sorted(LIB.rglob("*.lean")):
+        for mod in _imports(p):
+            if mod in COMPARATOR_MODULES or mod.startswith("Comparator."):
+                rc = fail(
+                    f"{p.relative_to(ROOT)} imports comparator module {mod}"
+                ) or 1
+                separation_ok = False
+    challenge_path = ROOT / "Comparator" / "Challenge.lean"
+    if challenge_path.exists():
+        for mod in _imports(challenge_path):
+            if mod != "Definitions" and not _is_mathlib_or_ext(mod):
+                rc = fail(f"Challenge.lean imports disallowed module {mod}") or 1
+                separation_ok = False
+    definitions_path = ROOT / "Comparator" / "Definitions.lean"
+    if definitions_path.exists():
+        for mod in _imports(definitions_path):
+            if not _is_mathlib_or_ext(mod):
+                rc = fail(f"Definitions.lean imports disallowed module {mod}") or 1
+                separation_ok = False
+    if separation_ok:
+        print(
+            "  ok: Formalization imports no comparator module; "
+            "Challenge/Definitions stay on Mathlib/MathlibExt (+Definitions)"
+        )
 
     print("=== 4c. axioms subset of permitted ===")
     out = _axioms_output()
