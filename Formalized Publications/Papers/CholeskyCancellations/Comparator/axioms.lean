@@ -3,8 +3,9 @@
 -- refutations, fill/factor bridges, infeasibility and converse
 -- forms). `Comparator/comparator.py` (step 4c) parses this output, and
 -- cholesky_cancellations_comparator.json's theorem_names must match
--- this list. Run it via `lake env lean Comparator/axioms.lean` once a
--- Lake project exists at this root.
+-- this list. Run it via `lake env lean Comparator/axioms.lean` once
+-- the paper's `Formalization/` has been elaborated (root module
+-- `CholeskyCancellations` importable; see `../Readme.md`, Building).
 
 import CholeskyCancellations
 
