@@ -4,11 +4,12 @@
 
 Reads cholesky_cancellations_comparator.json, then:
   1. every named theorem resolves in the library (grep for its declaration);
-  2. every acknowledged hole resolves;
-  3. the axioms reported by `lake env lean Comparator/axioms.lean` are subset
-     of permitted_axioms, plus `sorryAx` ONLY if acknowledged_holes is
-     non-empty (soundness composition: the audit's hole-uniqueness pinning
-     makes the sorryAx attribution sound).
+  2. every named definition resolves in the library, and the challenge
+     module (challenge_module + ".lean", the independent restatement with
+     `sorry` proofs) exists;
+  3. the axioms reported by `Comparator/axioms.lean` are a subset of
+     permitted_axioms (no `sorryAx`: the JSON has no acknowledged holes,
+     matching the model's field set).
 
 Empty theorem_names passes vacuously (seed state, pre-scaffolding).
 Exit 0 iff all checks pass. Run as `python3 Comparator/comparator.py` from
@@ -139,19 +140,26 @@ def main():
         else:
             print(f"  ok: {full}")
 
-    print("=== 4b. acknowledged holes resolve ===")
-    for hole in spec.get("acknowledged_holes", []):
-        short = hole["name"].split(".")[-1]
+    print("=== 4b. definition names resolve; challenge module present ===")
+    challenge = ROOT / "Comparator" / (spec.get("challenge_module", "") + ".lean")
+    if not challenge.exists():
+        rc = fail(f"challenge module {challenge.name} missing") or 1
+    else:
+        print(f"  ok: challenge module {challenge.name} present")
+    for full in spec.get("definition_names", []):
+        rel = full.split(".", 1)[1] if "." in full else full
         hits = [
             p for p in LIB.rglob("*.lean")
-            if re.search(rf"(theorem|lemma|def)\s+{re.escape(short)}\b", p.read_text())
+            if re.search(
+                rf"(def|abbrev|structure|inductive|class)\s+{re.escape(rel)}\b",
+                p.read_text())
         ]
         if not hits:
-            rc = fail(f"hole {hole['name']} resolves nowhere") or 1
+            rc = fail(f"{full} resolves nowhere") or 1
         else:
-            print(f"  ok (acknowledged, {hole['status']}): {hole['name']}")
+            print(f"  ok: {full}")
 
-    print("=== 4c. axioms subset of permitted (+sorryAx iff holes acknowledged) ===")
+    print("=== 4c. axioms subset of permitted ===")
     out = _axioms_output()
     if out is None:
         return 1
@@ -165,8 +173,7 @@ def main():
             return rc
         print("  (no axiom blocks parsed — axioms.lean output unexpected)")
         return 1
-    allow_sorry = bool(spec.get("acknowledged_holes"))
-    allowed = set(permitted) | ({"sorryAx"} if allow_sorry else set())
+    allowed = set(permitted)
     for name, axlist in blocks:
         found = {a.strip() for a in axlist.split(",") if a.strip()}
         exotic = found - allowed
