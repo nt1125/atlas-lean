@@ -1,5 +1,5 @@
 {
-  "challenge_module": "cholesky_cancellations_comparator",
+  "challenge_module": "Challenge",
   "solution_module": "CholeskyCancellations",
   "theorem_names": [
     "CholeskyCancellations.astar_counts",
