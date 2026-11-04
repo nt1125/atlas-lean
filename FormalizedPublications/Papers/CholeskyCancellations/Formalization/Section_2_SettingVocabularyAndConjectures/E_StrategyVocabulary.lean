@@ -89,10 +89,11 @@ clean. This is the per-matrix existential reading of the paper's
 `def:strategy`) — not the paper's strategy reading. It is
 deliberately named for what it is: the ordering `σ` may be chosen
 after seeing all of `A`, with no requirement that its pivots be
-produced by one pivot-choice rule. The paper's Theorem 4.8 is
-itself stated as "Conjecture 1 holds for …", i.e. in exactly
-this per-matrix form, and `positives` proves this form. For the
-paper's strategy form, see `PatternAdmitsAdaptiveStrategy`:
+produced by one pivot-choice rule. Although the paper's Theorem
+4.8 is phrased as "Conjecture 1 holds for …", Definition 2.25
+reads that phrase in the adaptive strategy sense; `positives`
+proves only this weaker per-matrix form. For the paper's
+strategy form, see `PatternAdmitsAdaptiveStrategy`:
 it is a priori more restrictive (a strategy must make the same next
 choice for matrices agreeing up to the current level); whether it
 is strictly stronger is not established here, and the

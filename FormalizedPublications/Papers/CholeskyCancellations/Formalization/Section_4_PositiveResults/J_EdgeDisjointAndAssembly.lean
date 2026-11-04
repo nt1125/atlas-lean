@@ -303,11 +303,15 @@ theorem edge_disjoint_perMatrix {G : SimpleGraph (Fin n)}
 fans, (ii) chordal graphs with exactly one triangle, and
 (iii) chordal graphs with `ω ≤ 3` and pairwise edge-disjoint
 triangles (paper Theorem 4.8, `thm:positives`). Each class is
-stated in the per-matrix form — a clean ordering per realization
-— which is the form the paper's Theorem 4.8 is stated in; the
-stronger strategy form (`PatternAdmitsAdaptiveStrategy`, one
-pivot-choice rule for all realizations) is defined in
-`E_StrategyVocabulary.lean` but not proved here. The parts are proved by
+proved here in the per-matrix form — a clean ordering per
+realization. Through paper Definition 2.25, Theorem 4.8 asserts
+the stronger adaptive strategy form
+(`PatternAdmitsAdaptiveStrategy`, one pivot-choice rule for all
+realizations); that form is defined in
+`E_StrategyVocabulary.lean` but is not proved here, and Remark
+4.9's no-fixed-ordering witness is not formalized. What is proved
+is therefore weaker than Theorem 4.8 in the paper's defined sense.
+The parts are proved by
 `strips_perMatrix` and `fans_perMatrix` (State 0/1 inductions
 through `AdmitsCleanContinuation`),
 `one_triangle_perMatrix` (peeling endpoints of longest paths off
