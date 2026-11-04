@@ -63,11 +63,19 @@ the two conjectures (C1, C2) are stated and refuted in Lean, as in the paper (Th
 * Library (`Formalization/`) contains no `sorry`, `axiom`, `native_decide`,
   `unsafe`, `partial def`, or `Float` — no holes, period. Unproved
   results are stated as `Prop` definitions, which assert nothing.
-* Top-level proofs (once present) depend only on `propext`, `Classical.choice`,
+* Top-level proofs depend only on `propext`, `Classical.choice`,
   `Quot.sound`.
-* The original repository's `bash scripts/audit.sh` checks all of this and fails on anything else; its step-4 check is ported here as `Comparator/comparator.py`.
-* `Comparator/cholesky_cancellations_comparator.json` is the machine-readable statement of record (theorem names + permitted axioms + acknowledged holes, if any);
-  `Comparator/comparator.py` (audit step 4) checks the library against it.
+* For readers experienced with Lean, `Comparator/` holds the comparator
+  challenge `cholesky_cancellations_comparator.lean` and its configuration
+  `cholesky_cancellations_comparator.json`. The challenge restates the
+  paper's definitions independently of the solution (it imports only
+  Mathlib) and states the paper's main results with `sorry` proofs; the
+  configuration lists those results under `theorem_names` and the
+  definitions under `definition_names`. For the full check, run the
+  comparator as instructed in
+  [Validating a Lean Proof](https://lean-lang.org/doc/reference/4.35.0/ValidatingProofs/#validating-comparator):
+  it checks that the solution proves exactly these statements, with the
+  same definitions, using only the permitted axioms.
 
 ## Building
 

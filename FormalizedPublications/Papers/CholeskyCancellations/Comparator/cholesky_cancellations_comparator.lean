@@ -6,15 +6,21 @@ Authors: Nam Trang
 import Mathlib
 
 /-!
-# Comparator definitions: Cholesky cancellations
+# Comparator challenge: accidental cancellations in Cholesky factorization
 
-Independent restatement of the paper's definitions for the challenge
-in `Challenge.lean`. This file must NOT import the solution
-(`Formalization/`), otherwise changing a solution definition would
-change both sides of the comparison. It imports Mathlib only; the
-definitions duplicate the paper-facing definitions of the solution
-under the same names and are enumerated in `definition_names` in
-`cholesky_cancellations_comparator.json`.
+Challenge module for the comparator (see
+`cholesky_cancellations_comparator.json`). The definitions below are
+stated independently in this file, by design: they must NOT be imported
+from the solution (`Formalization/`), otherwise changing a solution
+definition would change both sides of the comparison and the comparator
+would certify nothing about the definitions themselves. They duplicate
+the paper-facing definitions of the solution under the same names, and
+every one of them is enumerated in `definition_names` in the JSON
+config. The theorems at the end are the paper's main results, stated
+with these challenge definitions and proved with `sorry` here; they are
+exactly the `theorem_names` of the JSON config, and the comparator
+checks that the solution proves the same statements (and uses the same
+definitions) with only the permitted axioms.
 -/
 
 open scoped Matrix
@@ -1048,5 +1054,141 @@ def m2mEigen (m : ℕ) (a b : ℝ) (c : Fin (2 * m)) : ℝ :=
 /-- Squared norm of column `c` of `m2mP m`. -/
 def m2mNorm (c : Fin (2 * m)) : ℝ :=
   ∑ x, m2mP m x c * m2mP m x c
+
+/-! ## Challenge theorems
+
+The paper's main results, in paper order. Each has the name and the
+statement of the corresponding theorem of the solution; every proof here
+is `sorry`, by design. -/
+
+variable {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ} {m : ℕ} {a b : ℝ}
+
+/-- Paper Theorem 4.1: if the pattern graph `G_A` is a forest, then every
+ordering is clean. -/
+theorem forest_clean {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
+    (hF : (patternGraph A).IsAcyclic) (σ : List (Fin n))
+    (hσ : IsOrdering σ) : IsCleanOrdering A σ := by
+  sorry
+
+
+/-- Paper Theorem 4.8 (per-matrix form): strip, fan, and chordal one-triangle / edge-disjoint-triangle patterns admit a clean ordering for every matrix with that pattern. -/
+theorem positives :
+    (∀ {n : ℕ} (G : SimpleGraph (Fin n)), IsStripPattern G →
+      PatternAdmitsPerMatrixCleanOrdering G)
+    ∧ (∀ {n : ℕ} (G : SimpleGraph (Fin n)), IsFanPattern G →
+        PatternAdmitsPerMatrixCleanOrdering G)
+    ∧ (∀ {n : ℕ} (G : SimpleGraph (Fin n)),
+        IsChordal G → ExactlyOneTriangle G → PatternAdmitsPerMatrixCleanOrdering G)
+    ∧ (∀ {n : ℕ} (G : SimpleGraph (Fin n)),
+        IsChordal G → G.cliqueNum ≤ 3 → TrianglesEdgeDisjoint G →
+          PatternAdmitsPerMatrixCleanOrdering G) := by
+  sorry
+
+
+/-- Paper Theorem 5.1: `A*` is SPD with spectrum `{9, 3, 3, 1}` (as its
+characteristic factorization), no ordering has a clean first Schur
+complement, and exactly 8 of its orderings are clean. -/
+theorem astar_counts :
+    astar.PosDef ∧
+      astar.charpoly
+        = (Polynomial.X - Polynomial.C 9) * (Polynomial.X - Polynomial.C 3) ^ 2
+          * (Polynomial.X - Polynomial.C 1) ∧
+      (∀ σ : List (Fin 4), IsOrdering σ → ¬ FirstSchurClean astar σ) ∧
+      {σ : List (Fin 4) | IsOrdering σ ∧ IsCleanOrdering astar σ}.ncard = 8 := by
+  sorry
+
+
+/-- Paper Theorem 5.1 / Conjecture 2.26 refuted: no ordering of the order-4 matrix A* has a clean first Schur complement, so the first Schur-complement conjecture is false. -/
+theorem first_schur_conjecture_refuted : ¬ first_schur_conjecture := by
+  sorry
+
+
+/-- Paper Theorem 5.2: every irreducible SPD matrix of order at most 4 has a clean ordering. -/
+theorem clean_of_order_le_four : ∀ {n : ℕ}, n ≤ 4 →
+    ∀ A : Matrix (Fin n) (Fin n) ℝ,
+    A.PosDef → IsIrreducible A →
+      ∃ σ : List (Fin n), IsOrdering σ ∧ IsCleanOrdering A σ := by
+  sorry
+
+
+/-- Paper Lemma 5.5 (Pairing Lemma): at a four-survivor level a feasible
+candidate family has at most four slots; one with four slots using every
+apex is a pairing configuration; and every pairing configuration is
+feasible (feasibility of the formal additive system `IsFeasibleAt`). -/
+theorem pairing (S W : Finset (Fin n)) (hW : W.card = 4)
+    (hWS : ∀ u ∈ W, u ∉ S) :
+    (∀ H : Set (Slot n), (∀ s ∈ H, CandidateSlot S W s) →
+        IsFeasibleAt H S → H.ncard ≤ 4)
+      ∧ (∀ H : Set (Slot n), (∀ s ∈ H, CandidateSlot S W s) →
+          IsFeasibleAt H S → H.ncard = 4 →
+            (∀ u ∈ W, ∃ s ∈ H, s.level = insert u S) →
+              ∃ π : Fin n → Fin n, PairingConfig π S W H)
+      ∧ (∀ π : Fin n → Fin n, ∀ H : Set (Slot n),
+          (∀ s ∈ H, CandidateSlot S W s) → PairingConfig π S W H →
+            IsFeasibleAt H S) := by
+  sorry
+
+
+/-- Paper Corollary 5.6: the pairing relations force the six
+log-magnitudes up to two parameters: cross-pair correlations of
+magnitudes `a`, `b` in the block `[[a, b], [b, a]]` and within-pair
+magnitudes `a * b`. -/
+theorem magnitudes_forced {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ)
+    (hA : A.PosDef) (S : Finset (Fin n)) (w₀ w₁ w₂ w₃ : Fin n)
+    (h0 : w₀ ∉ S) (h1 : w₁ ∉ S) (h2 : w₂ ∉ S) (h3 : w₃ ∉ S)
+    (h01 : w₀ ≠ w₁) (h02 : w₀ ≠ w₂) (h03 : w₀ ≠ w₃)
+    (h12 : w₁ ≠ w₂) (h13 : w₁ ≠ w₃) (h23 : w₂ ≠ w₃)
+    (hall : ∀ x ∈ ({w₀, w₁, w₂, w₃} : Finset (Fin n)),
+      ∀ y ∈ ({w₀, w₁, w₂, w₃} : Finset (Fin n)), x ≠ y →
+        schurEntry A S x y ≠ 0)
+    (e1 : logMag A S w₂ w₃ = logMag A S w₀ w₂ + logMag A S w₀ w₃)
+    (e2 : logMag A S w₂ w₃ = logMag A S w₁ w₂ + logMag A S w₁ w₃)
+    (e3 : logMag A S w₀ w₁ = logMag A S w₀ w₂ + logMag A S w₁ w₂)
+    (e4 : logMag A S w₀ w₁ = logMag A S w₀ w₃ + logMag A S w₁ w₃) :
+    logMag A S w₀ w₂ = logMag A S w₁ w₃ ∧
+    logMag A S w₀ w₃ = logMag A S w₁ w₂ ∧
+    logMag A S w₀ w₁ = logMag A S w₀ w₂ + logMag A S w₀ w₃ ∧
+    logMag A S w₂ w₃ = logMag A S w₀ w₂ + logMag A S w₀ w₃ ∧
+    ∃ a b : ℝ, 0 < a ∧ a < 1 ∧ 0 < b ∧ b < 1 ∧
+      |partialCorr A S w₀ w₂| = a ∧
+      |partialCorr A S w₁ w₃| = a ∧
+      |partialCorr A S w₀ w₃| = b ∧
+      |partialCorr A S w₁ w₂| = b ∧
+      |partialCorr A S w₀ w₁| = a * b ∧
+      |partialCorr A S w₂ w₃| = a * b := by
+  sorry
+
+
+/-- Paper Theorem 5.8: on the curve `a² + (1 - b²) a - 1 = 0` with
+`0 < b < a < 1`, `M_{2m}` is SPD with the stated eigenvalues (as a
+characteristic factorization), and for `m ≥ 3` it has no clean ordering. -/
+theorem m2m_counterexample : ∀ (m : ℕ) (a b : ℝ), 2 ≤ m →
+    a ^ 2 + (1 - b ^ 2) * a - 1 = 0 → 0 < b → b < a → a < 1 →
+      (m2mMatrix m a b).PosDef ∧
+        (m2mMatrix m a b).charpoly
+          = (Polynomial.X - Polynomial.C (1 + a * b + (a + b) * ((m : ℝ) - 1)))
+            * (Polynomial.X - Polynomial.C (1 - a * b + (a - b) * ((m : ℝ) - 1)))
+            * (Polynomial.X - Polynomial.C ((1 - a) * (1 - b))) ^ (m - 1)
+            * (Polynomial.X - Polynomial.C ((1 - a) * (1 + b))) ^ (m - 1) ∧
+        0 < 1 + a * b + (a + b) * ((m : ℝ) - 1) ∧
+        0 < 1 - a * b + (a - b) * ((m : ℝ) - 1) ∧
+        0 < (1 - a) * (1 - b) ∧ 0 < (1 - a) * (1 + b) ∧
+        (3 ≤ m → ∀ σ : List (Fin (2 * m)), IsOrdering σ →
+          ¬ IsCleanOrdering (m2mMatrix m a b) σ) := by
+  sorry
+
+
+/-- Paper Theorem 5.8: at every even order 2m (m >= 3) there is an irreducible SPD matrix with no clean ordering. -/
+theorem m2m_counterexample_all_orders (m : ℕ) (hm : 3 ≤ m) :
+    ∃ A : Matrix (Fin (2 * m)) (Fin (2 * m)) ℝ,
+      A.PosDef ∧ IsIrreducible A ∧
+        ∀ σ : List (Fin (2 * m)), IsOrdering σ →
+          ¬ IsCleanOrdering A σ := by
+  sorry
+
+
+/-- Paper Conjecture 2.27 refuted: the fill-graph conjecture is false. -/
+theorem fill_graph_conjecture_refuted : ¬ fill_graph_conjecture := by
+  sorry
 
 end CholeskyCancellations
