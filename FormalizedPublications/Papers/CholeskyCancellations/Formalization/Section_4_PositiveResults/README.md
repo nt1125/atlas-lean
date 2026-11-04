@@ -12,3 +12,4 @@ Reading order:
 8. H_OneTriangleSetup.lean — exactly-one-triangle and edge-disjoint-triangle predicates, index bookkeeping, and the long-path endpoint lemma, used by J_EdgeDisjointAndAssembly.lean.
 9. I_OneTriangleContinuation.lean — the one-triangle state machine and clean apexes; `one_triangle_perMatrix` (Theorem 4.8).
 10. J_EdgeDisjointAndAssembly.lean — chordal states, the edge-disjoint continuation, `edge_disjoint_perMatrix`, and the assembly `positives` (Theorem 4.8).
+11. K_AdaptiveAndFixedOrderings.lean — Theorem 4.8 in the adaptive strategy form (`positives_adaptive`), and Remark 4.9's triangle: `K₃` lies in every class of Theorem 4.8 and has no fixed clean ordering (`positives_no_fixed_ordering`).

@@ -1106,6 +1106,33 @@ theorem positives :
   sorry
 
 
+/-- Paper Theorem 4.8 (adaptive strategy form, paper Definition 2.25): each class admits one
+pivot rule, reading only the current level and Schur complement, that yields a clean ordering
+for every SPD realization. The edge-disjoint class needs `0 < n`. -/
+theorem positives_adaptive :
+    (∀ {n : ℕ} (G : SimpleGraph (Fin n)), IsStripPattern G →
+      PatternAdmitsAdaptiveStrategy G)
+    ∧ (∀ {n : ℕ} (G : SimpleGraph (Fin n)), IsFanPattern G →
+        PatternAdmitsAdaptiveStrategy G)
+    ∧ (∀ {n : ℕ} (G : SimpleGraph (Fin n)),
+        IsChordal G → ExactlyOneTriangle G → PatternAdmitsAdaptiveStrategy G)
+    ∧ (∀ {n : ℕ} (G : SimpleGraph (Fin n)), 0 < n →
+        IsChordal G → G.cliqueNum ≤ 3 → TrianglesEdgeDisjoint G →
+          PatternAdmitsAdaptiveStrategy G) := by
+  sorry
+
+
+/-- Paper Remark 4.9: the triangle `K₃` lies in every class of Theorem 4.8, and no fixed
+ordering is clean for all of its SPD realizations. -/
+theorem positives_no_fixed_ordering :
+    IsStripPattern (⊤ : SimpleGraph (Fin 3)) ∧ IsFanPattern (⊤ : SimpleGraph (Fin 3))
+    ∧ (IsChordal (⊤ : SimpleGraph (Fin 3)) ∧ ExactlyOneTriangle (⊤ : SimpleGraph (Fin 3)))
+    ∧ (IsChordal (⊤ : SimpleGraph (Fin 3)) ∧ (⊤ : SimpleGraph (Fin 3)).cliqueNum ≤ 3
+        ∧ TrianglesEdgeDisjoint (⊤ : SimpleGraph (Fin 3)))
+    ∧ ∀ σ : List (Fin 3), ¬ IsFixedOrderingFor (⊤ : SimpleGraph (Fin 3)) σ := by
+  sorry
+
+
 /-- Paper Theorem 5.1: `A*` is SPD with spectrum `{9, 3, 3, 1}` (as its
 characteristic factorization), no ordering has a clean first Schur
 complement, and exactly 8 of its orderings are clean. -/

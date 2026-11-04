@@ -86,18 +86,16 @@ def IsFixedOrderingFor (G : SimpleGraph (Fin n)) (σ : List (Fin n)) : Prop :=
 realization some (hence possibly matrix-dependent) ordering is
 clean. This is the per-matrix existential reading of the paper's
 "admits an adaptive clean ordering" (paper Definition 2.25,
-`def:strategy`) — not the paper's strategy reading. It is
+`def:strategy`), not the paper's strategy reading. It is
 deliberately named for what it is: the ordering `σ` may be chosen
 after seeing all of `A`, with no requirement that its pivots be
-produced by one pivot-choice rule. Although the paper's Theorem
-4.8 is phrased as "Conjecture 1 holds for …", Definition 2.25
-reads that phrase in the adaptive strategy sense; `positives`
-proves only this weaker per-matrix form. For the paper's
-strategy form, see `PatternAdmitsAdaptiveStrategy`:
-it is a priori more restrictive (a strategy must make the same next
-choice for matrices agreeing up to the current level); whether it
-is strictly stronger is not established here, and the
-development does not prove it for any class. -/
+produced by one pivot-choice rule. The paper's strategy form is
+`PatternAdmitsAdaptiveStrategy`. That form is a priori more
+restrictive, since a strategy must make the same next choice for
+matrices agreeing up to the current level. For `0 < n` the two
+forms are equivalent (`perMatrix_iff_adaptiveStrategy` in
+`J_AdaptiveBridge.lean`), so the per-matrix theorem `positives`
+yields the strategy form of Theorem 4.8 (`positives_adaptive`). -/
 def PatternAdmitsPerMatrixCleanOrdering (G : SimpleGraph (Fin n)) :
     Prop :=
   ∀ A : Matrix (Fin n) (Fin n) ℝ, A.PosDef → patternGraph A = G →
@@ -138,10 +136,11 @@ def AdaptiveCleanStrategy (G : SimpleGraph (Fin n))
 /-- `PatternAdmitsAdaptiveStrategy G`: some adaptive clean strategy
 (as in `AdaptiveCleanStrategy`) yields a clean ordering for every
 SPD realization of `G` — the paper's Definition 2.25 reading of
-"admits an adaptive clean ordering". This is the paper's strategy
-reading, a priori more restrictive than the per-matrix form;
-`PatternAdmitsPerMatrixCleanOrdering` is what `positives`
-proves. -/
+"admits an adaptive clean ordering". It implies the per-matrix
+form `PatternAdmitsPerMatrixCleanOrdering`, which is what
+`positives` proves (`adaptiveStrategy_implies_perMatrix`, below).
+For `0 < n` it also follows from it
+(`perMatrix_implies_adaptiveStrategy` in `J_AdaptiveBridge.lean`). -/
 def PatternAdmitsAdaptiveStrategy (G : SimpleGraph (Fin n)) : Prop :=
   ∃ next : Finset (Fin n) → Matrix (Fin n) (Fin n) ℝ → Fin n,
     AdaptiveCleanStrategy G next

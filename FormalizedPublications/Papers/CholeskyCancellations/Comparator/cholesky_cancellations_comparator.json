@@ -11,7 +11,9 @@
     "CholeskyCancellations.m2m_counterexample_all_orders",
     "CholeskyCancellations.magnitudes_forced",
     "CholeskyCancellations.pairing",
-    "CholeskyCancellations.positives"
+    "CholeskyCancellations.positives",
+    "CholeskyCancellations.positives_adaptive",
+    "CholeskyCancellations.positives_no_fixed_ordering"
   ],
   "definition_names": [
     "CholeskyCancellations.Survivors",

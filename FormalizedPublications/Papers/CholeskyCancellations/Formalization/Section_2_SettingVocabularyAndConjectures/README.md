@@ -11,3 +11,4 @@ Reading order:
 7. G_FillGraphChordal.lean — Remark 2.11: the fill graph contains the pattern graph, is nonempty for connected patterns, has σ as a perfect elimination ordering and is chordal, and contains the factor pattern.
 8. H_BlockDiagonal.lean — Remark 2.18: for a block-diagonal matrix, clean orderings of the blocks concatenate to a clean ordering, and the fill graph is the disjoint union of the blocks' fill graphs.
 9. I_CoveringReformulation.lean — Remark 2.30: a matrix has no clean ordering iff its active slots spoil every ordering, and Conjecture 2.27 fails for a pattern iff some blocking family is realizable for it.
+10. J_AdaptiveBridge.lean — Definition 2.25: a pattern on at least one vertex admits an adaptive clean strategy iff each of its SPD realizations has a clean ordering (`perMatrix_iff_adaptiveStrategy`); with no vertices there is no pivot rule at all.

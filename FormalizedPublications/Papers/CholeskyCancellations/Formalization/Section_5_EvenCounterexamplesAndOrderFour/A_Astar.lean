@@ -7,7 +7,7 @@ Authors: Nam Trang
 import Mathlib.LinearAlgebra.Matrix.Notation
 import Mathlib.Algebra.Order.Star.Real
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Basic
-import Section_4_PositiveResults.J_EdgeDisjointAndAssembly
+import Section_4_PositiveResults.K_AdaptiveAndFixedOrderings
 
 /-! # The `A*` counterexample (paper Section 5)
 

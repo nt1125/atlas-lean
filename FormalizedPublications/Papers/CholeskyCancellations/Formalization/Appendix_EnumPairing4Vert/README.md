@@ -4,4 +4,4 @@ This appendix contains enum-pairing-4vert.py, the script that enumerates the can
 
 Reading order:
 
-1. enum-pairing-4vert.py — the pairing-enumeration script: among the 2^12 = 4096 subsets, 182 feasible, with exactly 3 of maximum size 4, each a fixed-point-free involution.
+1. enum-pairing-4vert.py — the pairing-enumeration script: among the 2^12 = 4096 subsets, 182 are feasible and the maximum size is 4; 15 subsets have that size, and exactly 3 of them use all four pivots, each a fixed-point-free involution. It uses NumPy and SciPy; Appendix_SlotCounts/slot_counts.py reproduces these counts in exact arithmetic with the standard library only.

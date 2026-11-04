@@ -304,13 +304,14 @@ fans, (ii) chordal graphs with exactly one triangle, and
 (iii) chordal graphs with `ω ≤ 3` and pairwise edge-disjoint
 triangles (paper Theorem 4.8, `thm:positives`). Each class is
 proved here in the per-matrix form — a clean ordering per
-realization. Through paper Definition 2.25, Theorem 4.8 asserts
-the stronger adaptive strategy form
+realization. Through paper Definition 2.25, Theorem 4.8 also
+asserts the adaptive strategy form
 (`PatternAdmitsAdaptiveStrategy`, one pivot-choice rule for all
-realizations); that form is defined in
-`E_StrategyVocabulary.lean` but is not proved here, and Remark
-4.9's no-fixed-ordering witness is not formalized. What is proved
-is therefore weaker than Theorem 4.8 in the paper's defined sense.
+realizations). That form follows from this one by
+`perMatrix_implies_adaptiveStrategy` and is `positives_adaptive`
+in `K_AdaptiveAndFixedOrderings.lean`. The same file formalizes
+Remark 4.9's triangle witness: no fixed ordering suffices for any
+of the classes (`positives_no_fixed_ordering`).
 The parts are proved by
 `strips_perMatrix` and `fans_perMatrix` (State 0/1 inductions
 through `AdmitsCleanContinuation`),

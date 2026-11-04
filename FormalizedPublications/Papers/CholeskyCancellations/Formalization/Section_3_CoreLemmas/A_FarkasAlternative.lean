@@ -7,7 +7,7 @@ Authors: Nam Trang
 import Mathlib.Combinatorics.Digraph.Basic
 import Mathlib.Logic.Relation
 import Mathlib.Analysis.LocallyConvex.Separation
-import Section_2_SettingVocabularyAndConjectures.I_CoveringReformulation
+import Section_2_SettingVocabularyAndConjectures.J_AdaptiveBridge
 
 /-! # Farkas alternative (paper Section 3)
 

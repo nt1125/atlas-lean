@@ -126,9 +126,9 @@
 \flexabstract{
 Sparse Cholesky factorization allocates storage from the symbolic fill pattern $G^+$ alone, assuming that no position predicted nonzero ever cancels. Over-allocation never threatens correctness, so the assumption is safe in practice, but it leaves open an existential question, recorded by the first author in unpublished notes circulated in 2021 as two conjectures. Call an ordering $\sigma$ clean for an SPD matrix $A$ if every position predicted nonzero in $G^+_\sigma$ is nonzero in the factor $L$. Conjecture~1: every irreducible SPD matrix admits a clean ordering. Conjecture~2: every irreducible SPD matrix admits an ordering whose first Schur complement has no cancellation at a predicted-nonzero position.
 
-We refute both. Conjecture~1 fails at every even order $n\ge6$, via an explicit family $M_{2m}$ on the complete graph. The family is not exhibited but derived: classifying the zero-configurations available at a level with four surviving vertices forces a fixed-point-free involution --- hence even order --- forces the magnitudes $AB$ within pairs and blocks $[[A,B],[B,A]]$ across them, and forces the parameters onto the measure-zero curve $A^2+(1-B^2)A-1=0$. Conversely every point of that curve yields a counterexample at every even order, so the construction is a one-parameter family rather than a single matrix. Conjecture~2 already fails at order~$4$, via $A^*$ with spectrum $\{9,3,3,1\}$: none of its $24$ orderings has a cancellation-free first Schur complement, yet $8$ of them give a clean factor --- the refill phenomenon that separates the two conjectures, and the trap that invalidates any argument conflating Schur-complement zeros with factor zeros.
+We refute both. Conjecture~1 fails at every even order $n\ge6$, via an explicit family $M_{2m}$ on the complete graph. The family is not exhibited but derived: classifying the zero-configurations available at a level with four surviving vertices forces a fixed-point-free involution --- hence even order --- forces the magnitudes $AB$ within pairs and blocks $[[A,B],[B,A]]$ across them, and forces the parameters onto the measure-zero curve $A^2+(1-B^2)A-1=0$. Conversely every point of that curve with $0<B<1$ yields a counterexample at every even order $n\ge6$, so the construction is a one-parameter family rather than a single matrix. Conjecture~2 already fails at order~$4$, via $A^*$ with spectrum $\{9,3,3,1\}$: none of its $24$ orderings has a cancellation-free first Schur complement, yet $8$ of them give a clean factor --- the refill phenomenon that separates the two conjectures, and the trap that invalidates any argument conflating Schur-complement zeros with factor zeros.
 
-Positively, Conjecture~1 holds for every irreducible SPD matrix of order at most~$4$, by an elementary argument; order five we leave open, and we settle no further order exhaustively. At order six the complete graph $K_6$ fails, by the family above. Forests are clean in the strong form that every ordering is clean --- recovering, in factorization language, a covariance-faithfulness theorem of Malouche and Rajaratnam --- and so are $2$-path strips and dominating-vertex fans, chordal graphs with exactly one triangle (adaptively; no fixed ordering suffices), and chordal graphs of clique number at most $3$ with pairwise edge-disjoint triangles. Odd orders $n\ge7$ remain open, and we explain why the pairing argument that settles the even orders
+Positively, Conjecture~1 holds for every irreducible SPD matrix of order at most~$4$, by an elementary argument; order five we leave open, and we settle no further order exhaustively. At order six the complete graph $K_6$ fails, by the family above. Forests are clean in the strong form that every ordering is clean --- recovering, in factorization language, a covariance-faithfulness theorem of Malouche and Rajaratnam --- and so are $2$-path strips and dominating-vertex fans, chordal graphs with exactly one triangle, and chordal graphs of clique number at most $3$ with pairwise edge-disjoint triangles; on the last four classes the clean ordering must adapt to the matrix, since no fixed ordering suffices. Odd orders $n\ge7$ remain open, and we explain why the pairing argument that settles the even orders
 does not extend to them.
 }
 
@@ -162,7 +162,7 @@ In sum, the results in this paper do not contradict expert expectations, they li
 
 \subsection{The existential question}\label{sec:intro-exist}
 
-Fix a matrix, not an ordering, and ask whether some ordering is free of cancellation. Call $\sigma$ clean for $A$ if for every edge $\{j,k\}\in G^+_\sigma$, letting $S$ be the set of vertices preceding $\min(\sigma^{-1}(j),\sigma^{-1}(k))$ in $\sigma$, we have $(A/A_S)_{jk}\neq0$ — i.e. the entry is nonzero at the stage where the earlier of $j,k$ is pivoted, so the predicted nonzero is realized in $L$. This is the factor definition, not the Schur-complement definition requiring $(A/A_S)_{jk}\neq0$ for every stage $S$ whenever $\{j,k\}\in G_S$; the latter conflates Schur zeros with factor cancellations and would make $A^*$ have zero clean orderings, contradicting Theorem~\ref{thm:Astar} and the refill phenomenon. Two conjectures, recorded by Trang in unpublished notes in 2021, ask:
+Fix a matrix, not an ordering, and ask whether some ordering is free of cancellation. Call $\sigma$ clean for $A$ if for every edge $\{j,k\}\in G^+_\sigma$, letting $S$ be the set of vertices preceding $\min(\sigma^{-1}(j),\sigma^{-1}(k))$ in $\sigma$, we have $(A/A_S)_{jk}\neq0$ — i.e. the entry is nonzero at the stage where the earlier of $j,k$ is pivoted, so the predicted nonzero is realized in $L$. This is the factor definition, not the Schur-complement definition requiring $(A/A_S)_{jk}\neq0$ for every stage $S$ whenever $\{j,k\}\in G_S$; the latter conflates Schur zeros with factor cancellations and would give $A^*$ no clean ordering at all, unlike the eight of Theorem~\ref{thm:Astar}, because it ignores the refill phenomenon. Two conjectures, recorded by Trang in unpublished notes in 2021, ask:
 \newline
 
 \noindent \textbf{Conjecture~1.} Every irreducible SPD matrix admits a clean ordering.
@@ -187,11 +187,11 @@ We answer the existential question negatively in general and positively on a sub
 
 Conjecture~2 is false at order~4 (Theorem~\ref{thm:Astar}): an explicit matrix $A^*$ with spectrum $\{9,3,3,1\}$ has no ordering whose first Schur complement is cancellation-free, although $8$ of its $24$ orderings give a clean factor -- the refill phenomenon in its simplest form.
 
-Conjecture~1 holds for $n\le4$ by an elementary case analysis of the six connected patterns on four vertices, with no computation (Theorem~\ref{thm:leq4}), and is false at every even order at least~6 (Theorem~\ref{thm:M2m}), via a family $M_{2m}$ built from a pairing of the vertices, with within-pair entries of magnitude $AB$ and cross-pair blocks $[[A,B],[B,A]]$. The family is not exhibited but derived: at any level with four surviving vertices, exactly three of the $4096=2^{12}$ candidate zero-configurations cover all four pivots, and each is a fixed-point-free involution (Lemma~\ref{lem:pairing}). The three magnitudes and the block structure are forced as the unique solution of the resulting additive system; the requirement of a fixed-point-free involution is precisely why the order must be even. The parameters are forced onto the measure-zero curve $A^2+(1-B^2)A-1=0$, and conversely every point of that curve with $0<B<1$ yields a counterexample (Remark~\ref{rem:curve-family}), so the construction is a one-parameter family; the instance $B=1/2$, with $A=(-3+\sqrt{73})/8$, is the one we verify explicitly.
+Conjecture~1 holds for $n\le4$ by an elementary case analysis of the six connected patterns on four vertices, with no computation (Theorem~\ref{thm:leq4}), and is false at every even order at least~6 (Theorem~\ref{thm:M2m}), via a family $M_{2m}$ built from a pairing of the vertices, with within-pair entries of magnitude $AB$ and cross-pair blocks $[[A,B],[B,A]]$. The family is not exhibited but derived: at any level with four surviving vertices, exactly three of the $4096=2^{12}$ candidate zero-configurations are feasible and use all four vertices as pivots, and each is a fixed-point-free involution (Lemma~\ref{lem:pairing}). The three magnitudes and the block structure are forced as the unique solution of the resulting additive system; the requirement of a fixed-point-free involution is precisely why the order must be even. The parameters are forced onto the measure-zero curve $A^2+(1-B^2)A-1=0$, and conversely every point of that curve with $0<B<1$ yields a counterexample (Remark~\ref{rem:curve-family}), so the construction is a one-parameter family; the instance $B=1/2$, with $A=(-3+\sqrt{73})/8$, is the one we verify explicitly.
 
-Order~5 remains open (Section~\ref{sec:status}). At order six the complete graph $K_6$ fails, by Theorem~\ref{thm:M2m}, and the single $14$-edge pattern $K_6-e$ remains open.
+Order~5 remains open (Section~\ref{sec:status}). At order six the complete graph $K_6$ fails, by Theorem~\ref{thm:M2m}; the other connected patterns of order six, the $14$-edge pattern $K_6-e$ among them, remain open.
 
-Structural classes. Independently of the order-by-order picture we prove Conjecture~1 for forests in the strong form above; for 2-path strips and dominating-vertex fans; for chordal graphs with exactly one triangle, adaptively, with an explicit demonstration that no fixed ordering suffices; and for chordal graphs of clique number at most $3$ whose triangles are pairwise edge-disjoint.
+Structural classes. Independently of the order-by-order picture we prove Conjecture~1 for forests in the strong form above; for 2-path strips and dominating-vertex fans; for chordal graphs with exactly one triangle; and for chordal graphs of clique number at most $3$ whose triangles are pairwise edge-disjoint. Beyond forests the clean ordering must adapt to the matrix: the triangle lies in each of these classes, and no fixed ordering is clean for every SPD matrix whose pattern is a triangle (Remark~\ref{rem:no-fixed}).
 
   The counterexamples refuting both conjectures, and the structural classes of Section \ref{sec:positive} beyond forests, were found with AI assistance and insight; AI finds the counterexamples in Section \ref{sec:even}, provides the calculations showing the counterexamples work, and comes up with key ideas for the proofs in Section \ref{sec:positive}. 
 
@@ -199,8 +199,8 @@ Odd orders at least~7 remain open. The reason is structural rather than computat
 classification of Lemma~\ref{lem:pairing} that forces the even construction requires exactly four
 surviving vertices, and its injectivity step fails at five, so parity confers no protection at odd
 orders. Remark~\ref{rem:even-needed} records this together with the two computations that delimit the
-position --- no scheme leaving one survivor at every vertex exists at order five, and exhaustive
-search at order seven is infeasible.
+position --- no scheme leaving one survivor at every vertex exists at order five, and an exhaustive
+search at order seven did not terminate.
 
 \subsection{Method}
 
@@ -222,7 +222,7 @@ practice that Section~\ref{sec:practical} addresses: a symbolic phase allocates 
 a numeric phase fills that structure in. Demmel's lecture notes~\cite{Demmel} state the underlying
 assumption explicitly. Our results separate two readings of it: as an allocation bound it is correct,
 since the numeric pattern is always contained in the symbolic one (Definition~\ref{def:numeric}), but
-as an existential statement about orderings it is false from order six onwards.
+as an existential statement about orderings it is false at every even order from six onwards.
 
 \emph{Chordal graphs.} The positive results of Section~\ref{sec:positive} proceed by choosing
 simplicial pivots, so they rest on the classical theory: Dirac's theorem that a chordal graph has a
@@ -270,9 +270,9 @@ transposition theorem~\cite{Stiemke}, a refinement of Gordan's~\cite{Gordan}.
 Section~\ref{sec:setting} sets notation and states conjectures. Section~\ref{sec:core} proves core lemmas. Section~\ref{sec:positive} proves positive results including PEO-insufficiency witness. Section~\ref{sec:even} proves Pairing Lemma, derives $M_{2m}$, and states $A^*$. Section~\ref{sec:status} states open problems and established results. Appendix gives computational protocol. Figures illustrate the forest path formula, the refill mechanism, the strip induction, and the pairing structure of $M_{2m}$.
 
 \subsection{Why it matters}\label{sec:why}
-These results close a foundational gap between theory and practice felt in several communities. For numerical linear algebra and sparse direct solvers, symbolic factorization allocates $G^+$ from the graph alone assuming no cancellation; we show the assumption is safe for correctness (over-allocation) yet false existentially: $G^L_\sigma=G^+_\sigma$ cannot be guaranteed for all SPD matrices, the first failure occurring at order $6$ ($K_6$, via $M_6$). Order $4$ already obstructs the weaker first-Schur version ($A^*$: $0/24$ stage-$1$ clean), while its $8/24$ clean factors show that refill separates the two questions.
+These results close a foundational gap between theory and practice felt in several communities. For numerical linear algebra and sparse direct solvers, symbolic factorization allocates $G^+$ from the graph alone assuming no cancellation; we show the assumption is safe for correctness (over-allocation) yet false existentially: $G^L_\sigma=G^+_\sigma$ cannot be guaranteed for all SPD matrices, the smallest known failure occurring at order $6$ ($K_6$, via $M_6$; order five is open). Order $4$ already obstructs the weaker first-Schur version ($A^*$: $0/24$ stage-$1$ clean), while its $8/24$ clean factors show that refill separates the two questions.
 
-For graph theory and combinatorial matrix theory, we map the boundary of when a chordal completion can be realized without algebraic accident: forests are strongly clean (every ordering clean), $2$-path strips, fans, one-triangle adaptive, and edge-disjoint triangles with $\omega\le3$ are clean, while $K_6$ fails. The failure requires near-completeness rather than density or clique number alone, and the $4$-vertex pairing involution forced on the curve $A^2+(1-B^2)A-1=0$ explains why.
+For graph theory and combinatorial matrix theory, we map the boundary of when a chordal completion can be realized without algebraic accident: forests are strongly clean (every ordering clean), $2$-path strips, fans, one-triangle adaptive, and edge-disjoint triangles with $\omega\le3$ are clean, while $K_6$ fails. Beyond order four, every positive class has clique number at most $3$, while the failures we construct are complete graphs; the $4$-vertex pairing involution forced on the curve $A^2+(1-B^2)A-1=0$ explains how these fail, and where the boundary lies in between is open.
 
 For statistics, graphical models, and causal inference, a cancellation $(A/A_S)_{jk}=0$ is a failure of faithfulness. We re-derive, in factorization language, Malouche and Rajaratnam's result that forests are faithful in the strong form every ordering clean (proved under a different name fifteen years ago, never cited in the numerical literature that assumes it). We exhibit measure-zero unfaithful $M_{2m}$ on $K_{2m}$ with $A^2+(1-B^2)A-1=0$, and explain why unfaithfulness has measure zero (faithfulness is generic) yet coexists with existential failure.
 
@@ -590,9 +590,14 @@ A \emph{fixed ordering} for a pattern $G$ is a single permutation $\sigma$, chos
 be used for every SPD matrix with $G_A=G$. An \emph{adaptive strategy} chooses each pivot as a
 function of the current matrix $A/A_S$; it therefore produces, for each SPD $A$ with $G_A=G$, an
 ordering $\sigma(A)$. We say $G$ \emph{admits an adaptive clean ordering} if some adaptive strategy
-yields a clean ordering for every SPD $A$ with $G_A=G$. Theorem~\ref{thm:positives}(ii) shows the
-distinction is real: there are patterns admitting an adaptive clean ordering for which no fixed
-$\sigma$ is clean for all matrices. To \emph{peel} a simplicial survivor $v$ is to pivot at it; since
+yields a clean ordering for every SPD $A$ with $G_A=G$. This asks no more than a clean ordering for
+each matrix: if every SPD $A$ with $G_A=G$ has a clean ordering, then $G$ admits an adaptive clean
+ordering, and the converse is immediate. Indeed, whether the pivots still to come can be completed
+cleanly from a level $S$ depends only on $S$, on $G$ and on the current matrix $A/A_S$, by
+Lemma~\ref{lem:quotient} and Proposition~\ref{prop:fillpath}; so the strategy that pivots a vertex
+beginning such a completion produces a clean ordering for every $A$ that has one. A fixed ordering
+is a genuinely stronger demand: Remark~\ref{rem:no-fixed} shows that the triangle admits an adaptive
+clean ordering but no fixed $\sigma$ that is clean for all matrices with that pattern. To \emph{peel} a simplicial survivor $v$ is to pivot at it; since
 $N(v)$ is a clique, no fill is created, and if $v$ is pendant then no pair of survivors is updated at
 all, so peeling a pendant vertex can neither create nor destroy a zero. The two named moves
 \emph{END} and \emph{SECOND} used for strips in Section~\ref{sec:positive} are, respectively, peeling
@@ -766,7 +771,7 @@ block-cut tree & bipartite tree of blocks and cut vertices; leaves are blocks\\
 \subsection{Roadmap and Stiemke}
 \label{sec:roadmap}
 \begin{humanblock}
-Our infeasibility arguments all rest on a single linear-algebraic alternative. Let $T$ be a real matrix. Stiemke's lemma \cite{Stiemke,Gordan} states that exactly one of the following holds: either there is a strictly positive vector $t>0$ with $Tt=0$, or there is a vector $y$ such that $y^\top T\ge0$ and $y^\top T\neq0$. We use the alternative in the second direction. To show that an additive system $Tt=0$ has no strictly positive solution, it suffices to exhibit one such $y$, and because $T$ has integer entries in all of our applications, $y$ may be taken with integer entries as well. Each $y$ is therefore an exact rational certificate that can be checked by hand, with no appeal to floating-point computation. The lemmas of this section fall into four families, which we describe in turn. The first family derives local obstructions from the positivity of $2\times2$ principal minors. The Exchange Lemma~\ref{lem:exchange} shows that two cancellation routes through the same pair of vertices cannot both occur. The Triangle Lemma~\ref{lem:tri} applies this to a triangle and concludes that at most one of its three apex routes can cancel, so at least two of its vertices cancel no pair of the triangle. The Max-Edge Lemma~\ref{lem:maxedge} turns the same inequality into a pivot selection rule: the pair of largest log-magnitude supplies a pivot whose partner survives. The second family consists of maximality arguments that produce safe pivots at a given level. Dense Safety~\ref{lem:dense} shows that a universal vertex cannot cancel the pair of largest log-magnitude incident to it, and the Universal Successor Lemma~\ref{lem:univsucc} shows that the weakest neighbour of a universal vertex is itself universal after that vertex is eliminated. Together they let a strategy keep choosing universal pivots. The third family governs how zeros persist, propagate, and are destroyed as the level grows. The Zero-leg Lemma~\ref{lem:zeroleg} shows that when one leg of a route vanishes the corresponding entry is unchanged by the elimination, so a zero already present is carried forward. The Prefix Lemma~\ref{lem:prefix} runs this backwards: a zero at a predicted-nonzero position must originate at an apex, which yields Corollary~\ref{cor:tri-nec}, that only an edge lying in a triangle of the fill graph can ever cancel. In the opposite direction, Fact~1~\ref{lem:fact1} shows that eliminating a universal vertex destroys every pre-existing zero among the survivors, because the update contributes a nonzero product; this is the refill mechanism in its simplest form. The Refill Lemma~\ref{lem:refill} is its structural counterpart under the hypothesis $\omega(G_A)\le3$: a cancelled pair lying in a second triangle forces the two apexes to be non-adjacent, since otherwise the four vertices would form a $K_4$, and the second apex then restores the entry. Finally, Fresh fill~\ref{lem:fresh} shows that a fill edge is nonzero at the moment it is created, though it may cancel at a later level, and the Nesting Lemma~\ref{lem:nesting} shows that a pair cannot be zero at two consecutive levels without one of its legs vanishing. The fourth family establishes infeasibility of the additive system and the monotonicity that makes exhaustive search sound. A cancellation relation reads $t_{jk}=t_{ji}+t_{ki}$ with all terms positive, so each relation strictly decreases the log-magnitude along the arcs of the digraph of Definition~\ref{def:arcdigraph}. The General Cycle Lemma~\ref{lem:cycle} concludes that a directed cycle is impossible, since it would give $t_x>\dots>t_x$. The 4-cycle Lemma~\ref{lem:4cycle} is the instance of this used in the pairing classification of Lemma~\ref{lem:pairing}. The Monotone Lemma~\ref{lem:monotone} states that unrealizability is inherited by supersets of a slot family, which is what allows the search to restrict attention to minimal blocking families. Underlying all of these is the quotient property of Schur complements, Lemma~\ref{lem:quotient}, which is what licenses the staged computations: eliminating a level and then one further vertex agrees with eliminating the enlarged level in one step. In summary, the dependencies run Exchange $\to$ Triangle $\to$ Max-Edge $\to$ Dense Safety and Universal Successor; Zero-leg $\to$ Prefix $\to$ Fresh fill and Nesting; General Cycle $\to$ 4-cycle $\to$ Pairing Lemma; and the Monotone Lemma closes the search.
+Our infeasibility arguments all rest on a single linear-algebraic alternative. Let $T$ be a real matrix. Stiemke's lemma \cite{Stiemke,Gordan} states that exactly one of the following holds: either there is a strictly positive vector $t>0$ with $Tt=0$, or there is a vector $y$ such that $y^\top T\ge0$ and $y^\top T\neq0$. We use the alternative in the second direction. To show that an additive system $Tt=0$ has no strictly positive solution, it suffices to exhibit one such $y$, and because $T$ has integer entries in all of our applications, $y$ may be taken with integer entries as well. Each $y$ is therefore an exact rational certificate that can be checked by hand, with no appeal to floating-point computation. The lemmas of this section fall into four families, which we describe in turn. The first family derives local obstructions from the positivity of $2\times2$ principal minors. The Exchange Lemma~\ref{lem:exchange} shows that two cancellation routes through the same pair of vertices cannot both occur. The Triangle Lemma~\ref{lem:tri} applies this to a triangle and concludes that at most one of its three apex routes can cancel, so at least two of its vertices cancel no pair of the triangle. The Max-Edge Lemma~\ref{lem:maxedge} turns the same inequality into a pivot selection rule: the pair of largest log-magnitude supplies a pivot whose partner survives. The second family consists of maximality arguments that produce safe pivots at a given level. Dense Safety~\ref{lem:dense} carries the Max-Edge rule to an arbitrary level: when every pair of survivors is nonzero and $\{p,q\}$ has the largest log-magnitude, pivoting $p$ cancels no pair containing $q$. The Universal Successor Lemma~\ref{lem:univsucc} shows that a vertex whose weakest neighbour is a universal vertex $p$ is itself universal after $p$ is eliminated. Together they let a strategy keep choosing universal pivots. The third family governs how zeros persist, propagate, and are destroyed as the level grows. The Zero-leg Lemma~\ref{lem:zeroleg} shows that when one leg of a route vanishes the corresponding entry is unchanged by the elimination, so a zero already present is carried forward. The Prefix Lemma~\ref{lem:prefix} runs this backwards: a zero at a predicted-nonzero position must originate at an apex, which yields Corollary~\ref{cor:tri-nec}, that only an edge lying in a triangle of the fill graph can ever cancel. In the opposite direction, Fact~1~\ref{lem:fact1} shows that eliminating a universal vertex destroys every pre-existing zero among the survivors, because the update contributes a nonzero product; this is the refill mechanism in its simplest form. The Refill Lemma~\ref{lem:refill} is its structural counterpart under the hypothesis $\omega(G_A)\le3$: a cancelled pair lying in a second triangle forces the two apexes to be non-adjacent, since otherwise the four vertices would form a $K_4$, and the second apex then restores the entry. Finally, Fresh fill~\ref{lem:fresh} shows that a fill edge is nonzero at the moment it is created, though it may cancel at a later level, and the Nesting Lemma~\ref{lem:nesting} shows that a pair cannot be zero at two consecutive levels without one of its legs vanishing. The fourth family establishes infeasibility of the additive system and the monotonicity that makes exhaustive search sound. A cancellation relation reads $t_{jk}=t_{ji}+t_{ki}$ with all terms positive, so each relation strictly decreases the log-magnitude along the arcs of the digraph of Definition~\ref{def:arcdigraph}. The General Cycle Lemma~\ref{lem:cycle} concludes that a directed cycle is impossible, since it would give $t_x>\dots>t_x$. The 4-cycle Lemma~\ref{lem:4cycle} is the instance of this used in the pairing classification of Lemma~\ref{lem:pairing}. The Monotone Lemma~\ref{lem:monotone} states that unrealizability is inherited by supersets of a slot family, which is what allows the search to restrict attention to minimal blocking families. Underlying all of these is the quotient property of Schur complements, Lemma~\ref{lem:quotient}, which is what licenses the staged computations: eliminating a level and then one further vertex agrees with eliminating the enlarged level in one step. In summary, the dependencies run Exchange $\to$ Triangle $\to$ Max-Edge $\to$ Dense Safety and Universal Successor; Zero-leg $\to$ Prefix $\to$ Fresh fill and Nesting; General Cycle $\to$ 4-cycle $\to$ Pairing Lemma; and the Monotone Lemma closes the search.
 
 \begin{lemma}[Exchange Lemma]\label{lem:exchange}
 Let $A\succ0$, $u,j,k$ distinct, $A_{uk}\neq0$. If $A_{uu}A_{jk}=A_{uj}A_{uk}$ then $A_{jj}A_{uk}\neq A_{ju}A_{jk}$.
@@ -1114,11 +1119,11 @@ For $j,k\notin S$, the Schur complement has the standard almost-principal-minor 
 \]
 where $A_{I,J}$ denotes the submatrix with rows $I$ and columns $J$; $A_{S,S}$ is principal. In particular the expression is manifestly independent of the elimination order on $S$.
 
-Assume $G_A$ is a forest. Then any two vertices of $G_A$ are joined by \emph{at most} one simple
-path: none if they lie in different components, and exactly one otherwise. By
-Proposition~\ref{prop:fillpath} the hypothesis $\{j,k\}\in G_S$ supplies such a path, so in the
-situation of interest the $j$--$k$ path exists and is unique; we write $\mathrm{path}(j,k)$ for its
-edge set and $I$ for its interior, and $I\subseteq S$. Fix $j,k\notin S$ with $\{j,k\}\in G_S$ (symbolic). Let $I$ be that interior, $I\subseteq S$, and let $\mathrm{path}(j,k)$ be the edge set of the unique $j$--$k$ path. A term of
+Assume $G_A$ is a forest, and fix $j,k\notin S$ with $\{j,k\}\in G_S$ (symbolic). Any two vertices
+of $G_A$ are joined by \emph{at most} one simple path: none if they lie in different components, and
+exactly one otherwise. By Proposition~\ref{prop:fillpath} the hypothesis $\{j,k\}\in G_S$ supplies
+such a path, so the $j$--$k$ path exists and is unique; we write $\mathrm{path}(j,k)$ for its edge set
+and $I$ for its interior, and $I\subseteq S$. A term of
 $\det A_{S\cup\{j\},S\cup\{k\}}$ is $\pm\prod_{u}A_{u,\pi(u)}$ for a bijection
 $\pi:S\cup\{j\}\to S\cup\{k\}$, and it is nonzero only if $\{u,\pi(u)\}\in E(G_A)$ or $u=\pi(u)$ for
 every $u$. Regard $\pi$ as a partial permutation of $V$: it is defined on $S\cup\{j\}$ and takes values
@@ -1131,7 +1136,7 @@ cycles involve only indices of $S\setminus I$ and are matched among themselves, 
 contribution is precisely $\det A_{S\setminus I,S\setminus I}$. Note that this includes $2$-cycles
 $A_{uv}A_{vu}=A_{uv}^2$ along genuine forest edges: such terms are legitimate and are exactly what the
 determinant $\det A_{S\setminus I,S\setminus I}$ collects, which is why no claim is made that off-path
-indices cannot be moved. After fixing that $j$--$k$ route, the remaining indices $S\setminus I$ must permute among themselves, contributing a factor $\det A_{S\setminus I,S\setminus I}$, while off-path $2$-cycles $A_{uv}^2$ using genuine forest edges are collected exactly in that principal minor. Hence
+indices cannot be moved. Hence
 \[
 \det A_{S\cup\{j\},S\cup\{k\}} = \pm\Bigl(\prod_{e\in\mathrm{path}(j,k)} A_e\Bigr)\,\det A_{S\setminus I,S\setminus I},
 \]
@@ -1216,7 +1221,7 @@ There exists a $2$-path of $5$ triangles where $23$ of $400$ adversarial SPD rea
 \end{definition}
 
 \begin{theorem}[Strips, fans, one-triangle, edge-disjoint triangles]\label{thm:positives}
-Conjecture~\ref{conj:1} holds for (i) 2-path strips and dominating-vertex fans, (ii) chordal graphs with exactly one triangle adaptively, (iii) chordal graphs with $\omega\le3$ and pairwise edge-disjoint triangles.
+Conjecture~\ref{conj:1} holds, and hence (Definition~\ref{def:strategy}) an adaptive clean ordering exists, for (i) 2-path strips and dominating-vertex fans, (ii) chordal graphs with exactly one triangle, and (iii) chordal graphs with $\omega\le3$ and pairwise edge-disjoint triangles. For none of these classes does a fixed ordering suffice (Remark~\ref{rem:no-fixed}).
 \end{theorem}
 \begin{proof}[Proof of (i), strips and fans]
 We prove by induction on $k=|V\setminus S|$ that a strip state $(S,P)$ admits a clean continuation and that States~0 and~1 are preserved. For $k=3$ there are two cases, according to the state. In State~0 all three pairs of the triangle
@@ -1396,8 +1401,21 @@ Consider a leaf block $B$ in this tree. If $B$ is an edge $\{c,x\}$ where $c$ is
 
 If $B$ is a triangle $\{c,a,b\}$ where $c$ is the cut vertex (or $B$ is isolated triangle when $G$ itself is a triangle), then $a,b$ are simplicial and $N(a)=\{c,b\}$, $N(b)=\{c,a\}$ are edges. By Lemma~\ref{lem:tri} at most one of the three vertices of $B$ is dirty (zeroes a pair of $B$), so at least one of the two simplicial vertices $a,b$ is clean — pigeonhole. Choose a clean apex among $a,b$, say $a$. Then $a$ zeroes no pair of its triangle, its neighbourhood is exactly the opposite edge $\{c,b\}$ because $\omega\le3$ and edge-disjointness, so eliminating $a$ creates no fill and zeroes no pair of $B$. The remaining graph is still chordal with $\omega\le3$ and edge-disjoint triangles, with $|V|$ reduced by one (the triangle block $\{c,a,b\}$ becomes the edge block $\{c,b\}$, so the number of blocks is unchanged). Induction on $|V|$ (equivalently $|E|$) closes.
 \end{proof}
-\begin{remark}
-    In the proof of (iii), the naive block tree that connects blocks directly fails for a star of three bridges sharing a central cut vertex: the three bridge-blocks are pairwise adjacent through the hub, so they do not form a tree; the bipartite incidence tree fixes this. In the situation of (ii), the word "adaptive" is crucial; no fixed ordering works for all matrices. We show this by using pattern $E=\{03,04,14,23,34\}$, vertices $0,\dots,4$, edges as listed, unique triangle $\{0,3,4\}$, vertex $1$ adjacent only to $4$, vertex $2$ adjacent only to $3$. This graph is chordal, has exactly one triangle and no dominating vertex. We exhibit explicit $5\times5$ SPD matrices with that zero pattern, one per first-triangle-vertex, to show no fixed ordering works.
+\begin{remark}\label{rem:no-fixed}
+    In the proof of (iii), the naive block tree that connects blocks directly fails for a star of three bridges sharing a central cut vertex: the three bridge-blocks are pairwise adjacent through the hub, so they do not form a tree; the bipartite incidence tree fixes this.
+
+For none of the classes (i)--(iii) does a fixed ordering suffice, so the clean orderings of
+Theorem~\ref{thm:positives} must depend on the matrix (Definition~\ref{def:strategy}). The simplest
+witness is the triangle $K_3$, which is a $2$-path strip, a fan, a chordal graph with exactly one
+triangle, and a chordal graph with $\omega\le3$ whose triangles are (trivially) edge-disjoint. For a
+vertex $a$ of $K_3$ with opposite pair $\{b,c\}$, let $T^{(a)}$ have unit diagonal,
+$T^{(a)}_{ab}=T^{(a)}_{ac}=1/2$ and $T^{(a)}_{bc}=1/4$. It is SPD, with leading principal minors
+$1,3/4,9/16$ in the order $a,b,c$, and $(T^{(a)}/T^{(a)}_{aa})_{bc}=1/4-(1/2)(1/2)=0$. Given an ordering
+$\sigma$, let $a$ be its first vertex. The pair $\{b,c\}$ is an edge, hence predicted nonzero, and it
+is committed at level $\{a\}$, where it vanishes for $T^{(a)}$. So no fixed $\sigma$ is clean for all
+three matrices.
+
+The phenomenon is not special to complete patterns. Take the pattern $E=\{03,04,14,23,34\}$, vertices $0,\dots,4$, edges as listed, unique triangle $\{0,3,4\}$, vertex $1$ adjacent only to $4$, vertex $2$ adjacent only to $3$. This graph is chordal, has exactly one triangle and no dominating vertex. We exhibit explicit $5\times5$ SPD matrices with that zero pattern, chosen according to the ordering, to show no fixed ordering works.
 
 For $u=0$ (first among $\{0,3,4\}$ is $0$, cancel $(3,4)$):
 \[
@@ -1437,30 +1455,45 @@ Leading minors $3,9,27,279/4,297/4>0$ hence SPD, $(A^{(4)}/A^{(4)}_{44})_{03}=0.
 
 Each matrix has exactly pattern $E$, exactly one triangle and no extra edges.
 
-Now fix a permutation $\sigma$ and let $u$ be the first vertex of $\{0,3,4\}$ in $\sigma$. One point
-needs care: the pendant vertices $1$ and $2$ may precede $u$ in $\sigma$, and pivoting a pendant
-changes the diagonal entry at its unique neighbour. Eliminating $2$ replaces $A_{33}$ by
-$A_{33}-A_{23}^2/A_{22}$, and eliminating $1$ replaces $A_{44}$ by $A_{44}-A_{14}^2/A_{11}$; no
-off-diagonal entry is affected, since a pendant has a single neighbour. The cancellation condition at
-$u$ involves the \emph{current} diagonal at $u$, so the witness is chosen as follows.
+Now fix a permutation $\sigma$ and let $u$ be the first vertex of $\{0,3,4\}$ in $\sigma$. Pivoting
+$u$ can zero the opposite pair of the triangle, but that pair is committed only when the earlier of
+its two ends is pivoted, so the zero must be present at the level $S$ of the vertices preceding that
+end. Two points need care. First, the pendant vertices $1$ and $2$ may precede $u$, and pivoting a
+pendant changes the diagonal entry at its unique neighbour: eliminating $2$ replaces $A_{33}$ by
+$A_{33}-A_{23}^2/A_{22}$, and eliminating $1$ replaces $A_{44}$ by $A_{44}-A_{14}^2/A_{11}$, while no
+off-diagonal entry is affected, since a pendant has a single neighbour. Second, a pendant pivoted
+after its neighbour $u$ is no longer pendant: eliminating $u$ joins it to both ends of the zeroed
+pair, and pivoting it then updates that pair. The witness is therefore chosen by whether the pendant
+at $u$ lies in $S$, as follows.
 
 If $u=0$, take $A^{(0)}$. No pendant is adjacent to $0$, and the entries $A_{00},A_{03},A_{04},A_{34}$
 that enter the condition $A_{00}A_{34}=A_{03}A_{04}$ are untouched by pivoting $1$ or $2$; hence the
-zero at $(3,4)$ appears when $0$ is pivoted, whichever pendants precede it.
+zero at $(3,4)$ appears when $0$ is pivoted, whichever pendants precede it. It persists until the
+pair is committed, since $1$ and $2$ remain pendant after $0$ is eliminated and pivoting them changes
+only the diagonal entries at $4$ and $3$.
 
-If $u=3$, take $A^{(3)}$ as displayed when $2$ follows $3$ in $\sigma$, and take $A^{(3)}$ with
-$A_{33}=7/3$ in place of $2$ when $2$ precedes $3$. The modified matrix is SPD, with leading
-principal minors $3,9,27,45,195/2$, and the compensation is exact: $7/3-A_{23}^2/A_{22}=7/3-1/3=2$, so
-$(A/A_{\{2,3\}})_{04}=0$. Symmetrically, if $u=4$ take $A^{(4)}$ as displayed when $1$ follows $4$,
-and with $A_{44}=7/3$ in place of $2$ when $1$ precedes $4$; the minors are then
-$3,9,27,279/4,195/2$ and $(A/A_{\{1,4\}})_{03}=0$.
+If $u=3$, the zeroed pair is $\{0,4\}$, and $S$ consists of $3$, possibly $1$ and possibly $2$.
+Whether $1\in S$ does not matter: while $4$ survives, $1$ is adjacent only to $4$, so pivoting it
+changes only the diagonal entry at $4$. Take $A^{(3)}$ as displayed when $2\notin S$, that is, when
+$2$ does not precede both $0$ and $4$; then $(A/A_S)_{04}=(A/A_{\{3\}})_{04}=0$. Take $A^{(3)}$ with
+$A_{33}=7/3$ in place of $2$ when $2\in S$. The modified matrix is SPD, with leading principal minors
+$3,9,27,45,195/2$, and the compensation is exact: $7/3-A_{23}^2/A_{22}=7/3-1/3=2$, so
+$(A/A_S)_{04}=(A/A_{\{2,3\}})_{04}=0$. Symmetrically, if $u=4$ the zeroed pair is $\{0,3\}$: take
+$A^{(4)}$ as displayed when $1$ does not precede both $0$ and $3$, and with $A_{44}=7/3$ in place of
+$2$ when it does; the minors are then $3,9,27,279/4,195/2$ and $(A/A_{\{1,4\}})_{03}=0$.
 
-In every case $\sigma$ meets a zero at a predicted-nonzero position at the stage where $u$ is
-pivoted, so $\sigma$ is not clean for that matrix. Hence no fixed $\sigma$ is clean for every SPD
-matrix with pattern $E$, whereas the peeling argument above supplies an adaptive clean ordering for
-each individual matrix. The adjustment is not cosmetic: for the displayed $A^{(3)}$ and
-$\sigma=(2,3,0,1,4)$ one computes $(A/A_{\{2,3\}})_{04}=-1/10\neq0$, so that $\sigma$ would otherwise
-escape.
+In every case the pair zeroed by $u$, an edge of $E$ and hence predicted nonzero, is zero at the
+level where it is committed, so $\sigma$ is not clean for that matrix. Hence no fixed $\sigma$ is
+clean for every SPD matrix with pattern $E$, whereas the peeling argument above supplies an adaptive
+clean ordering for each individual matrix. Both adjustments are needed. For the displayed $A^{(3)}$
+one computes $(A/A_{\{2,3\}})_{04}=-1/10\neq0$. So $\sigma=(2,3,0,1,4)$ escapes $A^{(3)}$ because
+pivoting $2$ first lowers the diagonal at $3$; and $\sigma=(3,2,0,1,4)$ escapes it although pivoting
+$3$ first does create the zero at $(0,4)$, because pivoting $2$ refills it before $0$ commits the pair.
+In fact $\sigma$ is clean for $A^{(3)}$. This is the refill phenomenon of
+Section~\ref{sec:intro-exist}, and it is why the witness is chosen by when the zeroed pair is
+committed rather than by the position of $u$. The script \texttt{fixed\_ordering\_witnesses.py}
+(Appendix~\ref{app:code-fixed}) checks the three matrices for $K_3$ against all $6$ orderings and
+this choice of witness for $E$ against all $120$.
 \end{remark}
 \end{aiblock}
 
@@ -1632,8 +1665,10 @@ means that the resulting relations admit a solution with all six variables stric
 $d=W\setminus(\{u\}\cup p)$ is the unique vertex of $W$ lying neither in $p$ nor at the apex. Suppose
 two slots of a feasible set, say $(u,p)$ and $(v,q)$, have the same second coordinate $d$. Since
 $u\neq v$ and neither $u$ nor $v$ equals $d$, the pair $p=W\setminus\{u,d\}$ contains $v$ and the pair
-$q=W\setminus\{v,d\}$ contains $u$. So $u$ cancels a pair containing $v$ while $v$ cancels a pair
-containing $u$, and Lemma~\ref{lem:exchange} forbids exactly this. Hence the second coordinates of a
+$q=W\setminus\{v,d\}$ contains $u$. Writing $w$ for the fourth vertex of $W$, this gives
+$p=\{v,w\}$ and $q=\{u,w\}$, so the two slots impose $t^{(S)}_{vw}=t^{(S)}_{uv}+t^{(S)}_{uw}$ and
+$t^{(S)}_{uw}=t^{(S)}_{uv}+t^{(S)}_{vw}$. Adding them gives $t^{(S)}_{uv}=0$, contradicting strict
+positivity; this is the additive form of Lemma~\ref{lem:exchange}. Hence the second coordinates of a
 feasible set are distinct, the set injects into $W$, and its size is at most $|W|=4$.
 
 \emph{(2) Four slots using all four apexes.} Let $H$ be such a set. By the injectivity just proved its
@@ -1687,8 +1722,9 @@ configurations of (2) rather than merely maximal feasible ones.
 \end{proof}
 
 \begin{corollary}[Magnitudes forced]\label{cor:magnitudes}
-Let $S$ be a level, let $W$ be a set of four survivors, and let $H$ be one of the three maximal
-feasible configurations supplied by Lemma~\ref{lem:pairing}. Relabel $W$ as $\{0,1,2,3\}$ so that the
+Let $S$ be a level, let $W$ be a set of four survivors, and let $H$ be one of the three feasible
+configurations of four slots using all four vertices of $W$ as apexes, supplied by
+Lemma~\ref{lem:pairing}. Relabel $W$ as $\{0,1,2,3\}$ so that the
 two pairs of the associated involution are $\{0,1\}$ and $\{2,3\}$. Then the relations imposed by $H$
 determine the six log-magnitudes inside $W$ up to two positive parameters: with
 $\alpha:=t^{(S)}_{02}$ and $\beta:=t^{(S)}_{03}$,
@@ -1749,13 +1785,20 @@ there. The classification of Lemma~\ref{lem:pairing} needs $|W|=4$: its injectiv
 $|W|=5$, where feasible sets using all five pivots do exist, a $4$-pairing together with any slot for
 the fifth pivot being feasible in all six cases. Parity therefore does not propagate, and odd orders
 enjoy no structural protection of the kind that forces the construction to be even. Two computations
-delimit the position further. At $n=5$ the maximum feasible size is $8$, whereas a scheme leaving one
-survivor at every vertex would need $\binom{5}{2}=10$ relations, so no such scheme exists at order
-five; among the $3^{10}=59049$ three-magnitude colorings the minimum total number of survivors is
-$8$, and none leaves exactly one survivor at every vertex. At $n=7$ a pruned depth-first search of
-$280$ million nodes together with canonical augmentation ($92\,423$ orbits at level~7, growth factor
-$\approx4.7$) failed to exhaust the space, so brute force is closed as a route; that search is not
-included in the ancillary material. We note in passing
+delimit the position further. At $n=5$ a feasible family has at most one slot on each triple
+$\{u\}\cup p$, since two slots on one triple force a log-magnitude to vanish (add their relations, as
+in the proof of Lemma~\ref{lem:pairing}(1)); so it has at most $\binom{5}{3}=10$ slots. The bound is
+attained: for the points $0,1,\dots,4$ of a line, the ten slots in which the middle point of a triple
+cancels the other two are realized by the SPD matrix with entries $2^{-|j-k|}$. A scheme leaving one
+survivor at every vertex needs at least two slots at each vertex, since one slot covers only two of
+the other four vertices; it therefore has exactly two at each vertex and exactly one on each of the
+ten triples, and none of the $288$ configurations of that kind is feasible
+(Appendix~\ref{app:code-slots}), so no such scheme exists at order five. Among the $3^{10}=59049$
+three-magnitude colorings the minimum total number of survivors is $8$, and none leaves exactly one
+survivor at every vertex. At $n=7$ a pruned depth-first search of $280$ million nodes together with
+canonical augmentation ($92\,423$ orbits at level~7, growth factor $\approx4.7$) failed to exhaust the
+space, so brute force did not settle the question; that search is not included in the ancillary
+material. We note in passing
 that a counting heuristic distinguishes the parities --- a scheme leaving one survivor at every vertex
 imposes $n\lceil(n-2)/2\rceil$ relations on $\binom{n}{2}$ unknowns, which is underdetermined for even
 $n$ and exactly square for odd $n$, so that a \emph{generic} square system would force every
@@ -1870,7 +1913,7 @@ S^{(1)}_{q_0,2k}=B-AB\cdot A=B(1-A^2)\neq0,
 \qquad
 S^{(1)}_{q_0,2k+1}=A-AB\cdot B=A(1-B^2)\neq0,
 \]
-both nonzero because $0<A<1$ and $0<B<1$. Hence no zero created by the first pivot is incident to $q_0$: writing $Z_{p_0}$ for the graph on $V\slash \{p_0\}$ whose edges are the cancelled pairs, $q_0$ is an isolated vertex of $Z_{p_0}$, while every other survivor meets exactly one edge of it.
+both nonzero because $0<A<1$ and $0<B<1$. Hence no zero created by the first pivot is incident to $q_0$: writing $Z_{p_0}$ for the graph on $V\setminus \{p_0\}$ whose edges are the cancelled pairs, $q_0$ is an isolated vertex of $Z_{p_0}$, while every other survivor meets exactly one edge of it.
 
 %Thus $q_0$ is isolated in $Z_{p_0}$: it is the unique
 %survivor incident to no zero pair.
@@ -1883,12 +1926,8 @@ cases, according to parities.
 \item Mixed, $p=2k$ and $q=2\ell+1$: then $M_{pq}=B$, $M_{p_0p}=A$ and $M_{p_0q}=B$, so
       $S^{(1)}_{pq}=B-AB=B(1-A)\neq0$.
 \item Both odd, $p=2k+1$ and $q=2\ell+1$: then $M_{pq}=A$ and $M_{p_0p}=M_{p_0q}=B$, so
-      $S^{(1)}_{pq}=A-B^2$. Rearranging \eqref{eq:curve} as $(1-B^2)A=1-A^2$ and dividing by $A>0$
-      gives
-      \[
-      A-B^2=\frac{1-A}{A}>0 ,
-      \]
-      so this entry too is nonzero.
+      $S^{(1)}_{pq}=A-B^2$. Since $0<B<A$ and $B<1$, we have $A-B^2>B-B^2=B(1-B)>0$, so this
+      entry too is nonzero.
 \end{itemize}
 Together with step~2 this shows that $Z_{p_0}$ is exactly the set of zeros of $S^{(1)}$.
 
@@ -1932,7 +1971,7 @@ $A^2+A(1-B^2)$, so the condition is exactly $A^2+(1-B^2)A-1=0$. Thus $S^{(2)}_{2
 only if \eqref{eq:curve} holds: the parameters are forced onto the curve, not chosen on it, and with
 $B=1/2$ the root in $(0,1)$ is $A=(-3+\sqrt{73})/8$.
 
-Consequently the zero set after the two forced pivots is
+Consequently the zero set after the two forced pivots contains
 \[
 Z^{(2)}=\bigl\{\{2k,2\ell+1\}: k\neq\ell,\ k,\ell\neq k_0\bigr\},
 \]
@@ -2042,7 +2081,7 @@ theorem.
 \end{aiblock}
 \begin{humanblock}
 \begin{remark}\label{rem:astar-family}
-The matrix $A^*$ in Theorem \ref{thm:Astar} is the order-four member of the $M_{2m}$ family. Normalized to unit diagonal, $|r_{03}|=|r_{12}|=1/4$ and all four cross entries have modulus $1/2$. Hence, after relabeling $(0,3,1,2)$ and conjugating by the diagonal sign matrix $D=\operatorname{diag}(-1,1,1,1)$ --- which preserves positive definiteness and leaves every $t^{(S)}_{jk}=-\log|r^{(S)}_{jk}|$ unchanged, so it preserves the entire cancellation structure --- $A^*$ is a member of the family above with $m=2$, $A=B=1/2$, $AB=1/4$. Since $A^2+(1-B^2)A-1=-3/8\neq0$, this explains why $M_4$ fails the First-Schur Conjecture only.
+The matrix $A^*$ in Theorem \ref{thm:Astar} has the shape of the $M_{2m}$ family at order four. Normalized to unit diagonal, $|r_{03}|=|r_{12}|=1/4$ and all four cross entries have modulus $1/2$. Hence, after relabeling $(0,3,1,2)$ and conjugating by the diagonal sign matrix $D=\operatorname{diag}(-1,1,1,1)$ --- which preserves positive definiteness and leaves every $t^{(S)}_{jk}=-\log|r^{(S)}_{jk}|$ unchanged, so it preserves the entire cancellation structure --- $A^*$ becomes the matrix $M_4$ of Theorem~\ref{thm:M2m} with $m=2$, $A=B=1/2$, $AB=1/4$. This parameter point is off the curve, since $A^2+(1-B^2)A-1=-3/8\neq0$, but the curve is not what makes $A^*$ fail only the First-Schur Conjecture. For $m=2$ and any $0<A,B<1$ the matrix $M_4$ is positive definite, with eigenvalues $1+AB+A+B$, $(1+A)(1-B)$, $(1-A)(1-B)$ and $(1-A)(1+B)$. Step~1 of the proof of Theorem~\ref{thm:M2m}, which holds for all parameters, shows that every first pivot zeroes the within-pair entry of the other pair, so Conjecture~\ref{conj:2} fails, while Conjecture~\ref{conj:1} holds by Theorem~\ref{thm:leq4}. The curve enters only in step~5, which needs $m\ge3$.
 \end{remark}
 \end{humanblock}
 
@@ -2076,15 +2115,15 @@ ordering whose first Schur complement is cancellation-free, while $8$ of its $24
 nevertheless deliver a clean factor. The gap between those two counts is the refill phenomenon, and
 isolating it is precisely what allows the stronger Conjecture~\ref{conj:1} to survive at order four.
 Conjecture~\ref{conj:1} itself fails at every even order $n\ge6$, by the family $M_{2m}$ of
-Theorem~\ref{thm:M2m}, so the smallest pattern on which cleanliness genuinely fails is the complete
-graph $K_6$.
+Theorem~\ref{thm:M2m}, so the smallest known pattern on which cleanliness genuinely fails is the
+complete graph $K_6$; whether some pattern of order five fails, $K_5$ in particular, is open.
 
 \emph{The counterexample is derived rather than exhibited.} This is the part of the argument we would
 emphasize, because it is what distinguishes the result from a lucky search. We did not find a matrix
 and then verify it. The Pairing Lemma~\ref{lem:pairing} classifies the zero-configurations available at
 a level with four surviving vertices, and shows that a feasible family of maximal size using all four
-survivors as apexes must be a fixed-point-free involution. Evenness of the order is then a consequence
-rather than a hypothesis; the magnitudes $AB$ within pairs and the blocks
+survivors as apexes must be a fixed-point-free involution. For counterexamples built this way,
+evenness of the order is then a consequence rather than a hypothesis; the magnitudes $AB$ within pairs and the blocks
 $\begin{pmatrix}A&B\\B&A\end{pmatrix}$ across them are consequences; and the curve
 $A^2+(1-B^2)A-1=0$ is a consequence. By Remark~\ref{rem:curve-family} what emerges at each even order
 is a one-parameter family on a measure-zero algebraic curve, not an isolated matrix, and the
@@ -2098,11 +2137,11 @@ gives forests in the strong form that \emph{every} ordering is clean, which reco
 language the covariance-faithfulness theorem of Malouche and Rajaratnam~\cite{Malouche}, and
 Theorem~\ref{thm:positives} adds $2$-path strips, dominating-vertex fans, chordal graphs with exactly
 one triangle, and chordal graphs of clique number at most three whose triangles are pairwise
-edge-disjoint. The one-triangle case is adaptive of necessity: we exhibit a pattern for which no single
-fixed ordering is clean for every matrix of that pattern, so the quantifier order in
-Conjecture~\ref{conj:1} is a feature of the problem and not of its phrasing. Set against the failure of
-$K_6$, these classes locate the obstruction at near-completeness rather than at density or clique
-number alone.
+edge-disjoint. Each of these classes is adaptive of necessity: the triangle lies in all of them, and no single
+fixed ordering is clean for every matrix with that pattern (Remark~\ref{rem:no-fixed}), so the
+quantifier order in Conjecture~\ref{conj:1} is a feature of the problem and not of its phrasing. All of
+these classes have clique number at most three, while the failures we know are complete graphs; where
+the boundary lies between the two is open.
 
 \emph{The apparatus is reusable, and is the part most likely to outlast the specific results.}
 Cleanliness is recast as a covering problem over slots: a slot $(S,\{j,k\})$ asserts
@@ -2118,23 +2157,25 @@ exact arithmetic where arithmetic is needed at all. The ancillary scripts of
 Appendix~\ref{app:protocol} recompute asserted values independently, and
 Appendix~\ref{app:recheck} is explicit that both the order-four slot search and the four-vertex
 feasibility counts corroborate rather than constitute the proofs they accompany. The computations
-reported in Remark~\ref{rem:even-needed} are the one place where this reading needs care: they are
-assertions about cases that remain open, not steps in any argument, and nothing established above
-depends on them.
+reported in Remark~\ref{rem:even-needed} and the order-five search below concern cases that remain
+open, and together with the sampling count of Remark~\ref{rem:peo-fail} they are the places where
+this reading needs care: they are not steps in any argument, nothing established above depends on
+them, and the order-five and order-seven searches and that sampling run are not included in the
+ancillary material.
 
 \emph{What is not settled.} The overall shape of the results is that the positive side is governed by
 the scarcity of triangles and by the availability of a simplicial or universal pivot, whereas the
-negative side requires near-completeness. Three frontiers remain open --- order five, the single
-$14$-edge pattern at order six, and all odd orders from seven upwards. The first two are finite
+negative side, so far, uses complete patterns. Three frontiers remain open --- order five, the
+connected patterns of order six other than $K_6$, and all odd orders from seven upwards. The first two are finite
 questions that we leave undecided; the third is not, and Remark~\ref{rem:even-needed} explains why the
 parity argument that settles the even orders gives nothing there. To these we add the structural
 question of how much the even-order construction really forces.
 
-\emph{How far order five has been pushed.} The order-five question is finite, and we have gone some way into it without settling it. Using the covering reformulation of Remark~\ref{rem:covering} together with the pattern rules of Section~\ref{sec:core}, a depth-first search over partial blocking families closes twenty of the twenty-one connected patterns of order five: for each of them every branch ends in a refutation, by a pattern rule or, where the rules do not suffice, by an integer Stiemke certificate checked in exact arithmetic. The complete graph $K_5$  is the exception. There the search does not terminate, with branches reaching families of some twenty slots without closing, and the natural alternative — enumerating the minimal blocking families of $K_5$ and refuting each — is worse, since a direct enumeration passes $2\times 10^7$   of them without exhausting the list. Because the order-five statement would rest on a single unresolved pattern, we record this as an observation rather than a theorem.
+\emph{How far order five has been pushed.} The order-five question is finite, and we have gone some way into it without settling it. Using the covering reformulation of Remark~\ref{rem:covering} together with the pattern rules of Section~\ref{sec:core}, a depth-first search over partial blocking families closes twenty of the twenty-one connected patterns of order five: for each of them every branch ends in a refutation, by a pattern rule or, where the rules do not suffice, by an integer Stiemke certificate checked in exact arithmetic. The complete graph $K_5$  is the exception. There the search does not terminate, with branches reaching families of some twenty slots without closing, and the natural alternative — enumerating the minimal blocking families of $K_5$ and refuting each — is worse, since a direct enumeration passes $2\times 10^7$   of them without exhausting the list. Because the order-five statement would rest on a single unresolved pattern, we record this as an observation rather than a theorem. The search is not included in the ancillary material.
 
 %\subsection{Open}
-Six questions are left open: order five; the single $14$-edge pattern $K_6-e$ at order six; all odd
-orders $n\ge7$; general partial $2$-trees; outerplanar graphs in general; and whether the $M_{2m}$
+Six questions are left open: order five; the connected patterns of order six other than $K_6$, of which
+$K_6-e$ is the densest; all odd orders $n\ge7$; general partial $2$-trees; outerplanar graphs in general; and whether the $M_{2m}$
 curve accounts for every even-order counterexample. Two of them we state formally: the rigidity
 question just mentioned, and a scheduling question which arose while proving
 Theorem~\ref{thm:positives}(i) and which would extend it.
@@ -2156,10 +2197,11 @@ excluded by anything we prove, and we state Question~\ref{q:curve} as a question
 conjecture because we have no evidence either way.
 
 An affirmative answer would be strong, and the reason is worth recording. Every off-diagonal entry of
-$M_{2m}$ is nonzero, so no point of the curve has pattern $K_6-e$; an affirmative answer at $n=6$ would
-therefore show that $K_6-e$ admits a clean ordering for every SPD matrix of that pattern, closing one
-of the two finite frontiers above. Question~\ref{q:curve} is in that sense at least as hard as the
-$|E|=14$ case, and a counterexample to it would be at least as interesting as a proof: it would mean
+$M_{2m}$ is nonzero, and permutation and diagonal scaling preserve this, so every counterexample on the
+curve has a complete pattern. An affirmative answer at $n=6$ would therefore show that every connected
+pattern of order six other than $K_6$ admits a clean ordering for every SPD matrix of that pattern,
+settling order six, one of the two finite frontiers above. Question~\ref{q:curve} is in that sense at
+least as hard as the whole of order six, and a counterexample to it would be at least as interesting as a proof: it would mean
 that the mechanism isolated by the Pairing Lemma is not the only route to failure.
 
 \begin{question}[Clean strategies ending at a prescribed edge]\label{q:cliquesum}
@@ -2172,7 +2214,7 @@ hence for strips and fans glued along an edge or a vertex.\footnote{%
 Sketch. Let $G=G_1\cup G_2$ with $G_1\cap G_2=K$ a clique, $|K|\le2$; suppose $G_2$ admits an adaptive
 clean strategy~(a) eliminating $K$ last, and $G_1$ an adaptive clean strategy~(b). Pivot
 $G_2\setminus K$ by the initial segment of~(a), then $G_1\cup K$ by~(b). Since no vertex of $K$ is
-pivoted in phase~1, no pair meeting $K$ is committed there, and because $K$ separates, $A[G_2]$ is a
+pivoted in phase~1, no pair inside $K$ is committed there, and because $K$ separates, $A[G_2]$ is a
 principal submatrix with pattern $G_2$ on which phase~1 is exactly~(a); as $K$ comes last in~(a), the
 pair inside $K$ is still nonzero after phase~1. By the fill-path theorem no fill crosses the
 separator, so the Schur complement handed to phase~2 is $A[G_1]$ altered only in the $K\times K$ block
@@ -2186,7 +2228,7 @@ $v_{k-2}$. If $v_{k-2}$ is the dirty vertex of that triangle, pivoting it commit
 $K$-pair. No refill argument repairs this, because refill (Lemma~\ref{lem:fact1}) needs the zero to
 pre-exist the pivot that destroys it, whereas here the offending pivot is itself the apex that creates
 it; and reversing the direction of the induction merely relocates the final triangle. A positive
-answer would also bear on the \emph{outerplanar follows from fans} question above.
+answer would also bear on the question of outerplanar graphs in the list above.
 \end{humanblock}
 % \subsection{Mathematical retractions}
 % \begin{enumerate}
@@ -2217,9 +2259,10 @@ verify explicitly.
 
 On the positive side, forests are clean in the strong sense that every ordering is clean
 (Theorem~\ref{thm:forest}), and Conjecture~\ref{conj:1} also holds for $2$-path strips, for
-dominating-vertex fans, for chordal graphs with exactly one triangle --- adaptively, since no fixed
-ordering suffices --- and for chordal graphs of clique number at most three whose triangles are
-pairwise edge-disjoint (Theorem~\ref{thm:positives}).
+dominating-vertex fans, for chordal graphs with exactly one triangle, and for chordal graphs of
+clique number at most three whose triangles are pairwise edge-disjoint (Theorem~\ref{thm:positives});
+on each class of Theorem~\ref{thm:positives} the clean ordering must adapt to the matrix, since no
+fixed ordering suffices even for the triangle (Remark~\ref{rem:no-fixed}).
 
 Two gaps remain, and they are of different kinds. Order five we leave open: the question there is
 finite, pattern by pattern, but we do not settle it. Odd orders $n\ge7$ are open for a structural
@@ -2232,10 +2275,11 @@ on a singular locus that such counting does not detect.
 For practice the conclusion is reassuring in the direction that matters. The no-cancellation assumption
 of symbolic factorization remains safe for allocation, since over-allocation never threatens
 correctness, and none of our counterexamples causes a standard code to return a wrong answer. What is
-not guaranteed is the existential statement: from order six upwards there are SPD matrices for which no
-ordering avoids an exact zero at a position the symbolic phase predicts nonzero. The independent
-recomputations behind the numerical claims are reported in Appendix~\ref{app:recheck} and reproducible
-from the ancillary files listed in Appendix~\ref{app:protocol}.
+not guaranteed is the existential statement: at every even order from six upwards there are SPD matrices for which no
+ordering avoids an exact zero at a position the symbolic phase predicts nonzero. The ancillary
+scripts listed in Appendix~\ref{app:protocol} reproduce the numerical claims they cover, and
+Appendix~\ref{app:recheck} reports the independent recomputation and says which computations are not
+included.
 \end{humanblock}
 
 \section*{Acknowledgments}
@@ -2248,7 +2292,8 @@ The author would like to thank Ricky Simanjuntak for discussions at various stag
 \begin{humanblock}
 All computations reported here were carried out in Python~$3.11.9$. The ancillary scripts need only
 the standard library, with exact integer or rational arithmetic, except \texttt{enum-pairing-4vert.py},
-which uses NumPy and SciPy's \texttt{linprog}. Pseudorandom draws, which enter only the sampling
+which uses NumPy and SciPy's \texttt{linprog} (its counts are reproduced without a solver by
+\texttt{slot\_counts.py}). Pseudorandom draws, which enter only the sampling
 experiment of Appendix~\ref{app:recheck}, were seeded with $42$, $123$ and $2026$. Where a linear program is solved --- in the order-four slot search of
 Appendix~\ref{app:recheck} and in the feasibility counts reported there --- HiGHS~\cite{HiGHS} serves
 only as a search device for a candidate certificate, and correctness never rests on it. By Stiemke's
@@ -2256,14 +2301,20 @@ alternative, infeasibility of $Tt=0$, $t>0$ is witnessed by an integer vector $y
 $y^\top T\ge0$ and $y^\top T\neq0$; since $T$ has integer entries such a witness is checked by integer
 arithmetic alone, so no floating-point computation enters any proof.
 
-Four scripts are provided as ancillary files. \texttt{verify\_cholesky.py} recomputes the worked
+Six scripts are provided as ancillary files. \texttt{verify\_cholesky.py} recomputes the worked
 instances of Theorems~\ref{thm:Astar} and~\ref{thm:M2m} from their statements alone.
 \texttt{enum-pairing-4vert.py} enumerates the $2^{12}=4096$ slot subsets at a four-vertex level and
 finds $182$ of them feasible, the computation behind the three all-pivot configurations of
 Lemma~\ref{lem:pairing}. \texttt{three-mag-59049.py} sweeps the $3^{10}=59049$ three-magnitude
 colourings at order five, establishing the minimum survivor count of $8$ reported in
 Remark~\ref{rem:even-needed}. \texttt{peo\_insufficiency.py} runs all $5040$ orderings of an SPD
-realization of the $2$-path of $5$ triangles, the witness of Remark~\ref{rem:peo-fail}. For the
+realization of the $2$-path of $5$ triangles, the witness of Remark~\ref{rem:peo-fail}.
+\texttt{fixed\_ordering\_witnesses.py} checks the witnesses of Remark~\ref{rem:no-fixed}: the three
+realizations of the triangle and the five realizations of the pattern $E$ defeat every fixed
+ordering. \texttt{slot\_counts.py} decides feasibility exactly, by Fourier--Motzkin elimination in
+rational arithmetic, and reproduces the four-vertex counts of Lemma~\ref{lem:pairing}, the order-four
+slot search of Appendix~\ref{app:recheck}, and the order-five slot bounds of
+Remark~\ref{rem:even-needed}. For the
 instance of Theorem~\ref{thm:M2m} used throughout, $B=1/2$ and
 $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 \end{humanblock}
@@ -2373,10 +2424,49 @@ $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 \lstinputlisting[style=pycode, firstline=44, lastline=90, firstnumber=44]{\ancillary{Appendix_PeoInsufficiency/peo_insufficiency.py}}
 \end{aiblock}
 
+\section{Source of \texttt{fixed\_ordering\_witnesses.py}}\label{app:code-fixed}
+\mbox{}
+
+% Split so each piece fits inside one aiblock; firstnumber keeps the numbering
+% continuous. Ranges refer to lines of fixed_ordering_witnesses.py (143 lines total).
+
+\begin{aiblock}
+\mbox{}
+\lstinputlisting[style=pycode, firstline=1, lastline=50, firstnumber=1]{\ancillary{Appendix_FixedOrderingWitnesses/fixed_ordering_witnesses.py}}
+\end{aiblock}
+
+\begin{aiblock}
+\mbox{}
+\lstinputlisting[style=pycode, firstline=51, lastline=114, firstnumber=51]{\ancillary{Appendix_FixedOrderingWitnesses/fixed_ordering_witnesses.py}}
+\end{aiblock}
+
+\begin{aiblock}
+\mbox{}
+\lstinputlisting[style=pycode, firstline=115, lastline=143, firstnumber=115]{\ancillary{Appendix_FixedOrderingWitnesses/fixed_ordering_witnesses.py}}
+\end{aiblock}
+
+
+\section{Source of \texttt{slot\_counts.py}}\label{app:code-slots}
+\mbox{}
+
+% Split so each piece fits inside one aiblock; firstnumber keeps the numbering
+% continuous. Ranges refer to lines of slot_counts.py (120 lines total).
+
+\begin{aiblock}
+\mbox{}
+\lstinputlisting[style=pycode, firstline=1, lastline=28, firstnumber=1]{\ancillary{Appendix_SlotCounts/slot_counts.py}}
+\end{aiblock}
+
+\begin{aiblock}
+\mbox{}
+\lstinputlisting[style=pycode, firstline=29, lastline=120, firstnumber=29]{\ancillary{Appendix_SlotCounts/slot_counts.py}}
+\end{aiblock}
+
+
 \section{Independent recomputation of the numerical claims}\label{app:recheck}
 \begin{humanblock}
-Every numerical and combinatorial assertion of the paper has been recomputed
-independently, in exact arithmetic, by an independent implementation written from the
+The numerical and combinatorial assertions listed below have been recomputed
+independently, in exact arithmetic, by an implementation written from the
 statements alone (no shared code with the primary verification of
 Appendix~\ref{app:protocol}). Rational quantities were handled with exact
 rationals; the irrational parameter was handled by exact arithmetic in the
@@ -2389,7 +2479,8 @@ $m=2,3,4$, the two parameter identities and the vanishing of $A^2+(1-B^2)A-1$ at
 $A=(-3+\sqrt{73})/8$, the clean-ordering counts $0/24$ and $8/24$ for $A^*$ and $0/720$ and $0/40320$
 for $M_6$ and $M_8$, the pairing classification of Lemma~\ref{lem:pairing}, and the square-count identity
 $n\lceil(n-2)/2\rceil=\binom{n}{2}$ for odd $n$ in the range $3\le n\le11$. Every asserted value was
-reproduced exactly. One quantity not asserted in the text emerged from the recomputation: there are
+reproduced exactly. One quantity emerged from the recomputation that the text uses only in the
+discussion of Question~\ref{q:curve}: there are
 $15$ feasible slot sets of the maximum size $4$ at a four-vertex level, of which only $3$ use all four
 pivots, which is why Lemma~\ref{lem:pairing} has to impose the all-four-pivots condition explicitly.
 The recomputation also separates the two necessary conditions of that lemma from feasibility
@@ -2397,14 +2488,17 @@ itself: $218$ of the $4096$ subsets have an acyclic arc digraph, so the General 
 Lemma~\ref{lem:cycle} leaves $36$ infeasible subsets undetected, and the feasible count $182$ is a
 linear-programming count rather than a cycle count. None of these counts is used in
 the proof of Lemma~\ref{lem:pairing}, which is elementary; they are recorded here as
-corroboration and as context for the size bound that the lemma does prove.
+corroboration and as context for the size bound that the lemma does prove. This recomputation is
+not included in the ancillary material; \texttt{slot\_counts.py} (Appendix~\ref{app:code-slots})
+reproduces the counts $182$, $15$ and $3$ in exact arithmetic.
 
 It is worth recording why random search does not find the counterexamples of
 Section~\ref{sec:even}. Adversarial sampling on dense $K_6$, in which the entries of a random SPD matrix are
 perturbed towards the cancellation conditions, bottoms out near $296/720$ clean orderings in our runs
 and never approaches the $0/720$ of $M_6$, because $M_6$ lies on the measure-zero curve $A^2+(1-B^2)A-1=0$. We report this as an
 indication of the difficulty rather than as evidence: the perturbation scheme and the number of draws
-are implementation choices, and no claim in this paper depends on them. This is the coexistence noted
+are implementation choices, and no claim in this paper depends on them. These runs are not
+included in the ancillary material. This is the coexistence noted
 in Section~\ref{sec:stats}: unfaithful distributions form a null set while strong-faithfulness fails on
 a set of positive measure \cite{Uhler}, so the genericity heuristic and the existential failure are
 consistent with one another.
@@ -2412,7 +2506,8 @@ consistent with one another.
 An exhaustive slot search at order four was also carried out, over the $18$ slots with
 $1\le|S|\le2$ on $G_A=K_4$: of the $2^{18}=262144$ slot families, $69075$ are blocking and $633$
 of these are minimal, and all $633$ are refuted by exact rational certificates ($605$ by Stiemke's
-lemma, $28$ by zero-leg propagation). This corroborates Theorem~\ref{thm:leq4} but is no longer
+lemma, $28$ by zero-leg propagation). The script \texttt{slot\_counts.py} reproduces the counts $69075$
+and $633$; the certificates are not included in the ancillary material. This corroborates Theorem~\ref{thm:leq4} but is no longer
 part of its proof, which is elementary.
 \end{humanblock}
 
