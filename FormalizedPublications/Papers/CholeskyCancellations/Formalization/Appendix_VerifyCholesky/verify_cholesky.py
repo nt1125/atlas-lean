@@ -16,7 +16,7 @@ First-Schur Conjecture (Conjecture 2) is false; but 8 of the 24 orderings give
 a clean Cholesky factor, so A* is NOT a counterexample to the Fill-Graph
 Conjecture (Conjecture 1).  The gap between the two is the refill phenomenon.
 
-Part B (Theorem 5.5).  With B = 1/2 and A = (-3 + sqrt(73))/8, the positive
+Part B (Theorem 5.8).  With B = 1/2 and A = (-3 + sqrt(73))/8, the positive
 root of the curve A^2 + (1 - B^2) A - 1 = 0, the 6x6 matrix
 
         M_6 = I_6 + AB*P + A*Q + B*R,

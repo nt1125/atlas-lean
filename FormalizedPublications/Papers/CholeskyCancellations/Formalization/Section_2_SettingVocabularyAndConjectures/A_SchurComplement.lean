@@ -15,7 +15,7 @@ import Mathlib.LinearAlgebra.Matrix.SchurComplement
 
 /-! # Schur complement (paper Section 2)
 
-Schur complements at a level `S`: the survivor index type, `schurEntry`, `pivotEntry`, and the basic SPD facts (Schur complements of SPD matrices stay SPD; `2 × 2` minors). Split from `Defs.lean`.
+Schur complements at a level `S`: the survivor index type, `schurEntry`, `pivotEntry`, and the basic SPD facts (Schur complements of SPD matrices stay SPD; `2 × 2` minors).
 -/
 
 open scoped Matrix

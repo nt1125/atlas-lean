@@ -16,7 +16,7 @@ import Section_2_SettingVocabularyAndConjectures.A_SchurComplement
 
 /-! # Pattern graphs (paper Section 2)
 
-Pattern, elimination-step, game, and fill graphs; orderings and committing prefixes; walks and fill paths; the numeric-vs-symbolic comparison. Split from `Defs.lean`.
+Pattern, elimination-step, game, and fill graphs; orderings and committing prefixes; walks and fill paths; the numeric-vs-symbolic comparison.
 -/
 
 open scoped Matrix

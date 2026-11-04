@@ -16,7 +16,7 @@ import Section_2_SettingVocabularyAndConjectures.E_StrategyVocabulary
 
 /-! # Conjectures and feasibility (paper Section 2)
 
-The two conjectures (`first_schur_conjecture`, `fill_graph_conjecture`), slots and feasibility (`IsFeasibleAt`), realizability, partial correlations, and log-magnitudes. Split from `Defs.lean`.
+The two conjectures (`first_schur_conjecture`, `fill_graph_conjecture`), slots and feasibility (`IsFeasibleAt`), realizability, partial correlations, and log-magnitudes.
 -/
 
 open scoped Matrix

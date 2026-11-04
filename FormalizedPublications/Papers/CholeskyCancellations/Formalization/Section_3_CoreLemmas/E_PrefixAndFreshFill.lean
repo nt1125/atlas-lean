@@ -11,12 +11,12 @@ import Section_3_CoreLemmas.D_UniversalAndRefill
 
 /-! # Prefix lemma and fresh fill (paper Section 3)
 
-The prefix lemma, triangle necessity, fresh fill and its closure, and the Nesting Lemma (paper Lemma 3.14). Split from `CoreLemmas.lean`.
+The prefix lemma, triangle necessity, fresh fill and its closure, and the Nesting Lemma (paper Lemma 3.14).
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean` — entries only through `schurEntry`, levels as finsets with enumerating lists wherever the symbolic graph `G_S` is read, cancellations only through `Zeroes`/`logMag`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files — entries only through `schurEntry`, levels as finsets with enumerating lists wherever the symbolic graph `G_S` is read, cancellations only through `Zeroes`/`logMag`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

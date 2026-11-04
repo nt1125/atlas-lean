@@ -11,12 +11,12 @@ import Section_3_CoreLemmas.A_FarkasAlternative
 
 /-! # Clean apexes and the Triangle Lemma (paper Section 3)
 
-Zeroes at the empty level, the exchange setup, the Triangle Lemma (paper Lemma 3.2) with its three-route case split, and the spoils example. Split from `CoreLemmas.lean`.
+Zeroes at the empty level, the exchange setup, the Triangle Lemma (paper Lemma 3.2) with its three-route case split, and the spoils example.
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean` — entries only through `schurEntry`, levels as finsets with enumerating lists wherever the symbolic graph `G_S` is read, cancellations only through `Zeroes`/`logMag`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files — entries only through `schurEntry`, levels as finsets with enumerating lists wherever the symbolic graph `G_S` is read, cancellations only through `Zeroes`/`logMag`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

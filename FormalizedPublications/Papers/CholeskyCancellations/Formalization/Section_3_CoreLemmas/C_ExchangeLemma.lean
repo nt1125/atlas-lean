@@ -10,12 +10,12 @@ import Section_3_CoreLemmas.B_CleanApexAndTriangle
 
 /-! # Exchange Lemma (paper Section 3)
 
-The exchange step of the Triangle Lemma at a general level (paper Lemma 3.1): if apex `u` zeroes `(j, k)` and `schurEntry A S u k ≠ 0`, then apex `j` does not zero `(u, k)`. Moved here from `Positives.lean`, since it formalises a Section 3 lemma; it is preceded by the `2 × 2` minor positivity (`schurEntry_two_mul_sub_pos`) its proof uses, which is also a Section 2-only fact.
+The exchange step of the Triangle Lemma at a general level (paper Lemma 3.1): if apex `u` zeroes `(j, k)` and `schurEntry A S u k ≠ 0`, then apex `j` does not zero `(u, k)`. It is preceded by the `2 × 2` minor positivity (`schurEntry_two_mul_sub_pos`) its proof uses, which is also a Section 2-only fact.
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

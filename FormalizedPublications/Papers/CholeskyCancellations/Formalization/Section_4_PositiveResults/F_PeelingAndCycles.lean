@@ -10,12 +10,12 @@ import Section_4_PositiveResults.E_FanContinuation
 
 /-! # Peeling, cycles, and paths (paper Section 4)
 
-Peeling a vertex with at most one survivor neighbour; cycle/path infrastructure (splitting cycles, induced cycles, cycle support) and longest paths, consumed by the chordal cases of Theorem 4.8 (ii)–(iii). Split from `Positives.lean`.
+Peeling a vertex with at most one survivor neighbour; cycle/path infrastructure (splitting cycles, induced cycles, cycle support) and longest paths, consumed by the chordal cases of Theorem 4.8 (ii)–(iii).
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

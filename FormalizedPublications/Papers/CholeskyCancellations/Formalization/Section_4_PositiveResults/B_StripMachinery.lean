@@ -10,12 +10,12 @@ import Section_4_PositiveResults.A_Theorem41Determinants
 
 /-! # Strip machinery (paper Section 4)
 
-Strip patterns and states (paper Definitions 4.3–4.5), end/second pivots, clean continuations, and the one-clean-pivot-prepends step. Split from `Positives.lean`.
+Strip patterns and states (paper Definitions 4.3–4.5), end/second pivots, clean continuations, and the one-clean-pivot-prepends step.
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

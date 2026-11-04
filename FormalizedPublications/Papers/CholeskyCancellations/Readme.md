@@ -6,7 +6,7 @@ A Lean 4 formalization of **[Accidental Cancellations in Cholesky Factorization]
 by Nam Trang and Meta AI.
 
 > **Read the paper with its formalization:**
-> [⬇ Download the interactive paper](https://raw.githubusercontent.com/nt1125/CholeskyCancellations/main/docs/paper.html)
+> [⬇ Download the interactive paper](https://raw.githubusercontent.com/nt1125/atlas-lean/main/FormalizedPublications/Papers/CholeskyCancellations/Papers/cholesky_cancellations_interactive.html)
 > — a single page rendering the paper with a Lean box at every definition and result.
 > Open the downloaded file in a browser (internet needed for the math rendering);
 > it also opens directly from a local clone at [`Papers/cholesky_cancellations_interactive.html`](Papers/cholesky_cancellations_interactive.html).
@@ -40,8 +40,7 @@ link for the full dotted path):
 All remaining definitions, propositions, lemmas, corollaries, and
 examples of Sections 2–5 are likewise formalized in the files above
 and in [Section_3_CoreLemmas](Formalization/Section_3_CoreLemmas/)
-(Section 3). The statements-first phase (2026-10-17, user-directed)
-is complete: every formalized result is now a proved theorem, and
+(Section 3). Every formalized result is a proved theorem, and
 the two conjectures (C1, C2) are stated and refuted in Lean, as in the paper (Theorems 5.1 and 5.8).
 
 ## Contents
@@ -50,13 +49,13 @@ the two conjectures (C1, C2) are stated and refuted in Lean, as in the paper (Th
 - 1. Introduction ([PDF p. 1](Papers/cholesky_cancellations.pdf#page=1))
 - 2. Setting, vocabulary, and conjectures ([PDF p. 6](Papers/cholesky_cancellations.pdf#page=6))
     - Core definitions and Section 2 results. [Section_2_SettingVocabularyAndConjectures](Formalization/Section_2_SettingVocabularyAndConjectures/)
-- 3. Core lemmas ([PDF p. 14](Papers/cholesky_cancellations.pdf#page=14))
+- 3. Core lemmas ([PDF p. 13](Papers/cholesky_cancellations.pdf#page=13))
     - Exchange through Monotone. [Section_3_CoreLemmas](Formalization/Section_3_CoreLemmas/)
-- 4. Positive results ([PDF p. 20](Papers/cholesky_cancellations.pdf#page=20))
+- 4. Positive results ([PDF p. 19](Papers/cholesky_cancellations.pdf#page=19))
     - Forests, strips, fans. [Section_4_PositiveResults](Formalization/Section_4_PositiveResults/)
-- 5. Even counterexamples and order four ([PDF p. 27](Papers/cholesky_cancellations.pdf#page=27))
+- 5. Even counterexamples and order four ([PDF p. 26](Papers/cholesky_cancellations.pdf#page=26))
     - `A*`, order four, Pairing Lemma, `M_{2m}`. [Section_5_EvenCounterexamplesAndOrderFour](Formalization/Section_5_EvenCounterexamplesAndOrderFour/)
-- 6–8 and appendices: consequences, open problems, computational protocol — paper only for now (HTML phase).
+- 6–8 and appendices: consequences, open problems, computational protocol — paper only (no Lean content).
 
 ## Trust
 
@@ -89,8 +88,6 @@ fetches prebuilt Mathlib oleans. Elaborate `Formalization/` in dependency order 
 The paper was written by Nam Trang with Muse Spark via meta.ai, and reviewed by Paul Bendich and Patrick Tam.
 
 The formalization was produced and reviewed by Nam Trang, using Muse Code.
-
-It was agent-built with Muse Code (model watermelon-preview) from the leanPaperTemplate scaffold, with human direction and review by Nam Trang.
 
 ## Versions
 

@@ -10,12 +10,12 @@ import Section_4_PositiveResults.H_OneTriangleSetup
 
 /-! # One-triangle continuation (paper Section 4)
 
-The one-triangle state machine, clean apexes, and the per-matrix one-triangle class theorem (`one_triangle_perMatrix`, Theorem 4.8). Split from `Positives.lean`.
+The one-triangle state machine, clean apexes, and the per-matrix one-triangle class theorem (`one_triangle_perMatrix`, Theorem 4.8).
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

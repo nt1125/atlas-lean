@@ -11,12 +11,12 @@ import Section_3_CoreLemmas.E_PrefixAndFreshFill
 
 /-! # Cycles and monotonicity (paper Section 3)
 
-Same-pair bookkeeping, the arc digraph, general cycles, four-cycles (and infeasibility), and the Monotone Lemma (paper Lemma 3.18). Split from `CoreLemmas.lean`.
+Same-pair bookkeeping, the arc digraph, general cycles, four-cycles (and infeasibility), and the Monotone Lemma (paper Lemma 3.18).
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean` — entries only through `schurEntry`, levels as finsets with enumerating lists wherever the symbolic graph `G_S` is read, cancellations only through `Zeroes`/`logMag`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files — entries only through `schurEntry`, levels as finsets with enumerating lists wherever the symbolic graph `G_S` is read, cancellations only through `Zeroes`/`logMag`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

@@ -10,12 +10,12 @@ import Section_4_PositiveResults.B_StripMachinery
 
 /-! # Strip helpers (paper Section 4)
 
-Distance-one/two membership lemmas, game-graph append facts, Schur-entry computations, and the small strip state lemmas. Split from `Positives.lean` (the Exchange Lemma and its `2 × 2` minor lemma move to Section 3).
+Distance-one/two membership lemmas, game-graph append facts, Schur-entry computations, and the small strip state lemmas. The Exchange Lemma and its `2 × 2` minor lemma are in Section 3 (`C_ExchangeLemma.lean`).
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

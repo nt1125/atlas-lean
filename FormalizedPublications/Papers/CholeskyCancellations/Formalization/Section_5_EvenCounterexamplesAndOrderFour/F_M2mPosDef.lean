@@ -11,12 +11,12 @@ import Section_5_EvenCounterexamplesAndOrderFour.E_M2mMatrix
 
 /-! # The `M_{2m}` family: positive definiteness (paper Section 5)
 
-Weights, vertex/pair/sign bookkeeping, the eigendecomposition, positive definiteness, the characteristic polynomial, the counterexample at every even order `≥ 6` (paper Theorem 5.8), and the refutation of the fill-graph conjecture (Conjecture 2.27). Split from `Counterexamples.lean`.
+Weights, vertex/pair/sign bookkeeping, the eigendecomposition, positive definiteness, the characteristic polynomial, the counterexample at every even order `≥ 6` (paper Theorem 5.8), and the refutation of the fill-graph conjecture (Conjecture 2.27).
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; concrete matrices are on `Fin 4` and `Fin (2 * m)` with pair/parity read from `Finset` levels and `Fin.val` division as in the paper's `P_k = {2k, 2k+1}` indexing. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; concrete matrices are on `Fin 4` and `Fin (2 * m)` with pair/parity read from `Finset` levels and `Fin.val` division as in the paper's `P_k = {2k, 2k+1}` indexing. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 variable {m : ℕ} {a b : ℝ}
 

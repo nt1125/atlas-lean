@@ -16,7 +16,7 @@ import Section_2_SettingVocabularyAndConjectures.D_CleanPivots
 
 /-! # Clean orderings and strategy vocabulary (paper Section 2)
 
-Clean orderings, the factor-pattern characterisation, one fixed ordering for all realizations (`IsFixedOrderingFor`), the per-matrix existential, the Schur matrix `schurMatrix`, and the adaptive-strategy notions (paper Definition 2.25). Split from `Defs.lean`.
+Clean orderings, the factor-pattern characterisation, one fixed ordering for all realizations (`IsFixedOrderingFor`), the per-matrix existential, the Schur matrix `schurMatrix`, and the adaptive-strategy notions (paper Definition 2.25).
 -/
 
 open scoped Matrix

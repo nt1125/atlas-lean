@@ -11,12 +11,12 @@ import Section_2_SettingVocabularyAndConjectures.F_ConjecturesAndFeasibility
 
 /-! # Farkas alternative (paper Section 3)
 
-A real linear functional is a dot product; Stiemke's theorem (strict Farkas alternative), the separation input to the core lemmas. Split from `CoreLemmas.lean`.
+A real linear functional is a dot product; Stiemke's theorem (strict Farkas alternative), the separation input to the core lemmas.
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean` — entries only through `schurEntry`, levels as finsets with enumerating lists wherever the symbolic graph `G_S` is read, cancellations only through `Zeroes`/`logMag`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files — entries only through `schurEntry`, levels as finsets with enumerating lists wherever the symbolic graph `G_S` is read, cancellations only through `Zeroes`/`logMag`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

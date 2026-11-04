@@ -11,12 +11,12 @@ import Section_5_EvenCounterexamplesAndOrderFour.D_PairingLemma
 
 /-! # The `M_{2m}` family: matrix (paper Section 5)
 
-The `M_{2m}` matrices, their pair partners, entry computations, and no-clean-ordering at the curve point. Split from `Counterexamples.lean`.
+The `M_{2m}` matrices, their pair partners, entry computations, and no-clean-ordering at the curve point.
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; concrete matrices are on `Fin 4` and `Fin (2 * m)` with pair/parity read from `Finset` levels and `Fin.val` division as in the paper's `P_k = {2k, 2k+1}` indexing. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; concrete matrices are on `Fin 4` and `Fin (2 * m)` with pair/parity read from `Finset` levels and `Fin.val` division as in the paper's `P_k = {2k, 2k+1}` indexing. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

@@ -10,12 +10,12 @@ import Section_4_PositiveResults.G_ExistsPeelVertex
 
 /-! # One-triangle setup (paper Section 4)
 
-Exactly-one-triangle and edge-disjoint-triangle predicates, index bookkeeping, and the long-path endpoint lemma (`exists_peel_vertex_iii`). Split from `Positives.lean`.
+Exactly-one-triangle and edge-disjoint-triangle predicates, index bookkeeping, and the long-path endpoint lemma (`exists_peel_vertex_iii`).
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

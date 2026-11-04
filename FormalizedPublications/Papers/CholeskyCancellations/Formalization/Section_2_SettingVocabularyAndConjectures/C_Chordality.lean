@@ -16,7 +16,7 @@ import Section_2_SettingVocabularyAndConjectures.B_PatternGraphs
 
 /-! # Chordality vocabulary (paper Section 2)
 
-Simplicial vertices, pendant vertices, perfect elimination orderings, chordal graphs, cut vertices, clique sums, and irreducibility (with `irreducible_iff_connected`). Split from `Defs.lean`.
+Simplicial vertices, pendant vertices, perfect elimination orderings, chordal graphs, cut vertices, clique sums, and irreducibility (with `irreducible_iff_connected`).
 -/
 
 open scoped Matrix

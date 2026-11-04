@@ -11,12 +11,12 @@ import Section_5_EvenCounterexamplesAndOrderFour.A_Astar
 
 /-! # Clean orderings at orders three and four (paper Section 5)
 
-Pattern/symbolic comparison helpers, clean orderings for triangles and four-vertex levels, and Conjecture 1 at order three. Split from `Counterexamples.lean`.
+Pattern/symbolic comparison helpers, clean orderings for triangles and four-vertex levels, and Conjecture 1 at order three.
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; concrete matrices are on `Fin 4` and `Fin (2 * m)` with pair/parity read from `Finset` levels and `Fin.val` division as in the paper's `P_k = {2k, 2k+1}` indexing. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; concrete matrices are on `Fin 4` and `Fin (2 * m)` with pair/parity read from `Finset` levels and `Fin.val` division as in the paper's `P_k = {2k, 2k+1}` indexing. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

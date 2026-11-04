@@ -10,12 +10,12 @@ import Section_4_PositiveResults.F_PeelingAndCycles
 
 /-! # A peelable vertex exists (paper Section 4)
 
-Every suitable graph has a peelable vertex (`exists_peel_vertex`), the Dirac-style endpoint lemma behind the chordal peeling arguments. Split from `Positives.lean`.
+Every suitable graph has a peelable vertex (`exists_peel_vertex`), the Dirac-style endpoint lemma behind the chordal peeling arguments.
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

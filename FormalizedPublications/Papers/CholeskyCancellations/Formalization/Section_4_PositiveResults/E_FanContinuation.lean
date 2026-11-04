@@ -10,12 +10,12 @@ import Section_4_PositiveResults.D_StripContinuation
 
 /-! # Fan continuation (paper Section 4)
 
-Fan patterns and states, the fan state machine (`fan_continuation`), and the per-matrix fan class theorem (`fans_perMatrix`, Theorem 4.8). Split from `Positives.lean`.
+Fan patterns and states, the fan state machine (`fan_continuation`), and the per-matrix fan class theorem (`fans_perMatrix`, Theorem 4.8).
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 

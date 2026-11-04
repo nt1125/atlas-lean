@@ -10,12 +10,12 @@ import Section_4_PositiveResults.I_OneTriangleContinuation
 
 /-! # Edge-disjoint triangles and assembly (paper Section 4)
 
-Chordal states, the edge-disjoint continuation, the per-matrix edge-disjoint class theorem (`edge_disjoint_perMatrix`), and the assembly `positives` (paper Theorem 4.8). Split from `Positives.lean`.
+Chordal states, the edge-disjoint continuation, the per-matrix edge-disjoint class theorem (`edge_disjoint_perMatrix`), and the assembly `positives` (paper Theorem 4.8).
 -/
 
 namespace CholeskyCancellations
 
-/- Spine-choice comment (MANDATORY per theory file): same single spine as `Defs.lean`; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
+/- Spine-choice comment (MANDATORY per theory file): same single spine as the Section 2 files; graph classes are predicates on `SimpleGraph (Fin n)` patterns and cleanliness is quantified per SPD realization through `PatternAdmitsPerMatrixCleanOrdering`. (Plain comment: a docstring cannot precede `variable`.) -/
 variable {n : ℕ}
 
 
@@ -307,7 +307,7 @@ stated in the per-matrix form — a clean ordering per realization
 — which is the form the paper's Theorem 4.8 is stated in; the
 stronger strategy form (`PatternAdmitsAdaptiveStrategy`, one
 pivot-choice rule for all realizations) is defined in
-`Defs.lean` but not proved here. The parts are proved by
+`E_StrategyVocabulary.lean` but not proved here. The parts are proved by
 `strips_perMatrix` and `fans_perMatrix` (State 0/1 inductions
 through `AdmitsCleanContinuation`),
 `one_triangle_perMatrix` (peeling endpoints of longest paths off

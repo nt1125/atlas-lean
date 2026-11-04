@@ -16,7 +16,7 @@ import Section_2_SettingVocabularyAndConjectures.C_Chordality
 
 /-! # Clean pivots and the Cholesky factor (paper Section 2)
 
-Zeroes, cancellation graphs, covers, survivors, clean pivots and apexes, and the assembled Cholesky factor `factorMatrix`. Split from `Defs.lean`.
+Zeroes, cancellation graphs, covers, survivors, clean pivots and apexes, and the assembled Cholesky factor `factorMatrix`.
 -/
 
 open scoped Matrix

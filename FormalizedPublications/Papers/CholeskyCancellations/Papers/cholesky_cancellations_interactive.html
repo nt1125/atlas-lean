@@ -145,8 +145,8 @@
 <h1 id="title">Accidental Cancellations in Cholesky Factorization</h1>
 <p class="authors">Nam Trang and Meta AI</p>
 <p class="authors reviewer">Reviewed by Paul Bendich and Patrick Tam</p>
-<p class="affil">PDF: <a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/docs/Cholesky.pdf">docs/Cholesky.pdf</a>.</p>
-<p class="affil">Lean library: <a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations">nt1125/CholeskyCancellations</a>.</p>
+<p class="affil">PDF: <a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Papers/cholesky_cancellations.pdf">cholesky_cancellations.pdf</a>.</p>
+<p class="affil">Lean library: <a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean">nt1125/atlas-lean</a>.</p>
 <div class="abstract">
   <span class="env-label">Abstract.</span>
 <p>Sparse Cholesky factorization allocates storage from the symbolic fill pattern \(G^+\) alone, assuming that no position predicted nonzero ever cancels. Over-allocation never threatens correctness, so the assumption is safe in practice, but it leaves open an existential question, recorded by the first author in unpublished notes circulated in 2021 as two conjectures. Call an ordering \(\sigma\) clean for an SPD matrix \(A\) if every position predicted nonzero in \(G^+_\sigma\) is nonzero in the factor \(L\). Conjecture 1: every irreducible SPD matrix admits a clean ordering. Conjecture 2: every irreducible SPD matrix admits an ordering whose first Schur complement has no cancellation at a predicted-nonzero position.</p>
@@ -279,7 +279,7 @@ and columns of \(A\), and we freely call the elements of \(V\) <em>vertices</em>
   <pre><code>def PosDef (M : Matrix n n R) :=
   M.IsHermitian ∧ ∀ ⦃x : n →₀ R⦄, x ≠ 0 → 0 &lt; x.sum fun i xi ↦ x.sum fun j xj ↦ star xi * M i j * xj</code></pre>
   <p class="lean-note">SPD is Mathlib's Matrix.PosDef itself; the paper's Definition 2.1 needs no new definition.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/leanprover-community/mathlib4/blob/v4.34.0/Mathlib/LinearAlgebra/Matrix/PosDef.lean#L162-L163">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/leanprover-community/mathlib4/blob/v4.35.0/Mathlib/LinearAlgebra/Matrix/PosDef.lean#L164-L165">Lean source</a></p>
 </details>
 <div class="env definition" id="def-spd-schur">
   <span class="env-label">Definition 2.2 (Schur complement of a set).</span>
@@ -313,7 +313,7 @@ noncomputable def schurEntry (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n
   if hj : j ∈ Sᶜ then
     if hk : k ∈ Sᶜ then schurSet A S ⟨j, hj⟩ ⟨k, hk⟩ else 0
   else 0</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L98-L117">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/A_SchurComplement.lean#L55-L76">Lean source</a></p>
 </details>
 <div class="env proposition" id="prop-schur-basic">
   <span class="env-label">Proposition 2.3 (Basic properties).</span>
@@ -328,7 +328,7 @@ Moreover \(A/A_S\) depends only on the <em>set</em> \(S\), not on any ordering o
   <pre><code>theorem schur_basic (hA : A.PosDef) (S : Finset (Fin n)) :
     (A.submatrix (Subtype.val : ↥S → Fin n) Subtype.val).PosDef ∧
       (schurSet A S).PosDef</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L206-L209">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/A_SchurComplement.lean#L171-L174">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -355,7 +355,7 @@ as eliminating \(S\cup\{v\}\) at once.</p>
     (hk : k ∉ insert v S) :
     schurEntry A (insert v S) j k = pivotEntry A S v j k</code></pre>
   <p class="lean-note">Entrywise form: the two survivor subtypes differ.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L322-L418">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/A_SchurComplement.lean#L307-L403">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -400,7 +400,7 @@ factor is assembled from the pivot columns (Definition <a href="#def-Llink">2.23
     (p j k : Fin n) : ℝ :=
   schurEntry A S j k
     - schurEntry A S j p * schurEntry A S k p / schurEntry A S p p</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L215-L218">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/A_SchurComplement.lean#L182-L185">Lean source</a></p>
 </details>
 <div class="env definition" id="def-fill">
   <span class="env-label">Definition 2.7 (Pattern graph, elimination game, \(G_S\)).</span>
@@ -432,8 +432,8 @@ theorem level_graph_path (l : List (Fin n)) (S : Finset (Fin n))
     (hjk : j ≠ k) :
     ((gameGraph (patternGraph A) l).Adj j k ↔
       HasPathThrough (patternGraph A) S j k)</code></pre>
-  <p class="lean-note">Equation (1): the level graph is path-determined (level_graph_path, proved generally as gameGraph_adj_iff_path, later in Defs.lean). The game here keeps eliminated vertices; adjacency between survivors agrees with the paper's G_S.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L431-L439">Lean source</a></p>
+  <p class="lean-note">Equation (1): the level graph is path-determined (level_graph_path, proved generally as gameGraph_adj_iff_path, later in B_PatternGraphs.lean). The game here keeps eliminated vertices; adjacency between survivors agrees with the paper's G_S.</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/B_PatternGraphs.lean#L43-L53">Lean source</a></p>
 </details>
 <div class="env remark" id="env-2.8">
   <span class="env-label">Remark 2.8.</span>
@@ -467,7 +467,7 @@ the game: that graph is \(G_V\), which has no vertices at all.</p>
   SimpleGraph.fromRel fun j k =&gt;
     (gameGraph (patternGraph A) (prefixList σ j k)).Adj j k</code></pre>
   <p class="lean-note">Adjacency is read at the committing prefix; see fillGraph_adj_iff.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L501-L504">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/B_PatternGraphs.lean#L131-L134">Lean source</a></p>
 </details>
 <div class="env proposition" id="prop-fillpath">
   <span class="env-label">Proposition 2.10 (Fill-path theorem; two indexings agree).</span>
@@ -488,7 +488,7 @@ and \(k\). Then the following are equivalent:</p>
     ((gameGraph (patternGraph A) (prefixList σ j k)).Adj j k ↔
       HasPathThrough (patternGraph A) (prefixSet σ j k) j k)</code></pre>
   <p class="lean-note">Cited in the paper (Rose–Tarjan–Lueker). Here (1)⇔(2) is the definition of fillGraph; the paper's cumulative-union definition is fillGraphGame, proved equal to fillGraph (fillGraphGame_eq_fillGraph). The (2)⇔(3) path characterization is proved (gameGraph_adj_iff_path, via walk lifting and walk surgery at each pivot).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1186-L1221">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/B_PatternGraphs.lean#L866-L901">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -533,8 +533,8 @@ theorem numeric_le_symbolic (hA : A.PosDef) :
     ∀ σ : List (Fin n), IsOrdering σ →
       ∀ j k : Fin n, (factorPattern A σ).Adj j k →
         PredictedNonzero A σ j k</code></pre>
-  <p class="lean-note">The containment display of Definition 2.12; numeric_le_symbolic is proved later in Defs.lean, by induction on the elimination list (the workhorse is numeric_le_gameGraph).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L534-L536">Lean source</a></p>
+  <p class="lean-note">The containment display of Definition 2.12; numeric_le_symbolic is proved later in B_PatternGraphs.lean, by induction on the elimination list (the workhorse is numeric_le_gameGraph).</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/B_PatternGraphs.lean#L170-L172">Lean source</a></p>
 </details>
 <div class="env example" id="ex-fill-path">
   <span class="env-label">Example 2.13 (Fill from a path).</span>
@@ -559,7 +559,7 @@ numeric fill, never a lower one.</p>
     schurEntry A {1} 0 2 = -A 0 1 * A 1 2 / A 1 1 ∧
     schurEntry A {1} 0 2 ≠ 0</code></pre>
   <p class="lean-note">The entry is nonzero at creation, by Lemma lem:fresh's formula.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L592-L639">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/B_PatternGraphs.lean#L242-L289">Lean source</a></p>
 </details>
 <h3 id="sec-2-3">2.3. Graph vocabulary</h3>
 <div class="env definition" id="def-graphvocab">
@@ -609,7 +609,7 @@ def IsCliqueSumAlong (G G₁ G₂ : SimpleGraph (Fin n)) (K : Finset (Fin n)) :
   G = G₁ ⊔ G₂ ∧
     ∀ j k : Fin n, (G₁.Adj j k ∧ G₂.Adj j k) ↔ j ∈ K ∧ k ∈ K ∧ j ≠ k</code></pre>
   <p class="lean-note">ω is Mathlib's SimpleGraph.cliqueNum; cut vertices and clique sums are IsCutVertex / IsCliqueSumAlong. Blocks and the block-cut tree are not formalized (unused). IsCliqueSumAlong formalizes only the common-edge part of the paper's \(G_1 \cap G_2 = K\): the vertex-set part is not formalized, since \(G_1, G_2\) are spanning graphs on the same vertex set.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1226-L1284">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/C_Chordality.lean#L33-L103">Lean source</a></p>
 </details>
 <div class="env remark" id="env-2.15">
   <span class="env-label">Remark 2.15.</span>
@@ -633,7 +633,7 @@ hypothesis of Conjectures <a href="#conj-2">2.26</a> and <a href="#conj-1">2.27<
   ∀ V₁ V₂ : Finset (Fin n), V₁.Nonempty → V₂.Nonempty → Disjoint V₁ V₂ →
     V₁ ∪ V₂ = Finset.univ →
       ∃ i ∈ V₁, ∃ j ∈ V₂, A i j ≠ 0</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1283-L1286">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/C_Chordality.lean#L110-L113">Lean source</a></p>
 </details>
 <div class="env proposition" id="prop-irred-connected">
   <span class="env-label">Proposition 2.17.</span>
@@ -648,7 +648,7 @@ hypothesis of Conjectures <a href="#conj-2">2.26</a> and <a href="#conj-1">2.27<
     (hsymm : ∀ i j : Fin n, A i j = A j i) :
     IsIrreducible A ↔ (patternGraph A).Connected</code></pre>
   <p class="lean-note">Symmetry is Definition 2.16's hypothesis; the conclusion is literally Mathlib's SimpleGraph.Connected (preconnected plus a vertex, supplied by 0 &lt; n).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1299-L1351">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/C_Chordality.lean#L122-L174">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -718,7 +718,7 @@ def IsCleanApex (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
     (p : Fin n) : Prop :=
   ∀ j k : Fin n, ¬ Zeroes A S p j k</code></pre>
   <p class="lean-note">Survives is exactly “not covered”: no survivor hypothesis on \(q\) is included, since \(C_p(S)\) contains only pairs of survivors of \(S \cup \{p\}\), so survival is vacuous for \(q \in S \cup \{p\}\). IsCleanPivotAt requires Enumerates \(l\ S\): the game graph is the paper's \(G_S\) only when \(l\) enumerates \(S\).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1358-L1428">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/D_CleanPivots.lean#L35-L121">Lean source</a></p>
 </details>
 <div class="env remark" id="rem-Cp-role">
   <span class="env-label">Remark 2.20 (What \(C_p(S)\) is for).</span>
@@ -742,7 +742,7 @@ for every \(j\in R\setminus\{v\}\), i.e. its row of \(M\) has no zero among the 
   <pre><code>def IsUniversalAt (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
     (v : Fin n) : Prop :=
   v ∉ S ∧ ∀ j : Fin n, j ∉ S → j ≠ v → schurEntry A S v j ≠ 0</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1398-L1400">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/D_CleanPivots.lean#L128-L130">Lean source</a></p>
 </details>
 <div class="env remark" id="rem-universal">
   <span class="env-label">Remark 2.22.</span>
@@ -789,8 +789,8 @@ theorem factorMatrix_diag (hA : A.PosDef) (σ : List (Fin n))
     factorMatrix A σ p p
       = Real.sqrt (schurEntry A (prefixListBefore σ p).toFinset p p) ∧
     0 &lt; factorMatrix A σ p p</code></pre>
-  <p class="lean-note">factorMatrix and the three theorems are later in Defs.lean: L Lᵀ = A, lower triangular in σ-order, and positive diagonal together identify factorMatrix as the Cholesky factor for σ; the factor pattern is its pattern (factorPattern_adj_iff_factorEntry).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1413-L1416">Lean source</a></p>
+  <p class="lean-note">factorMatrix and the three theorems are later in D_CleanPivots.lean: L Lᵀ = A, lower triangular in σ-order, and positive diagonal together identify factorMatrix as the Cholesky factor for σ; the factor pattern is its pattern (factorPattern_adj_iff_factorEntry).</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/D_CleanPivots.lean#L147-L150">Lean source</a></p>
 </details>
 <div class="env definition" id="def-clean">
   <span class="env-label">Definition 2.24 (Clean ordering).</span>
@@ -814,7 +814,7 @@ level can be refilled before the pair is committed (Section <a href="#sec-even">
 theorem clean_iff_factor_pattern (hA : A.PosDef)
     (σ : List (Fin n)) (hσ : IsOrdering σ) :
     (IsCleanOrdering A σ ↔ factorPattern A σ = fillGraph A σ)</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1879-L1915">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/E_StrategyVocabulary.lean#L34-L72">Lean source</a></p>
 </details>
 <div class="env definition" id="def-strategy">
   <span class="env-label">Definition 2.25 (Strategies: fixed, adaptive, peeling).</span>
@@ -868,7 +868,7 @@ theorem adaptiveStrategy_implies_perMatrix {G : SimpleGraph (Fin n)}
   obtain ⟨σ, hord, hclean, -⟩ := hstrat A hA hG
   exact ⟨σ, hord, hclean⟩</code></pre>
   <p class="lean-note">PatternAdmitsPerMatrixCleanOrdering is the per-matrix existential form of “admits an adaptive clean ordering”, named for what it is: the ordering may be chosen after seeing all of \(A\). The paper's strategy form is formalized separately as PatternAdmitsAdaptiveStrategy — each pivot a function of the current Schur complement alone, so matrices agreeing up to the current level get the same next pivot — and it implies the per-matrix form. Theorem 4.8 is proved in Lean only in the per-matrix form; the strategy form is not proved for any class.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1955-L2023">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/E_StrategyVocabulary.lean#L79-L158">Lean source</a></p>
 </details>
 <div class="env conjecture" id="conj-2">
   <span class="env-label">Conjecture 2.26 (First-Schur Conjecture, “Conjecture 2” of Section <a href="#sec-intro-exist">1.3</a>).</span>
@@ -884,8 +884,8 @@ complement \(S^{(1)}=A/A_{\{\sigma_1\}}\) has no cancellation at a predicted-non
   ∀ {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ),
     A.PosDef → IsIrreducible A →
       ∃ σ : List (Fin n), IsOrdering σ ∧ FirstSchurClean A σ</code></pre>
-  <p class="lean-note">Refuted in Lean, as in the paper (Theorem 5.1): first_schur_conjecture_refuted, via astar_irreducible and astar_counts (Counterexamples.lean).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1956-L1959">Lean source</a></p>
+  <p class="lean-note">Refuted in Lean, as in the paper (Theorem 5.1): first_schur_conjecture_refuted, via astar_irreducible and astar_counts (A_Astar.lean).</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/F_ConjecturesAndFeasibility.lean#L48-L51">Lean source</a></p>
 </details>
 <div class="env conjecture" id="conj-1">
   <span class="env-label">Conjecture 2.27 (Fill-Graph Conjecture, “Conjecture 1” of Section <a href="#sec-intro-exist">1.3</a>).</span>
@@ -901,8 +901,8 @@ that is, a clean ordering.</p>
   ∀ {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ),
     A.PosDef → IsIrreducible A →
       ∃ σ : List (Fin n), IsOrdering σ ∧ IsCleanOrdering A σ</code></pre>
-  <p class="lean-note">Refuted in Lean at every even order ≥ 6, as in the paper (Theorem 5.8): fill_graph_conjecture_refuted, via m2m_counterexample_all_orders and m2mMatrix_irreducible (Counterexamples.lean).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1964-L1967">Lean source</a></p>
+  <p class="lean-note">Refuted in Lean at every even order ≥ 6, as in the paper (Theorem 5.8): fill_graph_conjecture_refuted, via m2m_counterexample_all_orders and m2mMatrix_irreducible (F_M2mPosDef.lean).</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/F_ConjecturesAndFeasibility.lean#L58-L61">Lean source</a></p>
 </details>
 <h3 id="sec-2-6">2.6. Slots, blocking families, and realizability</h3>
 <div class="env definition" id="def-slots">
@@ -934,7 +934,7 @@ family of slots is a system of equations whose solvability is the question.</p>
 
 def Slot.Active (A : Matrix (Fin n) (Fin n) ℝ) (s : Slot n) : Prop :=
   schurEntry A s.level s.fst s.snd = 0</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L1971-L1988">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/F_ConjecturesAndFeasibility.lean#L67-L86">Lean source</a></p>
 </details>
 <div class="env definition" id="def-blocking">
   <span class="env-label">Definition 2.29 (Spoiling, blocking, realizable, feasible).</span>
@@ -973,7 +973,7 @@ def IsFeasibleAt (H : Set (Slot n)) (S : Finset (Fin n)) : Prop :=
     ∀ s ∈ H, ∃ v : Fin n, s.level = insert v S ∧ v ∉ S ∧
       t s.fst s.snd = t v s.fst + t v s.snd</code></pre>
   <p class="lean-note">IsFeasibleAt is the formal additive system: it is matrix-free, so each slot imposes its equation unconditionally. Lemma 2.33 supplies that equation from a realizing matrix only when both legs are nonzero, so formal infeasibility does not by itself refute realizability; the correct bridge is feasible_of_active_of_legs_ne — active slots with nonzero legs imply feasibility. The Pairing Lemma's use of IsFeasibleAt is likewise about the formal system.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L2078-L2199">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/F_ConjecturesAndFeasibility.lean#L94-L230">Lean source</a></p>
 </details>
 <div class="env remark" id="rem-covering">
   <span class="env-label">Remark 2.30 (The covering reformulation).</span>
@@ -1015,8 +1015,8 @@ contradicts \(G_A\) containing the triangle. Lemma <a href="#lem-tri">3.2</a> sa
       ¬ IsRealizable {⟨{0}, 1, 2, by decide, by decide, by decide⟩,
         ⟨{1}, 0, 2, by decide, by decide, by decide⟩,
         ⟨{2}, 0, 1, by decide, by decide, by decide⟩} G)</code></pre>
-  <p class="lean-note">Unrealizability is the Triangle Lemma (lem:tri). The first claim holds for any pair in any order: slot_empty_spoils_of_head (CoreLemmas.lean).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L421-L558">Lean source</a></p>
+  <p class="lean-note">Unrealizability is the Triangle Lemma (lem:tri). The first claim holds for any pair in any order: slot_empty_spoils_of_head (B_CleanApexAndTriangle.lean).</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/B_CleanApexAndTriangle.lean#L238-L375">Lean source</a></p>
 </details>
 <h3 id="sec-2-7">2.7. The additive parametrization</h3>
 <div class="env definition" id="def-t">
@@ -1044,7 +1044,7 @@ noncomputable def logMag (A : Matrix (Fin n) (Fin n) ℝ)
     (S : Finset (Fin n)) (j k : Fin n) : ℝ :=
   - Real.log |partialCorr A S j k|</code></pre>
   <p class="lean-note">Totalisation: the paper puts \(t = +\infty\) at a zero entry, but \(\mathbb{R}\) has no \(+\infty\), so Lean totalises — at a zero entry \(\text{logMag} = 0\), not \(+\infty\) (since \(\log 0 = 0\) in Lean). Every use guards this away by assuming the entries in play are nonzero, where the two conventions agree and \(t &gt; 0\); no lemma relies on the totalised value \(0\).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L2102-L2125">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/F_ConjecturesAndFeasibility.lean#L124-L145">Lean source</a></p>
 </details>
 <div class="env lemma" id="lem-additive">
   <span class="env-label">Lemma 2.33 (Cancellation is additive in \(t\)).</span>
@@ -1079,7 +1079,7 @@ the cancellation.</p>
           * (partialCorr A S v j * partialCorr A S v k) →
         schurEntry A (insert v S) j k = 0)</code></pre>
   <p class="lean-note">Sign agreement is read as a positive product (both sides nonzero under the hypotheses).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L2206-L2310">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/F_ConjecturesAndFeasibility.lean#L240-L342">Lean source</a></p>
 </details>
 <details class="leanbox res">
   <summary>
@@ -1094,7 +1094,7 @@ the cancellation.</p>
       schurEntry A S v s.fst ≠ 0 ∧ schurEntry A S v s.snd ≠ 0) :
     IsFeasibleAt H S</code></pre>
   <p class="lean-note">The soundness bridge for the formal feasibility system: Lemma 2.33 supplies a slot's additive equation only when both legs are nonzero, so active slots with nonzero legs — and only with that hypothesis — imply feasibility, with \(t\) the log-magnitudes of \(A/A_S\) (and \(1\) where the paper's \(t\) has no counterpart).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Defs.lean#L2320-L2415">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/F_ConjecturesAndFeasibility.lean#L356-L451">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1171,7 +1171,7 @@ rational vector \(y\) with \(y^\top T\ge0\) and \(y^\top T\neq0\), which is what
     (u j k : Fin n) (huj : u ≠ j) (_huk : u ≠ k) (_hjk : j ≠ k)
     (hak : A u k ≠ 0) (h1 : A u u * A j k = A u j * A u k) :
     A j j * A u k ≠ A j u * A j k</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L231-L249">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/B_CleanApexAndTriangle.lean#L36-L54">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1201,7 +1201,7 @@ triangle.</p>
         ∃ y ∈ ({j, k, u} : Finset (Fin n)), x ≠ y ∧
           IsCleanApexFor A ∅ x {j, k, u}
             ∧ IsCleanApexFor A ∅ y {j, k, u}</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L290-L358">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/B_CleanApexAndTriangle.lean#L101-L169">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1234,7 +1234,7 @@ of \(p\).</p>
     (p q : Fin n) (hpq : p ≠ q)
     (hmax : ∀ i j : Fin n, i ≠ j → logMag A ∅ i j ≤ logMag A ∅ p q) :
     ¬ Covers A ∅ p q ∧ Survives A ∅ p q</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L604-L621">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/D_UniversalAndRefill.lean#L69-L87">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1269,7 +1269,7 @@ the elimination of \(p\).</p>
     (hjv : j ≠ v) (hkv : k ≠ v) (hleg : schurEntry A S j v = 0) :
     schurEntry A (insert v S) j k = schurEntry A S j k ∧
       (schurEntry A S j k = 0 ↔ schurEntry A (insert v S) j k = 0)</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L626-L637">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/D_UniversalAndRefill.lean#L94-L105">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1306,7 +1306,7 @@ are survivors distinct from \(v\) with \(M_{jk}=0\), then</p>
               ∧ schurEntry A (insert v S) j k ≠ 0)
       ∧ ∀ j k : Fin n, j ∉ insert v S → k ∉ insert v S → j ≠ k →
           (schurEntry A (insert v S) j k = 0 ↔ Zeroes A S v j k)</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L642-L678">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/D_UniversalAndRefill.lean#L112-L148">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1340,7 +1340,7 @@ inheriting it (Question <a href="#q-cliquesum">7.2</a>).</p></div>
     (hmax : ∀ j k : Fin n, j ∉ S → k ∉ S → j ≠ k →
       logMag A S j k ≤ logMag A S p q) :
     ¬ Covers A S p q</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L683-L693">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/D_UniversalAndRefill.lean#L155-L165">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1375,7 +1375,7 @@ that \(p\) is a weakest neighbour of \(q\), that is
     (hweak : ∀ x : Fin n, x ∉ S → schurEntry A S q x ≠ 0 →
       logMag A S q x ≤ logMag A S p q) :
     IsUniversalAt A (insert p S) q</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L698-L722">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/D_UniversalAndRefill.lean#L172-L196">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1415,7 +1415,7 @@ Then \(A_{uw}=0\); moreover, writing \(M=A/A_{\{u\}}\), we have \(M_{jw}=A_{jw}\
       schurEntry A (insert w {u}) j k
         = - (A j w * A k w / schurEntry A {u} w w) ∧
       schurEntry A (insert w {u}) j k ≠ 0</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L729-L810">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/D_UniversalAndRefill.lean#L205-L286">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1449,7 +1449,7 @@ therefore gives</p>
     ∃ v ∈ S, ∃ l' : List (Fin n), Enumerates l' (S.erase v) ∧
       (gameGraph (patternGraph A) l').Adj j v ∧
       (gameGraph (patternGraph A) l').Adj k v</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L819-L941">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/E_PrefixAndFreshFill.lean#L30-L152">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1489,7 +1489,7 @@ particular, only an edge that lies in a triangle of the fill graph can ever canc
     (hg : (gameGraph (patternGraph A) l).Adj j k) :
     ∃ (v : Fin n), v ∈ S ∧ ∃ (σ : List (Fin n)), IsOrdering σ ∧
       (fillGraph A σ).IsClique ({j, k, v} : Set (Fin n))</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L949-L1093">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/E_PrefixAndFreshFill.lean#L162-L306">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1530,7 +1530,7 @@ later level.</p>
           / schurEntry A S v v) ∧
     (schurEntry A S j v ≠ 0 → schurEntry A S k v ≠ 0 →
       schurEntry A (insert v S) j k ≠ 0)</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L1100-L1129">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/E_PrefixAndFreshFill.lean#L315-L344">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1562,7 +1562,7 @@ of the slots \((S,j,v)\) and \((S,k,v)\) is active.</p>
     (hnk : ¬ (gameGraph (patternGraph A) l).Adj j k)
     (hz : schurEntry A (insert v S) j k = 0) :
     schurEntry A S j v = 0 ∨ schurEntry A S k v = 0</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L1135-L1158">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/E_PrefixAndFreshFill.lean#L352-L375">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1586,7 +1586,7 @@ if the product \((A/A_S)_{jv}(A/A_S)_{kv}\) vanishes, and hence only if one of i
     (_hjk : j ≠ k) (h0 : schurEntry A S j k = 0)
     (h1 : schurEntry A (insert i S) j k = 0) :
     schurEntry A S j i = 0 ∨ schurEntry A S k i = 0</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L1162-L1178">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/E_PrefixAndFreshFill.lean#L381-L397">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1621,7 +1621,7 @@ which pairs are nonzero in \(A/A_S\) is a numeric matter and not determined by t
   ⟨fun a b =&gt; ∃ s ∈ H, ∃ v : Fin n, s.level = insert v S ∧ v ∉ S ∧
     SamePair a.1.1 a.1.2 s.fst s.snd ∧
       (SamePair b.1.1 b.1.2 s.fst v ∨ SamePair b.1.1 b.1.2 s.snd v)⟩</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L1198-L1202">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/F_CyclesAndMonotone.lean#L45-L49">Lean source</a></p>
 </details>
 <div class="env lemma" id="lem-cycle">
   <span class="env-label">Lemma 3.16 (General Cycle Lemma).</span>
@@ -1642,7 +1642,7 @@ contains a directed cycle, then \(H\) is infeasible: no positive solution \(t^{(
       Relation.TransGen (arcDigraph A S H).Adj a a) :
     ¬ IsFeasibleAt H S</code></pre>
   <p class="lean-note">The conclusion is formal-system infeasibility (¬ IsFeasibleAt): the proof's chain of strict inequalities uses only the equations of the slots appearing as arcs. Each arc witnesses one leg nonzero (its target pair is a nonzero pair); the other leg's contribution is positive because the formal \(t\) is positive on every pair by definition. In the paper's argument both legs are nonzero, so both paper \(t\) values are finite and positive; that is the difference between the formal-system conclusion here and the paper's infeasibility.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L1215-L1258">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/F_CyclesAndMonotone.lean#L67-L110">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1680,8 +1680,8 @@ t^{(S)}_{da}=t^{(S)}_{db}+t^{(S)}_{ab}\]
       ∧ logMag A S b c = logMag A S b d + logMag A S c d
       ∧ logMag A S c d = logMag A S c a + logMag A S d a
       ∧ logMag A S d a = logMag A S d b + logMag A S a b)</code></pre>
-  <p class="lean-note">Matrix form: assumes all pairs nonzero at S, and only the two cross-pair distinctness facts. This is the paper's statement, since all pairs nonzero makes Lemma 2.33 supply all four relations. The formal-system form (¬ IsFeasibleAt for the four apex slots, with no nonzero hypotheses) is four_cycle_infeasible (CoreLemmas.lean).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L1267-L1285">Lean source</a></p>
+  <p class="lean-note">Matrix form: assumes all pairs nonzero at S, and only the two cross-pair distinctness facts. This is the paper's statement, since all pairs nonzero makes Lemma 2.33 supply all four relations. The formal-system form (¬ IsFeasibleAt for the four apex slots, with no nonzero hypotheses) is four_cycle_infeasible (F_CyclesAndMonotone.lean).</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/F_CyclesAndMonotone.lean#L121-L139">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1703,7 +1703,7 @@ for \(G\). Equivalently, in contrapositive form: if \(H'\) is realizable for \(G
   <pre><code>theorem monotone (G : SimpleGraph (Fin n)) (H H' : Set (Slot n))
     (hHH' : H ⊆ H') (hH : ¬ IsRealizable H G) :
     ¬ IsRealizable H' G</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/CoreLemmas.lean#L1368-L1373">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_3_CoreLemmas/F_CyclesAndMonotone.lean#L235-L238">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1728,7 +1728,7 @@ realizable for \(G\) implies \(H\) realizable for \(G\), which is what was requi
     (hF : (patternGraph A).IsAcyclic) (σ : List (Fin n))
     (hσ : IsOrdering σ) : IsCleanOrdering A σ</code></pre>
   <p class="lean-note">A forest is Mathlib's SimpleGraph.IsAcyclic.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Positives.lean#L503-L530">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_4_PositiveResults/A_Theorem41Determinants.lean#L503-L530">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -1779,7 +1779,7 @@ small forest. No accidental zero ever occurs, irrespective of ordering [<a href=
   <pre><code>def IsStripPattern (G : SimpleGraph (Fin n)) : Prop :=
   3 ≤ n ∧ ∃ l : List (Fin n), IsOrdering l ∧
     ∀ x y : Fin n, G.Adj x y ↔ DistOneIn l x y ∨ DistTwoIn l x y</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Positives.lean#L548-L550">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_4_PositiveResults/B_StripMachinery.lean#L42-L44">Lean source</a></p>
 </details>
 <div class="env definition" id="def-strip-state">
   <span class="env-label">Definition 4.4 (Strip state).</span>
@@ -1814,7 +1814,7 @@ def StripStateOne (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
     schurEntry A S s₂ s₃ = 0 ∧
       ∀ x y : Fin n, DistOneIn l x y ∨ DistTwoIn l x y →
         ¬ SamePair x y s₂ s₃ → schurEntry A S x y ≠ 0</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Positives.lean#L556-L578">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_4_PositiveResults/B_StripMachinery.lean#L52-L78">Lean source</a></p>
 </details>
 <div class="env definition" id="def-strip-moves">
   <span class="env-label">Definition 4.5 (Moves on a strip state).</span>
@@ -1836,7 +1836,7 @@ def IsSecondPivot (l : List (Fin n)) (p : Fin n) : Prop :=
   ∃ (s₁ s₃ s₄ : Fin n) (rest : List (Fin n)),
     l = s₁ :: p :: s₃ :: s₄ :: rest</code></pre>
   <p class="lean-note">IsEndPivot requires a fourth vertex \(s_4\): the strip moves require \(k \ge 4\) survivors, so a 3-vertex list is not an END move. (Unused: the strip induction reads the moves off the state directly.)</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Positives.lean#L586-L602">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_4_PositiveResults/B_StripMachinery.lean#L88-L108">Lean source</a></p>
 </details>
 <div class="env remark" id="rem-peo-fail">
   <span class="env-label">Remark 4.6 (PEO-insufficiency witness).</span>
@@ -1859,7 +1859,7 @@ def IsSecondPivot (l : List (Fin n)) (p : Fin n) : Prop :=
       (gameGraph (patternGraph A) (lS ++ prefixListBefore τ p)).Adj p x →
         schurEntry A (S ∪ (prefixListBefore τ p).toFinset) p x ≠ 0</code></pre>
   <p class="lean-note">The Enumerates \(lS\ S\) conjunct is load-bearing: the game graph at \(lS ++ \text{prefix}\) is the paper's \(G_{S_{i-1}}\) only when \(lS\) enumerates \(S\).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Positives.lean#L611-L618">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_4_PositiveResults/B_StripMachinery.lean#L119-L125">Lean source</a></p>
 </details>
 <div class="env theorem" id="thm-positives">
   <span class="env-label">Theorem 4.8 (Strips, fans, one-triangle, edge-disjoint triangles).</span>
@@ -1882,7 +1882,7 @@ def IsSecondPivot (l : List (Fin n)) (p : Fin n) : Prop :=
         IsChordal G → G.cliqueNum ≤ 3 → TrianglesEdgeDisjoint G →
           PatternAdmitsPerMatrixCleanOrdering G)</code></pre>
   <p class="lean-note">Parts (i)–(iii) are strips_perMatrix / fans_perMatrix, one_triangle_perMatrix, and edge_disjoint_perMatrix — the per-matrix form of Theorem 4.8, not the paper's strategy form (PatternAdmitsAdaptiveStrategy, not proved here).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Positives.lean#L5543-L5556">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_4_PositiveResults/J_EdgeDisjointAndAssembly.lean#L316-L329">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof of (i), strips and fans.</em></summary>
@@ -2028,8 +2028,8 @@ Conjecture <a href="#conj-1">2.27</a>: the refill phenomenon rescues eight of it
           * (Polynomial.X - Polynomial.C 1) ∧
       (∀ σ : List (Fin 4), IsOrdering σ → ¬ FirstSchurClean astar σ) ∧
       {σ : List (Fin 4) | IsOrdering σ ∧ IsCleanOrdering astar σ}.ncard = 8</code></pre>
-  <p class="lean-note">With astar_irreducible, this refutes Conjecture 2.26 in Lean: first_schur_conjecture_refuted (Counterexamples.lean).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Counterexamples.lean#L356-L364">Lean source</a></p>
+  <p class="lean-note">With astar_irreducible, this refutes Conjecture 2.26 in Lean: first_schur_conjecture_refuted (A_Astar.lean).</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_5_EvenCounterexamplesAndOrderFour/A_Astar.lean#L366-L374">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -2080,7 +2080,7 @@ is refill.</p>
     ∀ A : Matrix (Fin n) (Fin n) ℝ,
     A.PosDef → IsIrreducible A →
       ∃ σ : List (Fin n), IsOrdering σ ∧ IsCleanOrdering A σ</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Counterexamples.lean#L1358-L1406">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_5_EvenCounterexamplesAndOrderFour/C_ExistsCleanFour.lean#L457-L505">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -2159,7 +2159,7 @@ in its place; we do not carry one out here.</p>
   </summary>
   <pre><code>def IsFixedPointFreeInvolution {α : Type*} (π : Equiv.Perm α) : Prop :=
   Function.Involutive π ∧ ∀ x : α, π x ≠ x</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Counterexamples.lean#L1411-L1412">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_5_EvenCounterexamplesAndOrderFour/D_PairingLemma.lean#L26-L27">Lean source</a></p>
 </details>
 <div class="env lemma" id="lem-pairing">
   <span class="env-label">Lemma 5.5 (Pairing Lemma).</span>
@@ -2189,7 +2189,7 @@ Then:</p>
           (∀ s ∈ H, CandidateSlot S W s) → PairingConfig π S W H →
             IsFeasibleAt H S)</code></pre>
   <p class="lean-note">CandidateSlot uses the increasing representative of the paper's unordered pair; PairingConfig says every slot has the opposite-pair form.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Counterexamples.lean#L2004-L2018">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_5_EvenCounterexamplesAndOrderFour/D_PairingLemma.lean#L649-L663">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -2283,8 +2283,8 @@ correlations form the block \(\begin{pmatrix}A&amp;B\\B&amp;A\end{pmatrix}\).</p
       |partialCorr A S w₀ w₂| = a ∧ |partialCorr A S w₁ w₃| = a ∧
       |partialCorr A S w₀ w₃| = b ∧ |partialCorr A S w₁ w₂| = b ∧
       |partialCorr A S w₀ w₁| = a * b ∧ |partialCorr A S w₂ w₃| = a * b</code></pre>
-  <p class="lean-note">The paper's W is a set of four survivors; pairwise distinctness is explicit here. The converse ("every α, β &gt; 0 arises") is magnitudes_converse (Counterexamples.lean), realized by M₄ at level ∅.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Counterexamples.lean#L2031-L2093">Lean source</a></p>
+  <p class="lean-note">The paper's W is a set of four survivors; pairwise distinctness is explicit here. The converse ("every α, β &gt; 0 arises") is magnitudes_converse (F_M2mPosDef.lean), realized by M₄ at level ∅.</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_5_EvenCounterexamplesAndOrderFour/D_PairingLemma.lean#L678-L740">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -2379,7 +2379,7 @@ ordering. Hence Conjecture <a href="#conj-1">2.27</a> is false at every even ord
         (3 ≤ m → ∀ σ : List (Fin (2 * m)), IsOrdering σ →
           ¬ IsCleanOrdering (m2mMatrix m a b) σ)</code></pre>
   <p class="lean-note">The curve hypothesis is inhabited: m2m_curve_instance (b = 1/2, a = (−3+√73)/8). The unconditional form m2m_counterexample_all_orders, with m2mMatrix_irreducible, refutes Conjecture 2.27 at every even order ≥ 6: fill_graph_conjecture_refuted.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations/blob/main/CholeskyCancellations/Counterexamples.lean#L3320-L3344">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_5_EvenCounterexamplesAndOrderFour/F_M2mPosDef.lean#L953-L977">Lean source</a></p>
 </details>
 <div class="env remark" id="rem-curve-family">
   <span class="env-label">Remark 5.9 (The parameter curve is a one-parameter family).</span>
@@ -3486,7 +3486,7 @@ part of its proof, which is elementary.</p>
 </ul>
 <footer>
   Web rendering of the paper with its Lean formalization.
-  Repository: <a target="_blank" rel="noopener" href="https://github.com/nt1125/CholeskyCancellations">nt1125/CholeskyCancellations</a>.
+  Repository: <a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean">nt1125/atlas-lean</a>.
 </footer>
 
 </main>

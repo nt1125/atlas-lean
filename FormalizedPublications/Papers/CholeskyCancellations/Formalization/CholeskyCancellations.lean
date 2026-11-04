@@ -35,9 +35,9 @@ import Section_5_EvenCounterexamplesAndOrderFour.F_M2mPosDef
 
 /-! # CholeskyCancellations — library root
 
-Imports every library module above (single lake lib, dependency order —
-files are ordered so each imports its predecessor; new modules slot in
-after their dependencies, never reshuffle). Paper correspondence and
-per-result status: see `README.md`; web rendering with a Lean box per
-result: `Papers/cholesky_cancellations_interactive.html`. The paper is
-*Accidental Cancellations in Cholesky Factorization* (`Papers/cholesky_cancellations.pdf`). -/
+Imports every library module above, in dependency order (files are
+ordered so each imports its predecessor; new modules slot in after
+their dependencies, never reshuffle). Paper correspondence and
+per-result status: see `../Readme.md`; web rendering with a Lean box per
+result: `../Papers/cholesky_cancellations_interactive.html`. The paper is
+*Accidental Cancellations in Cholesky Factorization* (`../Papers/cholesky_cancellations.pdf`). -/
