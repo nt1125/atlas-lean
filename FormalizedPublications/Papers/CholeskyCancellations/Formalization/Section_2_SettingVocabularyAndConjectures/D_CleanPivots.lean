@@ -82,9 +82,11 @@ example (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
 
 
 
-/-- `IsCleanPivotAt A l S p`: `p` is a clean pivot at level `S`
-(enumerated by `l`): it destroys no predicted-nonzero pair (paper
-Definition 2.19, `def:cancel`). The `Enumerates l S` conjunct is
+/-- `IsCleanPivotAt A l S p`: the survivor `p` is a clean pivot at
+level `S` (enumerated by `l`): it destroys no predicted-nonzero pair
+(paper Definition 2.19, `def:cancel`: "a survivor `p` is a clean
+pivot at level `S` if `C_p(S) ∩ E(G_S) = ∅`"; the conjunct `p ∉ S`
+is "survivor"). The `Enumerates l S` conjunct is
 load-bearing: the paper's `G_S` depends only on the level `S`,
 and `gameGraph (patternGraph A) l` is `G_S` (between survivors)
 only when `l` enumerates `S`; without it the same `(S, p)`
@@ -92,7 +94,7 @@ could get different verdicts for `l = []` versus an `l`
 enumerating `S`. -/
 def IsCleanPivotAt (A : Matrix (Fin n) (Fin n) ℝ) (l : List (Fin n))
     (S : Finset (Fin n)) (p : Fin n) : Prop :=
-  Enumerates l S ∧ ∀ j k : Fin n, Zeroes A S p j k →
+  Enumerates l S ∧ p ∉ S ∧ ∀ j k : Fin n, Zeroes A S p j k →
     ¬ (gameGraph (patternGraph A) l).Adj j k
 
 
@@ -102,6 +104,16 @@ example (A : Matrix (Fin n) (Fin n) ℝ) (l : List (Fin n))
     (S : Finset (Fin n)) (p : Fin n) (h : IsCleanPivotAt A l S p) :
     Enumerates l S :=
   h.1
+
+
+
+/-- A clean pivot at level `S` is a survivor of `S`. Regression test
+for the definition: an earlier version omitted the survivor
+condition, so every `p ∈ S` was vacuously a clean pivot. -/
+example (A : Matrix (Fin n) (Fin n) ℝ) (l : List (Fin n))
+    (S : Finset (Fin n)) (p : Fin n) (h : IsCleanPivotAt A l S p) :
+    p ∉ S :=
+  h.2.1
 
 
 

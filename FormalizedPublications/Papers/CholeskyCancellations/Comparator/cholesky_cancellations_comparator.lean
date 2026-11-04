@@ -267,25 +267,44 @@ def IsCutVertex (G : SimpleGraph (Fin n)) (v : Fin n) : Prop :=
       ¬ (G.induce ({v}ᶜ : Set (Fin n))).Reachable ⟨a, ha⟩ ⟨b, hb⟩
 
 
-/-- `IsCliqueSumAlong G G₁ G₂ K`: `G` is the clique sum of `G₁` and
-`G₂` along the clique `K` (paper Definition 2.14, `def:graphvocab`:
-"`G = G₁ ∪ G₂` and `G₁ ∩ G₂ = K` is a clique"), read on a common
-vertex set: `G = G₁ ⊔ G₂`, and the common edges of `G₁` and `G₂`
-are exactly the pairs inside `K` (so `K` is a clique in each of
-`G₁, G₂, G`). Gap: only the common-edge part of the paper's
-`G₁ ∩ G₂ = K` is formalized. The vertex-set part is not: `G₁` and
-`G₂` are spanning graphs on the same vertex set `Fin n`, so they
-have no separate vertex sets whose intersection could be `K`
-(the paper's `G₁, G₂` are subgraphs, not spanning graphs).
-Modelling them as subgraphs would be needed to state that part.
-The remaining vocabulary of Definition 2.14 — blocks and the
-bipartite block-cut tree — is not formalized; no result in the
-development uses it (the edge-disjoint-triangles proof works with
-simplicial endpoints instead). -/
-def IsCliqueSumAlong (G G₁ G₂ : SimpleGraph (Fin n)) (K : Finset (Fin n)) :
+/-- `IsBlock G B`: the vertex set `B` spans a block of `G`, a maximal
+connected subgraph without a cut vertex (paper Definition 2.14,
+`def:graphvocab`). A block is an induced subgraph (adding edges
+inside a vertex set keeps it connected and creates no cut vertex),
+so it is recorded by its vertex set: `G[B]` is connected, deleting
+any one vertex of `B` leaves the rest of `G[B]` connected (`G[B]`
+has no cut vertex; a single vertex or an edge qualifies), and no
+larger vertex set has both properties. -/
+def IsBlock (G : SimpleGraph (Fin n)) (B : Finset (Fin n)) : Prop :=
+  Maximal (fun B : Finset (Fin n) => (G.induce (↑B : Set (Fin n))).Connected ∧
+    ∀ v ∈ B, (G.induce (↑(B.erase v) : Set (Fin n))).Preconnected) B
+
+/-- `blockCutGraph G`: the bipartite block-cut graph of `G` (paper
+Definition 2.14, `def:graphvocab`). Its nodes are the blocks of `G`
+(as vertex sets) and the cut vertices of `G`, and a block is adjacent
+to each cut vertex it contains. The paper also records that this
+graph is a tree when `G` is connected and that its leaves are always
+blocks; these standard facts are used nowhere in the development and
+are not proved here. -/
+def blockCutGraph (G : SimpleGraph (Fin n)) :
+    SimpleGraph ({B : Finset (Fin n) // IsBlock G B} ⊕ {v : Fin n // IsCutVertex G v}) :=
+  SimpleGraph.fromRel fun x y =>
+    match x, y with
+    | .inl B, .inr v => v.1 ∈ B.1
+    | _, _ => False
+
+/-- `IsCliqueSumAlong G G₁ G₂ K`: `G` is the clique sum of its
+subgraphs `G₁` and `G₂` along the clique `K` (paper Definition 2.14,
+`def:graphvocab`: "`G = G₁ ∪ G₂` and `G₁ ∩ G₂ = K` is a clique").
+`G₁` and `G₂` are subgraphs of `G` in Mathlib's sense, each with its
+own vertex set: their union is all of `G` (every vertex and every
+edge of `G` lies in `G₁` or in `G₂`), their intersection has vertex
+set `K`, and any two distinct vertices of `K` are adjacent in both,
+so the intersection is the complete graph on `K`. -/
+def IsCliqueSumAlong (G : SimpleGraph (Fin n)) (G₁ G₂ : G.Subgraph) (K : Finset (Fin n)) :
     Prop :=
-  G = G₁ ⊔ G₂ ∧
-    ∀ j k : Fin n, (G₁.Adj j k ∧ G₂.Adj j k) ↔ j ∈ K ∧ k ∈ K ∧ j ≠ k
+  G₁ ⊔ G₂ = ⊤ ∧ (G₁ ⊓ G₂).verts = ↑K ∧
+    ∀ j ∈ K, ∀ k ∈ K, j ≠ k → (G₁ ⊓ G₂).Adj j k
 
 
 /-- `IsIrreducible A`: no nontrivial partition of the vertices kills
@@ -338,9 +357,11 @@ def Survives (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
   ¬ Covers A S p q
 
 
-/-- `IsCleanPivotAt A l S p`: `p` is a clean pivot at level `S`
-(enumerated by `l`): it destroys no predicted-nonzero pair (paper
-Definition 2.19, `def:cancel`). The `Enumerates l S` conjunct is
+/-- `IsCleanPivotAt A l S p`: the survivor `p` is a clean pivot at
+level `S` (enumerated by `l`): it destroys no predicted-nonzero pair
+(paper Definition 2.19, `def:cancel`: "a survivor `p` is a clean
+pivot at level `S` if `C_p(S) ∩ E(G_S) = ∅`"; the conjunct `p ∉ S`
+is "survivor"). The `Enumerates l S` conjunct is
 load-bearing: the paper's `G_S` depends only on the level `S`,
 and `gameGraph (patternGraph A) l` is `G_S` (between survivors)
 only when `l` enumerates `S`; without it the same `(S, p)`
@@ -348,7 +369,7 @@ could get different verdicts for `l = []` versus an `l`
 enumerating `S`. -/
 def IsCleanPivotAt (A : Matrix (Fin n) (Fin n) ℝ) (l : List (Fin n))
     (S : Finset (Fin n)) (p : Fin n) : Prop :=
-  Enumerates l S ∧ ∀ j k : Fin n, Zeroes A S p j k →
+  Enumerates l S ∧ p ∉ S ∧ ∀ j k : Fin n, Zeroes A S p j k →
     ¬ (gameGraph (patternGraph A) l).Adj j k
 
 

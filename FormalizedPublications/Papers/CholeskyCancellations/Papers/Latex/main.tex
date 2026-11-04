@@ -77,7 +77,9 @@
   showstringspaces=false
 }
 
-% Python code listings: read from the ancillary .py file rather than pasted inline.
+% Python code listings: read from the ancillary .py file rather than pasted inline. The
+% scripts live in this repository's Formalization/Appendix_* folders.
+\newcommand{\ancillary}[1]{../../Formalization/#1}
 \lstdefinestyle{pycode}{
   language=Python,
   basicstyle=\scriptsize\ttfamily,
@@ -532,8 +534,8 @@ Definition~\ref{def:pivot},
 and we then say that \emph{$p$ zeroes the pair $\{j,k\}$ at level $S$}, that $p$ is the \emph{apex} of
 that cancellation, and that $j-p-k$ is the \emph{route}. We say $C_p(S)$ \emph{covers} a vertex $q$ if
 some pair of $C_p(S)$ contains $q$, and that $q$ \emph{survives} the pivot at $p$ otherwise;
-equivalently, $q$ survives if $(A/A_{S\cup\{p\}})_{qk}\neq0$ for every $k$ with
-$\{q,k\}\in G_{S\cup\{p\}}$. A survivor $p$ is a \emph{clean pivot at level $S$} if
+equivalently, $q$ survives if $(A/A_{S\cup\{p\}})_{qk}\neq0$ for every
+$k\in V\setminus(S\cup\{p,q\})$. A survivor $p$ is a \emph{clean pivot at level $S$} if
 $C_p(S)\cap E(G_S)=\emptyset$, i.e. it destroys no predicted-nonzero pair; for a triangle
 $T$ we say $p$ is a \emph{clean apex for $T$} if $C_p(S)$ contains no pair of $T$. The unqualified
 phrase \emph{clean apex} means $C_p(S)=\emptyset$.
@@ -627,7 +629,10 @@ $H$. $H$ is \emph{realizable} for $G$ if there is an SPD $A$ with $G_A=G$ for wh
 is active. A family of slots at a single fixed level $S$ is \emph{feasible} if the additive system
 $Tt^{(S)}=0$ of Definition~\ref{def:t} that encodes it admits a strictly positive solution
 $t^{(S)}>0$, and \emph{infeasible} otherwise. Feasibility is the linear surrogate for realizability
-at one level: realizable implies feasible, so infeasibility refutes realizability.
+at one level: by Lemma~\ref{lem:additive}, an SPD $A$ that makes every slot $(S\cup\{v\},j,k)$ of
+the family active, with both legs $(A/A_S)_{vj}$ and $(A/A_S)_{vk}$ nonzero, makes it feasible (take
+$t^{(S)}$ to be the log-magnitudes of $A/A_S$), so infeasibility refutes realizability by such
+matrices. Without nonzero legs Lemma~\ref{lem:additive} supplies no equation.
 \end{definition}
 
 \begin{remark}[The covering reformulation]\label{rem:covering}
@@ -710,9 +715,11 @@ condition over $\mathrm{GF}(2)$ independent of the magnitudes.
 
 \begin{remark}[How the additive system is used]\label{rem:additive-use}
 A family of slots at a level $S$ imposes, by Lemma~\ref{lem:additive}, a system of linear equations
-$Tt^{(S)}=0$ in the unknowns $t^{(S)}_{jk}>0$, one row per slot. Only the forward (magnitude)
+$Tt^{(S)}=0$ in the unknowns $t^{(S)}_{jk}>0$, one row per slot, on every realizing matrix whose legs
+are nonzero. Only the forward (magnitude)
 implication is used, so the sign conditions are separated off and handled as a parity question; this
-can only make our refutations stronger, since we refute a system implied by realizability. By
+can only make our refutations stronger, since we refute a system implied by realizability with
+nonzero legs. By
 Stiemke's alternative (Section~\ref{sec:core}), infeasibility of $Tt=0,\ t>0$ is certified by a single
 rational vector $y$ with $y^\top T\ge0$ and $y^\top T\neq0$, which is what our computations output.
 \end{remark}
@@ -1201,11 +1208,11 @@ Definition~\ref{def:strategy}:
 \end{definition}
 
 \begin{remark}[PEO-insufficiency witness]\label{rem:peo-fail}
-There exists a $2$-path of $5$ triangles where $23$ of $400$ adversarial SPD realizations have zero clean simplicial vertices, so a pure PEO strategy that never creates fill fails. Hence the induction must sometimes use SECOND to create fill. See script \texttt{peo\_insufficiency\_23\_400.py}.
+There exists a $2$-path of $5$ triangles where $23$ of $400$ adversarial SPD realizations have zero clean simplicial vertices, so a pure PEO strategy that never creates fill fails. Hence the induction must sometimes use SECOND to create fill. That sampling run is not included in the ancillary material; the script \texttt{peo\_insufficiency.py} (Appendix~\ref{app:code-peo}) instead checks one such realization in exact arithmetic: neither simplicial vertex is a clean pivot, all $96$ perfect elimination orderings of the pattern are unclean, and $3228$ of the $5040$ orderings, each creating fill, are clean, as Theorem~\ref{thm:positives}(i) guarantees for strips.
 \end{remark}
 
 \begin{definition}\label{def:clean_continuation}
-    Let $(S, P)$ be a strip state. A continuation of $(S, P)$ is an ordering $\tau = (p_1,\dots, p_k)$ of the survivors $V\slash S$, and we write $S_0 = S, S_i = S \cup \{p_1, \dots, p_i\}$. The continuation $\tau$ is clean if for every $i = 1, \dots, k$ and every survivor $x \in V\slash S_i$ with $\{p_i, x\} \in G_{S_{i-1}}$, we have $(A / A_{S_{i-1}})_{p_i x} \neq 0$. We say $(S, P)$ admits a clean continuation if some continuation of it is clean.
+    Let $(S, P)$ be a strip state. A continuation of $(S, P)$ is an ordering $\tau = (p_1,\dots, p_k)$ of the survivors $V\setminus S$, and we write $S_0 = S, S_i = S \cup \{p_1, \dots, p_i\}$. The continuation $\tau$ is clean if for every $i = 1, \dots, k$ and every survivor $x \in V\setminus S_i$ with $\{p_i, x\} \in G_{S_{i-1}}$, we have $(A / A_{S_{i-1}})_{p_i x} \neq 0$. We say $(S, P)$ admits a clean continuation if some continuation of it is clean.
 \end{definition}
 
 \begin{theorem}[Strips, fans, one-triangle, edge-disjoint triangles]\label{thm:positives}
@@ -2239,22 +2246,25 @@ The author would like to thank Ricky Simanjuntak for discussions at various stag
 \appendix
 \section{Computational protocol}\label{app:protocol}
 \begin{humanblock}
-All computations reported here were carried out in Python~$3.11.9$ with SymPy~$1.12$; pseudorandom
-draws, which enter only the sampling experiment of Appendix~\ref{app:recheck}, were seeded with $42$,
-$123$ and $2026$. Where a linear program is solved --- in the order-four slot search of
+All computations reported here were carried out in Python~$3.11.9$. The ancillary scripts need only
+the standard library, with exact integer or rational arithmetic, except \texttt{enum-pairing-4vert.py},
+which uses NumPy and SciPy's \texttt{linprog}. Pseudorandom draws, which enter only the sampling
+experiment of Appendix~\ref{app:recheck}, were seeded with $42$, $123$ and $2026$. Where a linear program is solved --- in the order-four slot search of
 Appendix~\ref{app:recheck} and in the feasibility counts reported there --- HiGHS~\cite{HiGHS} serves
 only as a search device for a candidate certificate, and correctness never rests on it. By Stiemke's
 alternative, infeasibility of $Tt=0$, $t>0$ is witnessed by an integer vector $y$ with
 $y^\top T\ge0$ and $y^\top T\neq0$; since $T$ has integer entries such a witness is checked by integer
 arithmetic alone, so no floating-point computation enters any proof.
 
-Three scripts are provided as ancillary files. \texttt{verify\_cholesky.py} recomputes the worked
+Four scripts are provided as ancillary files. \texttt{verify\_cholesky.py} recomputes the worked
 instances of Theorems~\ref{thm:Astar} and~\ref{thm:M2m} from their statements alone.
 \texttt{enum-pairing-4vert.py} enumerates the $2^{12}=4096$ slot subsets at a four-vertex level and
 finds $182$ of them feasible, the computation behind the three all-pivot configurations of
 Lemma~\ref{lem:pairing}. \texttt{three-mag-59049.py} sweeps the $3^{10}=59049$ three-magnitude
 colourings at order five, establishing the minimum survivor count of $8$ reported in
-Remark~\ref{rem:even-needed}. For the instance of Theorem~\ref{thm:M2m} used throughout, $B=1/2$ and
+Remark~\ref{rem:even-needed}. \texttt{peo\_insufficiency.py} runs all $5040$ orderings of an SPD
+realization of the $2$-path of $5$ triangles, the witness of Remark~\ref{rem:peo-fail}. For the
+instance of Theorem~\ref{thm:M2m} used throughout, $B=1/2$ and
 $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 \end{humanblock}
 
@@ -2263,61 +2273,61 @@ $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 
 % The listing is split into page-sized pieces so that each one fits inside a single
 % aiblock; firstnumber keeps the printed line numbering continuous across the pieces.
-% Ranges refer to lines of verify_cholesky.py (571 lines total).
+% Ranges refer to lines of verify_cholesky.py (569 lines total).
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=1, lastline=58, firstnumber=1]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=1, lastline=58, firstnumber=1]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=59, lastline=111, firstnumber=59]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=59, lastline=111, firstnumber=59]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=112, lastline=172, firstnumber=112]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=112, lastline=170, firstnumber=112]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=171, lastline=221, firstnumber=171]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=171, lastline=219, firstnumber=171]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=220, lastline=277, firstnumber=220]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=220, lastline=275, firstnumber=220]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=276, lastline=331, firstnumber=276]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=276, lastline=330, firstnumber=276]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=331, lastline=389, firstnumber=331]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=331, lastline=389, firstnumber=331]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=390, lastline=434, firstnumber=390]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=390, lastline=434, firstnumber=390]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=435, lastline=490, firstnumber=435]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=435, lastline=490, firstnumber=435]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=491, lastline=535, firstnumber=491]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=491, lastline=534, firstnumber=491]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=535, lastline=571, firstnumber=535]{verify_cholesky.py}
+\lstinputlisting[style=pycode, firstline=535, lastline=569, firstnumber=535]{\ancillary{Appendix_VerifyCholesky/verify_cholesky.py}}
 \end{aiblock}
 
 
@@ -2325,32 +2335,42 @@ $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 \mbox{}
 
 % Split so each piece fits inside one aiblock; firstnumber keeps the numbering
-% continuous. Ranges refer to lines of enum_pairing_4vert.py (84 lines total).
+% continuous. Ranges refer to lines of enum-pairing-4vert.py (83 lines total).
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=1, lastline=46, firstnumber=1]{enum-pairing-4vert.py}
+\lstinputlisting[style=pycode, firstline=1, lastline=46, firstnumber=1]{\ancillary{Appendix_EnumPairing4Vert/enum-pairing-4vert.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=46, lastline=84, firstnumber=46]{enum-pairing-4vert.py}
+\lstinputlisting[style=pycode, firstline=47, lastline=83, firstnumber=47]{\ancillary{Appendix_EnumPairing4Vert/enum-pairing-4vert.py}}
 \end{aiblock}
 
 \section{Source of \texttt{three-mag-59049.py}}\label{app:code-threemag}
 \mbox{}
 
-% Split so each piece fits inside one aiblock; firstnumber keeps the numbering
-% continuous. Ranges refer to lines of three_mag_59049.py (71 lines total).
+% The whole script (61 lines) fits inside one aiblock.
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=1, lastline=23, firstnumber=1]{three-mag-59049.py}
+\lstinputlisting[style=pycode, firstline=1, lastline=61, firstnumber=1]{\ancillary{Appendix_ThreeMag59049/three-mag-59049.py}}
+\end{aiblock}
+
+\section{Source of \texttt{peo\_insufficiency.py}}\label{app:code-peo}
+\mbox{}
+
+% Split so each piece fits inside one aiblock; firstnumber keeps the numbering
+% continuous. Ranges refer to lines of peo_insufficiency.py (90 lines total).
+
+\begin{aiblock}
+\mbox{}
+\lstinputlisting[style=pycode, firstline=1, lastline=43, firstnumber=1]{\ancillary{Appendix_PeoInsufficiency/peo_insufficiency.py}}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=23, lastline=71, firstnumber=23]{three-mag-59049.py}
+\lstinputlisting[style=pycode, firstline=44, lastline=90, firstnumber=44]{\ancillary{Appendix_PeoInsufficiency/peo_insufficiency.py}}
 \end{aiblock}
 
 \section{Independent recomputation of the numerical claims}\label{app:recheck}

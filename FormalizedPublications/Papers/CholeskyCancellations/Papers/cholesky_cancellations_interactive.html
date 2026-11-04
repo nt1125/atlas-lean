@@ -108,6 +108,7 @@
     font-size: .8rem; line-height: 1.5;
   }
   details.leanbox pre code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  details.leanbox pre.vars code { color: var(--muted); font-style: italic; }
   .lean-note { margin: 0 .8rem .8rem; color: var(--muted); font-size: .82rem; }
   footer { margin-top: 3rem; font-size: .85rem; color: var(--muted);
     font-family: -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -137,7 +138,8 @@
   <a href="#app-code">Appendix B. Source of verify_cholesky.py</a>
   <a href="#app-code-pairing">Appendix C. Source of enum-pairing-4vert.py</a>
   <a href="#app-code-threemag">Appendix D. Source of three-mag-59049.py</a>
-  <a href="#app-recheck">Appendix E. Independent recomputation of the numerical claims</a>
+  <a href="#app-code-peo">Appendix E. Source of peo_insufficiency.py</a>
+  <a href="#app-recheck">Appendix F. Independent recomputation of the numerical claims</a>
   <a href="#refs">References</a>
 </aside>
 
@@ -231,7 +233,7 @@ ask when faithfulness holds <em>generically</em> or <em>strongly</em>, and show 
 distributions form a set of measure zero while strong-faithfulness failures occupy a set of positive
 measure. Those are statements about typical matrices. Ours is existential and quantifies over all SPD
 matrices, so a counterexample must be an exact algebraic object and necessarily lives on the
-measure-zero locus that this literature sets aside; Appendix <a href="#app-recheck">E</a> explains how the two
+measure-zero locus that this literature sets aside; Appendix <a href="#app-recheck">F</a> explains how the two
 coexist.</p>
 <p><em>Tools.</em> Three further bodies of work are used technically rather than thematically. The quotient
 identity for Schur complements, which is what licenses treating a level as a set rather than a
@@ -276,6 +278,8 @@ and columns of \(A\), and we freely call the elements of \(V\) <em>vertices</em>
     <span class="lean-kind">Definition</span>
     <span class="lean-name">Matrix.PosDef</span>
   </summary>
+  <pre class="vars"><code>variable {m n R R' : Type*}
+variable [Ring R] [PartialOrder R] [StarRing R]</code></pre>
   <pre><code>def PosDef (M : Matrix n n R) :=
   M.IsHermitian ∧ ∀ ⦃x : n →₀ R⦄, x ≠ 0 → 0 &lt; x.sum fun i xi ↦ x.sum fun j xj ↦ star xi * M i j * xj</code></pre>
   <p class="lean-note">SPD is Mathlib's Matrix.PosDef itself; the paper's Definition 2.1 needs no new definition.</p>
@@ -296,6 +300,7 @@ symmetric permutation. The <em>Schur complement of \(S\) in \(A\)</em> is the ma
     <span class="lean-kind">Definition</span>
     <span class="lean-name">schurSet</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>noncomputable def schurSet (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n)) :
     Matrix (Survivors S) (Survivors S) ℝ :=
   let aRR : Matrix (Survivors S) (Survivors S) ℝ :=
@@ -325,6 +330,7 @@ Moreover \(A/A_S\) depends only on the <em>set</em> \(S\), not on any ordering o
     <span class="lean-kind">Proposition</span>
     <span class="lean-name">schur_basic</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}</code></pre>
   <pre><code>theorem schur_basic (hA : A.PosDef) (S : Finset (Fin n)) :
     (A.submatrix (Subtype.val : ↥S → Fin n) Subtype.val).PosDef ∧
       (schurSet A S).PosDef</code></pre>
@@ -350,6 +356,7 @@ as eliminating \(S\cup\{v\}\) at once.</p>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">schur_quotient</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}</code></pre>
   <pre><code>theorem schur_quotient (hA : A.PosDef) (S : Finset (Fin n)) (v : Fin n)
     (hv : v ∉ S) (j k : Fin n) (hj : j ∉ insert v S)
     (hk : k ∉ insert v S) :
@@ -396,6 +403,7 @@ factor is assembled from the pivot columns (Definition <a href="#def-Llink">2.23
     <span class="lean-kind">Definition</span>
     <span class="lean-name">pivotEntry</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>noncomputable def pivotEntry (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
     (p j k : Fin n) : ℝ :=
   schurEntry A S j k
@@ -421,6 +429,7 @@ steps. Thus \(G_S=H_{|S|}\) for such an ordering, and in particular</p>
     <span class="lean-kind">Definition</span>
     <span class="lean-name">gameGraph</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}</code></pre>
   <pre><code>def elimStep (G : SimpleGraph (Fin n)) (v : Fin n) : SimpleGraph (Fin n) :=
   SimpleGraph.fromRel fun x y =&gt; G.Adj x y ∨ (G.Adj x v ∧ G.Adj y v)
 
@@ -462,6 +471,7 @@ the game: that graph is \(G_V\), which has no vertices at all.</p>
     <span class="lean-kind">Definition</span>
     <span class="lean-name">fillGraph</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def fillGraph (A : Matrix (Fin n) (Fin n) ℝ) (σ : List (Fin n)) :
     SimpleGraph (Fin n) :=
   SimpleGraph.fromRel fun j k =&gt;
@@ -481,6 +491,7 @@ and \(k\). Then the following are equivalent:</p>
     <span class="lean-kind">Proposition</span>
     <span class="lean-name">fill_path</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}</code></pre>
   <pre><code>theorem fill_path (σ : List (Fin n)) (hσ : IsOrdering σ)
     (j k : Fin n) (hjk : j ≠ k) :
     ((fillGraph A σ).Adj j k ↔
@@ -506,6 +517,33 @@ later vertices.</p>
 point is why \(G^+_\sigma\) must live on all of \(V\): the equality \(G^L_\sigma=G^+_\sigma\) asserted by
 Conjecture <a href="#conj-1">2.27</a> compares two graphs on the vertex set \(V\).</p>
 </div>
+<details class="leanbox res">
+  <summary>
+    <span class="lean-kind">Remark</span>
+    <span class="lean-name">fillGraph_isChordal</span>
+  </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
+  <pre><code>theorem patternGraph_le_fillGraph (A : Matrix (Fin n) (Fin n) ℝ) (σ : List (Fin n)) :
+    patternGraph A ≤ fillGraph A σ
+
+theorem fillGraph_ne_bot (A : Matrix (Fin n) (Fin n) ℝ) (σ : List (Fin n)) (hn : 2 ≤ n)
+    (hconn : (patternGraph A).Connected) : fillGraph A σ ≠ ⊥
+
+theorem fillGraph_isPerfectEliminationOrdering (A : Matrix (Fin n) (Fin n) ℝ)
+    (σ : List (Fin n)) (hσ : IsOrdering σ) :
+    IsPerfectEliminationOrdering (fillGraph A σ) σ
+
+theorem isChordal_of_isPerfectEliminationOrdering {G : SimpleGraph (Fin n)}
+    {σ : List (Fin n)} (h : IsPerfectEliminationOrdering G σ) : IsChordal G
+
+theorem fillGraph_isChordal (A : Matrix (Fin n) (Fin n) ℝ) (σ : List (Fin n))
+    (hσ : IsOrdering σ) : IsChordal (fillGraph A σ)
+
+theorem factorPattern_le_fillGraph {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef)
+    (σ : List (Fin n)) (hσ : IsOrdering σ) : factorPattern A σ ≤ fillGraph A σ</code></pre>
+  <p class="lean-note">Claim by claim: \(G^+_\sigma\supseteq G_A\) holds for every list σ; nonemptiness for n ≥ 2 with \(G_A\) connected is fillGraph_ne_bot; σ is a PEO of \(G^+_\sigma\), so \(G^+_\sigma\) is chordal by the easy direction of [FG65] (isChordal_of_isPerfectEliminationOrdering). For the last claim, the factor side \(G^L_\sigma\subseteq G^+_\sigma\) is factorPattern_le_fillGraph, with equality exactly for clean orderings (clean_iff_factor_pattern).</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/G_FillGraphChordal.lean#L52-L299">Lean source</a></p>
+</details>
 <div class="env definition" id="def-numeric">
   <span class="env-label">Definition 2.12 (Numeric pattern; predicted-nonzero positions).</span>
 <p>Let \(P_S\) denote the <em>numeric</em> pattern of \(A/A_S\): the graph on \(V\setminus S\) with an edge
@@ -522,6 +560,7 @@ a predicted-nonzero position whose numeric value is zero at the stage where it i
     <span class="lean-kind">Definition</span>
     <span class="lean-name">numericPattern</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>noncomputable def numericPattern (A : Matrix (Fin n) (Fin n) ℝ)
     (S : Finset (Fin n)) : SimpleGraph (Fin n) :=
   SimpleGraph.fromRel fun j k =&gt; schurEntry A S j k ≠ 0
@@ -577,6 +616,7 @@ each cut vertex it contains; its leaves are always blocks. \(G\) is a <em>clique
     <span class="lean-kind">Definition</span>
     <span class="lean-name">IsChordal</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def IsSimplicial (G : SimpleGraph (Fin n)) (v : Fin n) : Prop :=
   G.IsClique (G.neighborSet v)
 
@@ -604,12 +644,23 @@ def IsCutVertex (G : SimpleGraph (Fin n)) (v : Fin n) : Prop :=
     ∀ (ha : a ∈ ({v}ᶜ : Set (Fin n))) (hb : b ∈ ({v}ᶜ : Set (Fin n))),
       ¬ (G.induce ({v}ᶜ : Set (Fin n))).Reachable ⟨a, ha⟩ ⟨b, hb⟩
 
-def IsCliqueSumAlong (G G₁ G₂ : SimpleGraph (Fin n)) (K : Finset (Fin n)) :
+def IsBlock (G : SimpleGraph (Fin n)) (B : Finset (Fin n)) : Prop :=
+  Maximal (fun B : Finset (Fin n) =&gt; (G.induce (↑B : Set (Fin n))).Connected ∧
+    ∀ v ∈ B, (G.induce (↑(B.erase v) : Set (Fin n))).Preconnected) B
+
+def blockCutGraph (G : SimpleGraph (Fin n)) :
+    SimpleGraph ({B : Finset (Fin n) // IsBlock G B} ⊕ {v : Fin n // IsCutVertex G v}) :=
+  SimpleGraph.fromRel fun x y =&gt;
+    match x, y with
+    | .inl B, .inr v =&gt; v.1 ∈ B.1
+    | _, _ =&gt; False
+
+def IsCliqueSumAlong (G : SimpleGraph (Fin n)) (G₁ G₂ : G.Subgraph) (K : Finset (Fin n)) :
     Prop :=
-  G = G₁ ⊔ G₂ ∧
-    ∀ j k : Fin n, (G₁.Adj j k ∧ G₂.Adj j k) ↔ j ∈ K ∧ k ∈ K ∧ j ≠ k</code></pre>
-  <p class="lean-note">ω is Mathlib's SimpleGraph.cliqueNum; cut vertices and clique sums are IsCutVertex / IsCliqueSumAlong. Blocks and the block-cut tree are not formalized (unused). IsCliqueSumAlong formalizes only the common-edge part of the paper's \(G_1 \cap G_2 = K\): the vertex-set part is not formalized, since \(G_1, G_2\) are spanning graphs on the same vertex set.</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/C_Chordality.lean#L33-L103">Lean source</a></p>
+  G₁ ⊔ G₂ = ⊤ ∧ (G₁ ⊓ G₂).verts = ↑K ∧
+    ∀ j ∈ K, ∀ k ∈ K, j ≠ k → (G₁ ⊓ G₂).Adj j k</code></pre>
+  <p class="lean-note">ω is Mathlib's SimpleGraph.cliqueNum; cut vertices, blocks, the block-cut tree and clique sums are IsCutVertex, IsBlock, blockCutGraph and IsCliqueSumAlong. A block is recorded by its vertex set (blocks are induced subgraphs). The clique sum takes \(G_1, G_2\) as subgraphs of \(G\) with their own vertex sets, so \(G_1 \cap G_2 = K\) is stated in full. That the block-cut graph of a connected graph is a tree whose leaves are blocks is standard and used nowhere; it is not proved.</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/C_Chordality.lean#L33-L135">Lean source</a></p>
 </details>
 <div class="env remark" id="env-2.15">
   <span class="env-label">Remark 2.15.</span>
@@ -629,11 +680,12 @@ hypothesis of Conjectures <a href="#conj-2">2.26</a> and <a href="#conj-1">2.27<
     <span class="lean-kind">Definition</span>
     <span class="lean-name">IsIrreducible</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def IsIrreducible (A : Matrix (Fin n) (Fin n) ℝ) : Prop :=
   ∀ V₁ V₂ : Finset (Fin n), V₁.Nonempty → V₂.Nonempty → Disjoint V₁ V₂ →
     V₁ ∪ V₂ = Finset.univ →
       ∃ i ∈ V₁, ∃ j ∈ V₂, A i j ≠ 0</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/C_Chordality.lean#L110-L113">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/C_Chordality.lean#L142-L145">Lean source</a></p>
 </details>
 <div class="env proposition" id="prop-irred-connected">
   <span class="env-label">Proposition 2.17.</span>
@@ -644,11 +696,12 @@ hypothesis of Conjectures <a href="#conj-2">2.26</a> and <a href="#conj-1">2.27<
     <span class="lean-kind">Proposition</span>
     <span class="lean-name">irreducible_iff_connected</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}</code></pre>
   <pre><code>theorem irreducible_iff_connected (hn : 0 &lt; n)
     (hsymm : ∀ i j : Fin n, A i j = A j i) :
     IsIrreducible A ↔ (patternGraph A).Connected</code></pre>
   <p class="lean-note">Symmetry is Definition 2.16's hypothesis; the conclusion is literally Mathlib's SimpleGraph.Connected (preconnected plus a vertex, supplied by 0 &lt; n).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/C_Chordality.lean#L122-L174">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/C_Chordality.lean#L154-L206">Lean source</a></p>
 </details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
@@ -663,6 +716,39 @@ edges of \(G_A\) between \(V_1\) and \(V_2\), so \(G_A\) is disconnected.</p>
 \(A\), and \(G^+_\sigma\) is the disjoint union of the blocks' fill graphs; so nothing is lost by assuming
 \(G_A\) connected.</p>
 </div>
+<details class="leanbox res">
+  <summary>
+    <span class="lean-kind">Remark</span>
+    <span class="lean-name">blockDiag_isCleanOrdering</span>
+  </summary>
+  <pre><code>noncomputable def blockDiag {n₁ n₂ : ℕ} (A₁ : Matrix (Fin n₁) (Fin n₁) ℝ)
+    (A₂ : Matrix (Fin n₂) (Fin n₂) ℝ) : Matrix (Fin (n₁ + n₂)) (Fin (n₁ + n₂)) ℝ :=
+  Matrix.reindex finSumFinEquiv finSumFinEquiv (Matrix.fromBlocks A₁ 0 0 A₂)
+
+def blockOrdering {n₁ n₂ : ℕ} (σ₁ : List (Fin n₁)) (σ₂ : List (Fin n₂)) :
+    List (Fin (n₁ + n₂)) :=
+  σ₁.map (Fin.castAdd n₂) ++ σ₂.map (Fin.natAdd n₁)
+
+theorem blockDiag_isCleanOrdering {n₁ n₂ : ℕ} {A₁ : Matrix (Fin n₁) (Fin n₁) ℝ}
+    {A₂ : Matrix (Fin n₂) (Fin n₂) ℝ} (hA₁ : A₁.PosDef) (hA₂ : A₂.PosDef)
+    {σ₁ : List (Fin n₁)} {σ₂ : List (Fin n₂)} (hσ₁ : IsOrdering σ₁) (hσ₂ : IsOrdering σ₂)
+    (hc₁ : IsCleanOrdering A₁ σ₁) (hc₂ : IsCleanOrdering A₂ σ₂) :
+    IsCleanOrdering (blockDiag A₁ A₂) (blockOrdering σ₁ σ₂)
+
+theorem blockDiag_fillGraph {n₁ n₂ : ℕ} (A₁ : Matrix (Fin n₁) (Fin n₁) ℝ)
+    (A₂ : Matrix (Fin n₂) (Fin n₂) ℝ) {σ₁ : List (Fin n₁)} {σ₂ : List (Fin n₂)}
+    (hσ₁ : IsOrdering σ₁) (hσ₂ : IsOrdering σ₂) :
+    fillGraph (blockDiag A₁ A₂) (blockOrdering σ₁ σ₂) =
+      (fillGraph A₁ σ₁).map (Fin.castAddEmb n₂) ⊔ (fillGraph A₂ σ₂).map (Fin.natAddEmb n₁)
+
+theorem blockDiag_exists_clean {n₁ n₂ : ℕ} {A₁ : Matrix (Fin n₁) (Fin n₁) ℝ}
+    {A₂ : Matrix (Fin n₂) (Fin n₂) ℝ} (hA₁ : A₁.PosDef) (hA₂ : A₂.PosDef)
+    (h₁ : ∃ σ₁ : List (Fin n₁), IsOrdering σ₁ ∧ IsCleanOrdering A₁ σ₁)
+    (h₂ : ∃ σ₂ : List (Fin n₂), IsOrdering σ₂ ∧ IsCleanOrdering A₂ σ₂) :
+    ∃ σ : List (Fin (n₁ + n₂)), IsOrdering σ ∧ IsCleanOrdering (blockDiag A₁ A₂) σ</code></pre>
+  <p class="lean-note">Block diagonal is taken literally: diag(A₁, A₂) on Fin (n₁ + n₂), first block first. Concatenating clean orderings of the blocks gives a clean ordering, and its fill graph is the disjoint union of the blocks' fill graphs. A reducible matrix is a symmetric permutation of such a matrix (Definition 2.16); transporting orderings along that permutation is not formalized.</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/H_BlockDiagonal.lean#L54-L687">Lean source</a></p>
+</details>
 <h3 id="sec-2-4">2.4. Cancellations, apexes, and what a pivot can destroy</h3>
 <div class="env definition" id="def-cancel">
   <span class="env-label">Definition 2.19 (Cancellation graph, zeroing, apex, covering, surviving).</span>
@@ -676,8 +762,8 @@ Definition <a href="#def-pivot">2.6</a>,</p>
 <p>and we then say that <em>\(p\) zeroes the pair \(\{j,k\}\) at level \(S\)</em>, that \(p\) is the <em>apex</em> of
 that cancellation, and that \(j-p-k\) is the <em>route</em>. We say \(C_p(S)\) <em>covers</em> a vertex \(q\) if
 some pair of \(C_p(S)\) contains \(q\), and that \(q\) <em>survives</em> the pivot at \(p\) otherwise;
-equivalently, \(q\) survives if \((A/A_{S\cup\{p\}})_{qk}\neq0\) for every \(k\) with
-\(\{q,k\}\in G_{S\cup\{p\}}\). A survivor \(p\) is a <em>clean pivot at level \(S\)</em> if
+equivalently, \(q\) survives if \((A/A_{S\cup\{p\}})_{qk}\neq0\) for every
+\(k\in V\setminus(S\cup\{p,q\})\). A survivor \(p\) is a <em>clean pivot at level \(S\)</em> if
 \(C_p(S)\cap E(G_S)=\emptyset\), i.e. it destroys no predicted-nonzero pair; for a triangle
 \(T\) we say \(p\) is a <em>clean apex for \(T\)</em> if \(C_p(S)\) contains no pair of \(T\). The unqualified
 phrase <em>clean apex</em> means \(C_p(S)=\emptyset\).</p>
@@ -687,6 +773,7 @@ phrase <em>clean apex</em> means \(C_p(S)=\emptyset\).</p>
     <span class="lean-kind">Definition</span>
     <span class="lean-name">Zeroes</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def Zeroes (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
     (p j k : Fin n) : Prop :=
   p ∉ S ∧ j ∉ insert p S ∧ k ∉ insert p S ∧ j ≠ k ∧
@@ -707,7 +794,7 @@ def Survives (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
 
 def IsCleanPivotAt (A : Matrix (Fin n) (Fin n) ℝ) (l : List (Fin n))
     (S : Finset (Fin n)) (p : Fin n) : Prop :=
-  Enumerates l S ∧ ∀ j k : Fin n, Zeroes A S p j k →
+  Enumerates l S ∧ p ∉ S ∧ ∀ j k : Fin n, Zeroes A S p j k →
     ¬ (gameGraph (patternGraph A) l).Adj j k
 
 def IsCleanApexFor (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
@@ -718,7 +805,7 @@ def IsCleanApex (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
     (p : Fin n) : Prop :=
   ∀ j k : Fin n, ¬ Zeroes A S p j k</code></pre>
   <p class="lean-note">Survives is exactly “not covered”: no survivor hypothesis on \(q\) is included, since \(C_p(S)\) contains only pairs of survivors of \(S \cup \{p\}\), so survival is vacuous for \(q \in S \cup \{p\}\). IsCleanPivotAt requires Enumerates \(l\ S\): the game graph is the paper's \(G_S\) only when \(l\) enumerates \(S\).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/D_CleanPivots.lean#L35-L121">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/D_CleanPivots.lean#L35-L133">Lean source</a></p>
 </details>
 <div class="env remark" id="rem-Cp-role">
   <span class="env-label">Remark 2.20 (What \(C_p(S)\) is for).</span>
@@ -739,10 +826,11 @@ for every \(j\in R\setminus\{v\}\), i.e. its row of \(M\) has no zero among the 
     <span class="lean-kind">Definition</span>
     <span class="lean-name">IsUniversalAt</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def IsUniversalAt (A : Matrix (Fin n) (Fin n) ℝ) (S : Finset (Fin n))
     (v : Fin n) : Prop :=
   v ∉ S ∧ ∀ j : Fin n, j ∉ S → j ≠ v → schurEntry A S v j ≠ 0</code></pre>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/D_CleanPivots.lean#L128-L130">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/D_CleanPivots.lean#L140-L142">Lean source</a></p>
 </details>
 <div class="env remark" id="rem-universal">
   <span class="env-label">Remark 2.22.</span>
@@ -767,6 +855,7 @@ preceding \(j\), then \(L_{kj}\neq0\) iff \((A/A_S)_{jk}\neq0\): the pair \(\{j,
     <span class="lean-kind">Definition</span>
     <span class="lean-name">factorEntry</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>noncomputable def factorEntry (A : Matrix (Fin n) (Fin n) ℝ)
     (σ : List (Fin n)) (p k : Fin n) : ℝ :=
   schurEntry A (prefixListBefore σ p).toFinset k p
@@ -790,7 +879,7 @@ theorem factorMatrix_diag (hA : A.PosDef) (σ : List (Fin n))
       = Real.sqrt (schurEntry A (prefixListBefore σ p).toFinset p p) ∧
     0 &lt; factorMatrix A σ p p</code></pre>
   <p class="lean-note">factorMatrix and the three theorems are later in D_CleanPivots.lean: L Lᵀ = A, lower triangular in σ-order, and positive diagonal together identify factorMatrix as the Cholesky factor for σ; the factor pattern is its pattern (factorPattern_adj_iff_factorEntry).</p>
-  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/D_CleanPivots.lean#L147-L150">Lean source</a></p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/D_CleanPivots.lean#L159-L162">Lean source</a></p>
 </details>
 <div class="env definition" id="def-clean">
   <span class="env-label">Definition 2.24 (Clean ordering).</span>
@@ -806,6 +895,7 @@ level can be refilled before the pair is committed (Section <a href="#sec-even">
     <span class="lean-kind">Definition</span>
     <span class="lean-name">IsCleanOrdering</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def IsCleanOrdering (A : Matrix (Fin n) (Fin n) ℝ) (σ : List (Fin n)) :
     Prop :=
   ∀ j k : Fin n, PredictedNonzero A σ j k →
@@ -836,6 +926,7 @@ Definition <a href="#def-strip-moves">4.5</a>.</p>
     <span class="lean-kind">Definition</span>
     <span class="lean-name">PatternAdmitsPerMatrixCleanOrdering</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def IsFixedOrderingFor (G : SimpleGraph (Fin n)) (σ : List (Fin n)) : Prop :=
   IsOrdering σ ∧ ∀ A : Matrix (Fin n) (Fin n) ℝ,
     A.PosDef → patternGraph A = G → IsCleanOrdering A σ
@@ -946,13 +1037,17 @@ of slots is <em>blocking</em> for a pattern \(G\) if every permutation of \(V\) 
 is active. A family of slots at a single fixed level \(S\) is <em>feasible</em> if the additive system
 \(Tt^{(S)}=0\) of Definition <a href="#def-t">2.32</a> that encodes it admits a strictly positive solution
 \(t^{(S)}&gt;0\), and <em>infeasible</em> otherwise. Feasibility is the linear surrogate for realizability
-at one level: realizable implies feasible, so infeasibility refutes realizability.</p>
+at one level: by Lemma <a href="#lem-additive">2.33</a>, an SPD \(A\) that makes every slot \((S\cup\{v\},j,k)\) of
+the family active, with both legs \((A/A_S)_{vj}\) and \((A/A_S)_{vk}\) nonzero, makes it feasible (take
+\(t^{(S)}\) to be the log-magnitudes of \(A/A_S\)), so infeasibility refutes realizability by such
+matrices. Without nonzero legs Lemma <a href="#lem-additive">2.33</a> supplies no equation.</p>
 </div>
 <details class="leanbox def">
   <summary>
     <span class="lean-kind">Definition</span>
     <span class="lean-name">IsBlocking</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def Slot.Spoils (s : Slot n) (A : Matrix (Fin n) (Fin n) ℝ)
     (σ : List (Fin n)) : Prop :=
   s.level = prefixSet σ s.fst s.snd ∧
@@ -983,6 +1078,32 @@ Section <a href="#sec-even">5</a> exploits one direction: to refute the conjectu
 blocking family. The converse direction, refuting every blocking family, is what a positive result at
 a given order requires.</p>
 </div>
+<details class="leanbox res">
+  <summary>
+    <span class="lean-kind">Remark</span>
+    <span class="lean-name">covering_reformulation</span>
+  </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
+  <pre><code>theorem not_isCleanOrdering_iff_exists_active_spoils (A : Matrix (Fin n) (Fin n) ℝ)
+    (σ : List (Fin n)) :
+    ¬ IsCleanOrdering A σ ↔ ∃ s : Slot n, s.Active A ∧ s.Spoils A σ
+
+theorem no_clean_ordering_iff_active_slots_spoil (A : Matrix (Fin n) (Fin n) ℝ) :
+    (∀ σ : List (Fin n), IsOrdering σ → ¬ IsCleanOrdering A σ) ↔
+      ∀ σ : List (Fin n), IsOrdering σ → ∃ s : Slot n, s.Active A ∧ s.Spoils A σ
+
+theorem covering_reformulation (G : SimpleGraph (Fin n)) :
+    (∃ A : Matrix (Fin n) (Fin n) ℝ, A.PosDef ∧ patternGraph A = G ∧
+        ∀ σ : List (Fin n), IsOrdering σ → ¬ IsCleanOrdering A σ) ↔
+      ∃ H : Set (Slot n), IsBlocking H G ∧ IsRealizable H G
+
+theorem covering_not_fill_graph_conjecture_iff :
+    ¬ fill_graph_conjecture ↔
+      ∃ (m : ℕ) (G : SimpleGraph (Fin m)), G.Connected ∧
+        ∃ H : Set (Slot m), IsBlocking H G ∧ IsRealizable H G</code></pre>
+  <p class="lean-note">The first two statements are the remark's second sentence, for a single matrix (no positivity is needed); covering_reformulation is its first sentence, for a pattern G. The last restates the refutation of Conjecture 2.27 itself: it fails iff some connected pattern has a realizable blocking family.</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_2_SettingVocabularyAndConjectures/I_CoveringReformulation.lean#L52-L163">Lean source</a></p>
+</details>
 <div class="env example" id="ex-spoils">
   <span class="env-label">Example 2.31 (Spoiling and blocking).</span>
 <p>The slot \((\emptyset,0,1)\) spoils every ordering whose <em>first</em> vertex is \(0\) or \(1\) (provided
@@ -1035,6 +1156,7 @@ correlation</em> is</p>
     <span class="lean-kind">Definition</span>
     <span class="lean-name">logMag</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>noncomputable def partialCorr (A : Matrix (Fin n) (Fin n) ℝ)
     (S : Finset (Fin n)) (j k : Fin n) : ℝ :=
   schurEntry A S j k
@@ -1065,6 +1187,7 @@ the cancellation.</p>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">cancellation_additive</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}</code></pre>
   <pre><code>theorem cancellation_additive (hA : A.PosDef) (S : Finset (Fin n))
     (v j k : Fin n) (hv : v ∉ S) (hj : j ∉ insert v S)
     (hk : k ∉ insert v S) (hlegj : schurEntry A S v j ≠ 0)
@@ -1086,6 +1209,7 @@ the cancellation.</p>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">feasible_of_active_of_legs_ne</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ} {A : Matrix (Fin n) (Fin n) ℝ}</code></pre>
   <pre><code>theorem feasible_of_active_of_legs_ne (hA : A.PosDef)
     (S : Finset (Fin n)) (H : Set (Slot n))
     (hlevel : ∀ s ∈ H, ∃ v : Fin n, s.level = insert v S ∧ v ∉ S)
@@ -1120,9 +1244,11 @@ condition over \(\mathrm{GF}(2)\) independent of the magnitudes.</p>
 <div class="env remark" id="rem-additive-use">
   <span class="env-label">Remark 2.34 (How the additive system is used).</span>
 <p>A family of slots at a level \(S\) imposes, by Lemma <a href="#lem-additive">2.33</a>, a system of linear equations
-\(Tt^{(S)}=0\) in the unknowns \(t^{(S)}_{jk}&gt;0\), one row per slot. Only the forward (magnitude)
+\(Tt^{(S)}=0\) in the unknowns \(t^{(S)}_{jk}&gt;0\), one row per slot, on every realizing matrix whose legs
+are nonzero. Only the forward (magnitude)
 implication is used, so the sign conditions are separated off and handled as a parity question; this
-can only make our refutations stronger, since we refute a system implied by realizability. By
+can only make our refutations stronger, since we refute a system implied by realizability with
+nonzero legs. By
 Stiemke's alternative (Section <a href="#sec-core">3</a>), infeasibility of \(Tt=0,\ t&gt;0\) is certified by a single
 rational vector \(y\) with \(y^\top T\ge0\) and \(y^\top T\neq0\), which is what our computations output.</p>
 </div>
@@ -1167,6 +1293,7 @@ rational vector \(y\) with \(y^\top T\ge0\) and \(y^\top T\neq0\), which is what
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">exchange</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem exchange (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
     (u j k : Fin n) (huj : u ≠ j) (_huk : u ≠ k) (_hjk : j ≠ k)
     (hak : A u k ≠ 0) (h1 : A u u * A j k = A u j * A u k) :
@@ -1191,6 +1318,7 @@ triangle.</p>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">triangle</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem triangle (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
     (j k u : Fin n) (hjk : j ≠ k) (hju : j ≠ u) (hku : k ≠ u)
     (_hjk' : A j k ≠ 0) (huk' : A u k ≠ 0) (huj' : A u j ≠ 0) :
@@ -1229,6 +1357,7 @@ of \(p\).</p>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">max_edge</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem max_edge (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
     (hdense : ∀ i j : Fin n, i ≠ j → A i j ≠ 0)
     (p q : Fin n) (hpq : p ≠ q)
@@ -1263,6 +1392,7 @@ the elimination of \(p\).</p>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">zero_leg</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem zero_leg (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
     (S : Finset (Fin n)) (j k v : Fin n)
     (hj : j ∉ S) (hk : k ∉ S) (hv : v ∉ S) (_hjk : j ≠ k)
@@ -1295,6 +1425,7 @@ are survivors distinct from \(v\) with \(M_{jk}=0\), then</p>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">universal_pivot_refill</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem universal_pivot_refill (A : Matrix (Fin n) (Fin n) ℝ)
     (hA : A.PosDef) (S : Finset (Fin n)) (v : Fin n)
     (huniv : IsUniversalAt A S v) :
@@ -1332,6 +1463,7 @@ inheriting it (Question <a href="#q-cliquesum">7.2</a>).</p></div>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">dense_safety</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem dense_safety (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
     (S : Finset (Fin n))
     (hdense : ∀ j k : Fin n, j ∉ S → k ∉ S → j ≠ k →
@@ -1369,6 +1501,7 @@ that \(p\) is a weakest neighbour of \(q\), that is
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">universal_successor</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem universal_successor (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
     (S : Finset (Fin n)) (p q : Fin n) (huniv : IsUniversalAt A S p)
     (hq : q ∉ S) (hqp : q ≠ p)
@@ -1441,6 +1574,7 @@ therefore gives</p>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">prefix_lemma</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem prefix_lemma (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
     (l : List (Fin n)) (S : Finset (Fin n)) (henum : Enumerates l S)
     (j k : Fin n) (hj : j ∉ S) (hk : k ∉ S)
@@ -1482,6 +1616,7 @@ particular, only an edge that lies in a triangle of the fill graph can ever canc
     <span class="lean-kind">Corollary</span>
     <span class="lean-name">triangle_necessary</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem triangle_necessary (A : Matrix (Fin n) (Fin n) ℝ)
     (hA : A.PosDef) (l : List (Fin n)) (S : Finset (Fin n))
     (henum : Enumerates l S) (j k : Fin n) (hj : j ∉ S) (hk : k ∉ S)
@@ -1517,6 +1652,7 @@ later level.</p>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">fresh_fill</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem fresh_fill (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
     (l : List (Fin n)) (S : Finset (Fin n)) (henum : Enumerates l S)
     (v j k : Fin n) (hv : v ∉ S) (hj : j ∉ insert v S)
@@ -1553,6 +1689,7 @@ of the slots \((S,j,v)\) and \((S,k,v)\) is active.</p>
     <span class="lean-kind">Corollary</span>
     <span class="lean-name">fresh_fill_closure</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem fresh_fill_closure (A : Matrix (Fin n) (Fin n) ℝ)
     (hA : A.PosDef) (l : List (Fin n)) (S : Finset (Fin n))
     (henum : Enumerates l S) (v j k : Fin n) (hv : v ∉ S)
@@ -1580,6 +1717,7 @@ if the product \((A/A_S)_{jv}(A/A_S)_{kv}\) vanishes, and hence only if one of i
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">nesting</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem nesting (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
     (S : Finset (Fin n)) (i j k : Fin n)
     (hi : i ∉ S) (hj : j ∉ S) (hk : k ∉ S) (hij : i ≠ j) (hik : i ≠ k)
@@ -1616,6 +1754,7 @@ which pairs are nonzero in \(A/A_S\) is a numeric matter and not determined by t
     <span class="lean-kind">Definition</span>
     <span class="lean-name">arcDigraph</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>noncomputable def arcDigraph (A : Matrix (Fin n) (Fin n) ℝ)
     (S : Finset (Fin n)) (H : Set (Slot n)) : Digraph (NonzeroPairs A S) :=
   ⟨fun a b =&gt; ∃ s ∈ H, ∃ v : Fin n, s.level = insert v S ∧ v ∉ S ∧
@@ -1635,6 +1774,7 @@ contains a directed cycle, then \(H\) is infeasible: no positive solution \(t^{(
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">general_cycle</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem general_cycle (A : Matrix (Fin n) (Fin n) ℝ) (_hA : A.PosDef)
     (S : Finset (Fin n)) (H : Set (Slot n))
     (_hslots : ∀ s ∈ H, ∃ v : Fin n, v ∉ S ∧ s.level = insert v S)
@@ -1669,6 +1809,7 @@ t^{(S)}_{da}=t^{(S)}_{db}+t^{(S)}_{ab}\]
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">four_cycle</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem four_cycle (A : Matrix (Fin n) (Fin n) ℝ) (hA : A.PosDef)
     (S : Finset (Fin n)) (a b c d : Fin n)
     (ha : a ∉ S) (hb : b ∉ S) (hc : c ∉ S) (hd : d ∉ S)
@@ -1700,6 +1841,7 @@ for \(G\). Equivalently, in contrapositive form: if \(H'\) is realizable for \(G
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">monotone</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem monotone (G : SimpleGraph (Fin n)) (H H' : Set (Slot n))
     (hHH' : H ⊆ H') (hH : ¬ IsRealizable H G) :
     ¬ IsRealizable H' G</code></pre>
@@ -1776,6 +1918,7 @@ small forest. No accidental zero ever occurs, irrespective of ordering [<a href=
     <span class="lean-kind">Definition</span>
     <span class="lean-name">IsStripPattern</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def IsStripPattern (G : SimpleGraph (Fin n)) : Prop :=
   3 ≤ n ∧ ∃ l : List (Fin n), IsOrdering l ∧
     ∀ x y : Fin n, G.Adj x y ↔ DistOneIn l x y ∨ DistTwoIn l x y</code></pre>
@@ -1796,6 +1939,7 @@ assumption that \(k=4\) (the right end is symmetric, and we treat only the left)
     <span class="lean-kind">Definition</span>
     <span class="lean-name">IsStripState</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def IsStripState (A : Matrix (Fin n) (Fin n) ℝ) (lS : List (Fin n))
     (S : Finset (Fin n)) (l : List (Fin n)) : Prop :=
   Enumerates lS S ∧ l.Nodup ∧ (∀ x : Fin n, x ∈ l ↔ x ∉ S) ∧
@@ -1828,6 +1972,7 @@ Definition <a href="#def-strategy">2.25</a>:</p>
     <span class="lean-kind">Definition</span>
     <span class="lean-name">IsEndPivot</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def IsEndPivot (l : List (Fin n)) (p : Fin n) : Prop :=
   ∃ (s₂ s₃ s₄ : Fin n) (rest : List (Fin n)),
     l = p :: s₂ :: s₃ :: s₄ :: rest
@@ -1840,17 +1985,18 @@ def IsSecondPivot (l : List (Fin n)) (p : Fin n) : Prop :=
 </details>
 <div class="env remark" id="rem-peo-fail">
   <span class="env-label">Remark 4.6 (PEO-insufficiency witness).</span>
-<p>There exists a \(2\)-path of \(5\) triangles where \(23\) of \(400\) adversarial SPD realizations have zero clean simplicial vertices, so a pure PEO strategy that never creates fill fails. Hence the induction must sometimes use SECOND to create fill. See script <code>peo_insufficiency_23_400.py</code>.</p>
+<p>There exists a \(2\)-path of \(5\) triangles where \(23\) of \(400\) adversarial SPD realizations have zero clean simplicial vertices, so a pure PEO strategy that never creates fill fails. Hence the induction must sometimes use SECOND to create fill. That sampling run is not included in the ancillary material; the script <code>peo_insufficiency.py</code> (Appendix <a href="#app-code-peo">E</a>) instead checks one such realization in exact arithmetic: neither simplicial vertex is a clean pivot, all \(96\) perfect elimination orderings of the pattern are unclean, and \(3228\) of the \(5040\) orderings, each creating fill, are clean, as Theorem <a href="#thm-positives">4.8</a>(i) guarantees for strips.</p>
 </div>
 <div class="env definition" id="def-clean-continuation">
   <span class="env-label">Definition 4.7.</span>
-<p>Let \((S, P)\) be a strip state. A continuation of \((S, P)\) is an ordering \(\tau = (p_1,\dots, p_k)\) of the survivors \(V/ S\), and we write \(S_0 = S, S_i = S \cup \{p_1, \dots, p_i\}\). The continuation \(\tau\) is clean if for every \(i = 1, \dots, k\) and every survivor \(x \in V/ S_i\) with \(\{p_i, x\} \in G_{S_{i-1}}\), we have \((A / A_{S_{i-1}})_{p_i x} \neq 0\). We say \((S, P)\) admits a clean continuation if some continuation of it is clean.</p>
+<p>Let \((S, P)\) be a strip state. A continuation of \((S, P)\) is an ordering \(\tau = (p_1,\dots, p_k)\) of the survivors \(V\setminus S\), and we write \(S_0 = S, S_i = S \cup \{p_1, \dots, p_i\}\). The continuation \(\tau\) is clean if for every \(i = 1, \dots, k\) and every survivor \(x \in V\setminus S_i\) with \(\{p_i, x\} \in G_{S_{i-1}}\), we have \((A / A_{S_{i-1}})_{p_i x} \neq 0\). We say \((S, P)\) admits a clean continuation if some continuation of it is clean.</p>
 </div>
 <details class="leanbox def">
   <summary>
     <span class="lean-kind">Definition</span>
     <span class="lean-name">AdmitsCleanContinuation</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>def AdmitsCleanContinuation (A : Matrix (Fin n) (Fin n) ℝ)
     (lS : List (Fin n)) (S : Finset (Fin n)) : Prop :=
   Enumerates lS S ∧
@@ -2177,6 +2323,7 @@ Then:</p>
     <span class="lean-kind">Lemma</span>
     <span class="lean-name">pairing</span>
   </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
   <pre><code>theorem pairing (S W : Finset (Fin n)) (hW : W.card = 4)
     (hWS : ∀ u ∈ W, u ∉ S) :
     (∀ H : Set (Slot n), (∀ s ∈ H, CandidateSlot S W s) →
@@ -2399,12 +2546,48 @@ complete, while \(B\to1\) forces \(A\to1\) and \(\lambda_3=(1-A)(1-B)\to0\).</p>
 <p>Consequently Theorem <a href="#thm-M2m">5.8</a> produces, at each even order \(n=2m\ge6\), a one-parameter family of
 counterexamples lying on a measure-zero algebraic curve, not a single matrix. The instance \(B=\tfrac12\),
 for which \(A=(-3+\sqrt{73})/8\approx0.693\) and \(AB\approx0.3465\), is the one used for the explicit
-verification described in Appendices <a href="#app-protocol">A</a> and <a href="#app-recheck">E</a>; a concrete instance is
+verification described in Appendices <a href="#app-protocol">A</a> and <a href="#app-recheck">F</a>; a concrete instance is
 needed there only because exact arithmetic must be carried out in a specific field, here
 \(\mathbb{Q}(\sqrt{73})\).
 Whether the curve accounts for <em>every</em> counterexample at even order is a separate
 question, and an open one; we state it as Question <a href="#q-curve">7.1</a>.</p>
 </div>
+<details class="leanbox res">
+  <summary>
+    <span class="lean-kind">Remark</span>
+    <span class="lean-name">curve_admissible_iff</span>
+  </summary>
+  <pre><code>noncomputable def curveRoot (b : ℝ) : ℝ :=
+  (-(1 - b ^ 2) + Real.sqrt ((1 - b ^ 2) ^ 2 + 4)) / 2
+
+theorem curveRoot_spec {b : ℝ} (hb0 : 0 &lt; b) (hb1 : b &lt; 1) :
+    curveRoot b ^ 2 + (1 - b ^ 2) * curveRoot b - 1 = 0 ∧ b &lt; curveRoot b ∧ curveRoot b &lt; 1
+
+theorem eq_curveRoot {a b : ℝ} (hb0 : 0 &lt; b) (hb1 : b &lt; 1) (ha0 : 0 &lt; a)
+    (h : a ^ 2 + (1 - b ^ 2) * a - 1 = 0) : a = curveRoot b
+
+theorem curve_admissible_iff (a b : ℝ) :
+    (a ^ 2 + (1 - b ^ 2) * a - 1 = 0 ∧ 0 &lt; b ∧ b &lt; a ∧ a &lt; 1) ↔
+      (0 &lt; b ∧ b &lt; 1 ∧ a = curveRoot b)
+
+theorem curveRoot_half : curveRoot (1 / 2) = (-3 + Real.sqrt 73) / 8
+
+theorem m2m_family_counterexample {b : ℝ} (hb0 : 0 &lt; b) (hb1 : b &lt; 1) {m : ℕ} (hm : 3 ≤ m) :
+    (m2mMatrix m (curveRoot b) b).PosDef ∧ IsIrreducible (m2mMatrix m (curveRoot b) b) ∧
+      ∀ σ : List (Fin (2 * m)), IsOrdering σ →
+        ¬ IsCleanOrdering (m2mMatrix m (curveRoot b) b) σ
+
+theorem m2m_pattern_ne_top_of_b_eq_zero {m : ℕ} (hm : 2 ≤ m) (a : ℝ) :
+    patternGraph (m2mMatrix m a 0) ≠ ⊤
+
+theorem tendsto_curveRoot_one :
+    Filter.Tendsto curveRoot (nhdsWithin 1 (Set.Iio 1)) (nhds 1)
+
+theorem tendsto_m2m_lambda3 :
+    Filter.Tendsto (fun b =&gt; (1 - curveRoot b) * (1 - b)) (nhdsWithin 1 (Set.Iio 1)) (nhds 0)</code></pre>
+  <p class="lean-note">curveRoot b is the paper's α(B); eq_curveRoot is uniqueness among all positive roots. m2m_family_counterexample is the one-parameter family of counterexamples, and the last three are the endpoint remarks. The measure-zero remark and the decimal approximations are not formalized.</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_5_EvenCounterexamplesAndOrderFour/G_ParameterCurve.lean#L34-L258">Lean source</a></p>
+</details>
 <details class="proof">
   <summary><em>Proof.</em></summary>
 <p>Throughout we use the two facts recorded in <a href="#eq-curve">(4)</a>: that \(A\) lies strictly between \(B\) and
@@ -2493,6 +2676,48 @@ theorem.</p>
   <span class="env-label">Remark 5.10.</span>
 <p>The matrix \(A^*\) in Theorem <a href="#thm-Astar">5.1</a> is the order-four member of the \(M_{2m}\) family. Normalized to unit diagonal, \(|r_{03}|=|r_{12}|=1/4\) and all four cross entries have modulus \(1/2\). Hence, after relabeling \((0,3,1,2)\) and conjugating by the diagonal sign matrix \(D=\operatorname{diag}(-1,1,1,1)\) — which preserves positive definiteness and leaves every \(t^{(S)}_{jk}=-\log|r^{(S)}_{jk}|\) unchanged, so it preserves the entire cancellation structure — \(A^*\) is a member of the family above with \(m=2\), \(A=B=1/2\), \(AB=1/4\). Since \(A^2+(1-B^2)A-1=-3/8\neq0\), this explains why \(M_4\) fails the First-Schur Conjecture only.</p>
 </div>
+<details class="leanbox res">
+  <summary>
+    <span class="lean-kind">Remark</span>
+    <span class="lean-name">astar_div_four_eq_m2m</span>
+  </summary>
+  <pre class="vars"><code>variable {n : ℕ}</code></pre>
+  <pre><code>def astarSign : Fin 4 → ℝ := ![-1, 1, 1, 1]
+
+def astarRelabel : Fin 4 → Fin (2 * 2) := ![0, 2, 3, 1]
+
+theorem astar_div_four_eq_m2m (i j : Fin 4) :
+    astar i j / 4 =
+      astarSign i * astarSign j *
+        m2mMatrix 2 (1 / 2) (1 / 2) (astarRelabel i) (astarRelabel j)
+
+theorem astar_member_off_curve :
+    (1 / 2 : ℝ) ^ 2 + (1 - (1 / 2) ^ 2) * (1 / 2) - 1 = -3 / 8
+
+def signConj (d : Fin n → ℝ) (A : Matrix (Fin n) (Fin n) ℝ) : Matrix (Fin n) (Fin n) ℝ :=
+  fun i j =&gt; d i * d j * A i j
+
+theorem signConj_posDef {d : Fin n → ℝ} (hd : ∀ i, d i = 1 ∨ d i = -1)
+    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef) : (signConj d A).PosDef
+
+theorem schurEntry_signConj {d : Fin n → ℝ} (hd : ∀ i, d i = 1 ∨ d i = -1)
+    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef) (S : Finset (Fin n)) (j k : Fin n) :
+    schurEntry (signConj d A) S j k = d j * d k * schurEntry A S j k
+
+theorem logMag_signConj {d : Fin n → ℝ} (hd : ∀ i, d i = 1 ∨ d i = -1)
+    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef) (S : Finset (Fin n)) (j k : Fin n) :
+    logMag (signConj d A) S j k = logMag A S j k
+
+theorem isCleanOrdering_signConj {d : Fin n → ℝ} (hd : ∀ i, d i = 1 ∨ d i = -1)
+    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef) (σ : List (Fin n)) :
+    IsCleanOrdering (signConj d A) σ ↔ IsCleanOrdering A σ
+
+theorem firstSchurClean_signConj {d : Fin n → ℝ} (hd : ∀ i, d i = 1 ∨ d i = -1)
+    {A : Matrix (Fin n) (Fin n) ℝ} (hA : A.PosDef) (σ : List (Fin n)) :
+    FirstSchurClean (signConj d A) σ ↔ FirstSchurClean A σ</code></pre>
+  <p class="lean-note">Relabeling (0,3,1,2) lists A*'s vertices in the order 0, 3, 1, 2 as M₄'s vertices 0, 1, 2, 3, so vertex i of A* is vertex astarRelabel i of M₄. Conjugation by a diagonal sign matrix preserves positive definiteness, each Schur entry up to sign, every t, cleanliness and first-Schur cleanliness. At order four the curve is not decisive: every irreducible SPD matrix of order at most four has a clean ordering (clean_of_order_le_four, Theorem 5.2).</p>
+  <p class="srcline"><a target="_blank" rel="noopener" href="https://github.com/nt1125/atlas-lean/blob/main/FormalizedPublications/Papers/CholeskyCancellations/Formalization/Section_5_EvenCounterexamplesAndOrderFour/H_AstarInFamily.lean#L32-L220">Lean source</a></p>
+</details>
 <h2 id="sec-practical">6. Consequences for solver authors</h2>
 <p>Two questions a reader implementing sparse Cholesky will ask deserve explicit answers. <em>Must a
 solver test for these cancellations?</em> No: symbolic factorization allocates for \(G^+_\sigma\), and by
@@ -2554,7 +2779,7 @@ are what make families refutable without reference to any particular matrix.</p>
 <p><em>No theorem in this paper depends on a computation.</em> Every result above is proved by hand, in
 exact arithmetic where arithmetic is needed at all. The ancillary scripts of
 Appendix <a href="#app-protocol">A</a> recompute asserted values independently, and
-Appendix <a href="#app-recheck">E</a> is explicit that both the order-four slot search and the four-vertex
+Appendix <a href="#app-recheck">F</a> is explicit that both the order-four slot search and the four-vertex
 feasibility counts corroborate rather than constitute the proofs they accompany. The computations
 reported in Remark <a href="#rem-even-needed">5.7</a> are the one place where this reading needs care: they are
 assertions about cases that remain open, not steps in any argument, and nothing established above
@@ -2651,26 +2876,29 @@ of symbolic factorization remains safe for allocation, since over-allocation nev
 correctness, and none of our counterexamples causes a standard code to return a wrong answer. What is
 not guaranteed is the existential statement: from order six upwards there are SPD matrices for which no
 ordering avoids an exact zero at a position the symbolic phase predicts nonzero. The independent
-recomputations behind the numerical claims are reported in Appendix <a href="#app-recheck">E</a> and reproducible
+recomputations behind the numerical claims are reported in Appendix <a href="#app-recheck">F</a> and reproducible
 from the ancillary files listed in Appendix <a href="#app-protocol">A</a>.</p>
 <h2 id="acks">Acknowledgments</h2>
 <p>The author would like to thank Ricky Simanjuntak for discussions at various stages of this project and his feedback on the final draft. The authors would also like to thank Paul Bendich and Patrick Tam for so kindly reviewing this work and offering very thoughtful suggestions and edits which have greatly improved the content of this draft.</p>
 <h2 id="app-protocol">Appendix A. Computational protocol</h2>
-<p>All computations reported here were carried out in Python \(3.11.9\) with SymPy \(1.12\); pseudorandom
-draws, which enter only the sampling experiment of Appendix <a href="#app-recheck">E</a>, were seeded with \(42\),
-\(123\) and \(2026\). Where a linear program is solved — in the order-four slot search of
-Appendix <a href="#app-recheck">E</a> and in the feasibility counts reported there — HiGHS [<a href="#ref-HiGHS">HH18</a>] serves
+<p>All computations reported here were carried out in Python \(3.11.9\). The ancillary scripts need only
+the standard library, with exact integer or rational arithmetic, except <code>enum-pairing-4vert.py</code>,
+which uses NumPy and SciPy's <code>linprog</code>. Pseudorandom draws, which enter only the sampling
+experiment of Appendix <a href="#app-recheck">F</a>, were seeded with \(42\), \(123\) and \(2026\). Where a linear program is solved — in the order-four slot search of
+Appendix <a href="#app-recheck">F</a> and in the feasibility counts reported there — HiGHS [<a href="#ref-HiGHS">HH18</a>] serves
 only as a search device for a candidate certificate, and correctness never rests on it. By Stiemke's
 alternative, infeasibility of \(Tt=0\), \(t&gt;0\) is witnessed by an integer vector \(y\) with
 \(y^\top T\ge0\) and \(y^\top T\neq0\); since \(T\) has integer entries such a witness is checked by integer
 arithmetic alone, so no floating-point computation enters any proof.</p>
-<p>Three scripts are provided as ancillary files. <code>verify_cholesky.py</code> recomputes the worked
+<p>Four scripts are provided as ancillary files. <code>verify_cholesky.py</code> recomputes the worked
 instances of Theorems <a href="#thm-Astar">5.1</a> and <a href="#thm-M2m">5.8</a> from their statements alone.
 <code>enum-pairing-4vert.py</code> enumerates the \(2^{12}=4096\) slot subsets at a four-vertex level and
 finds \(182\) of them feasible, the computation behind the three all-pivot configurations of
 Lemma <a href="#lem-pairing">5.5</a>. <code>three-mag-59049.py</code> sweeps the \(3^{10}=59049\) three-magnitude
 colourings at order five, establishing the minimum survivor count of \(8\) reported in
-Remark <a href="#rem-even-needed">5.7</a>. For the instance of Theorem <a href="#thm-M2m">5.8</a> used throughout, \(B=1/2\) and
+Remark <a href="#rem-even-needed">5.7</a>. <code>peo_insufficiency.py</code> runs all \(5040\) orderings of an SPD
+realization of the \(2\)-path of \(5\) triangles, the witness of Remark <a href="#rem-peo-fail">4.6</a>. For the
+instance of Theorem <a href="#thm-M2m">5.8</a> used throughout, \(B=1/2\) and
 \(A=(-3+\sqrt{73})/8\), so that \(B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659\).</p>
 <h2 id="app-code">Appendix B. Source of <code>verify_cholesky.py</code></h2>
 <p></p>
@@ -2693,7 +2921,7 @@ First-Schur Conjecture (Conjecture 2) is false; but 8 of the 24 orderings give
 a clean Cholesky factor, so A* is NOT a counterexample to the Fill-Graph
 Conjecture (Conjecture 1).  The gap between the two is the refill phenomenon.
 
-Part B (Theorem 5.5).  With B = 1/2 and A = (-3 + sqrt(73))/8, the positive
+Part B (Theorem 5.8).  With B = 1/2 and A = (-3 + sqrt(73))/8, the positive
 root of the curve A^2 + (1 - B^2) A - 1 = 0, the 6x6 matrix
 
         M_6 = I_6 + AB*P + A*Q + B*R,
@@ -3347,45 +3575,43 @@ for mask, idx in all_pivot:
 <p></p>
 <p></p>
 <pre><code>"""
-three_mag_59049.py — 3^{10}=59049 three-magnitude colourings for n=5 unique-survivor
+three-mag-59049.py — 3^{10}=59049 three-magnitude colourings for n=5 unique-survivor
 Tests Remark 5.7: minimum total survivors 8 and zero colourings with one survivor at every vertex.
 
-We model t-values as magnitudes 0,1,2 representing alpha, beta, alpha+beta.
-For each colouring of the 10 pairs (0..2), we compute for each apex u,
-how many pairs (j,k) would be zeroed if apex had relation t_{jk}=t_{uj}+t_{uk}.
-In magnitude model, this holds when mag[jk] == mag[uj]+mag[uk] (capped).
+Each of the 10 pairs gets one of three magnitudes alpha, beta, alpha+beta (colours 0, 1, 2),
+with alpha, beta &gt; 0 generic, i.e. linearly independent over Q. A magnitude is stored as its
+coefficient vector over (alpha, beta), so the relation t_{jk} = t_{uj} + t_{uk} of Lemma 2.33
+holds exactly when the coefficient vectors add up: exact integer arithmetic, no floating
+point, and every magnitude is positive. For each apex u we mark the pairs (j,k) whose
+relation holds; a vertex survives u if it lies in no marked pair.
 """
 import itertools
 
 pairs = [(0,1),(0,2),(0,3),(0,4),(1,2),(1,3),(1,4),(2,3),(2,4),(3,4)]
 pair_index = {p:i for i,p in enumerate(pairs)}
 
-# Precompute for each apex u the list of pairs it could zero: pair (j,k) with u not in (j,k)
-apex_to_pairs = {}
-for u in range(5):
-    lst=[]
-    for (j,k) in pairs:
-        if u not in (j,k):
-            lst.append((j,k))
-    apex_to_pairs[u]=lst
+# colour -&gt; coefficients of the magnitude over (alpha, beta)
+MAG = {0: (1, 0), 1: (0, 1), 2: (1, 1)}
 
-def survivors_for_colouring(mags):
-    """mags list length 10 values 0,1,2. For each apex u, count survivors."""
-    # For n=5, each apex has 3 other vertices besides itself? Actually W\{u} size 4, pairs among them C(4,2)=6 possible zeroed.
-    # Survivor = vertex q that is never covered by zeroed pairs of u.
+def srt(a,b): return (a,b) if a&lt;b else (b,a)
+
+# For each apex u, the pairs it could zero: (j,k) with u not in (j,k)
+apex_to_pairs = {u: [(j,k) for (j,k) in pairs if u not in (j,k)] for u in range(5)}
+
+def survivors_for_colouring(colours):
+    """colours: 10 values in {0,1,2}. For each apex u, count the survivors of u."""
+    mags = [MAG[c] for c in colours]
     total_survivors=0
     per_vertex_survivors={}
     all_one = True
     for u in range(5):
         covered=set()
         for (j,k) in apex_to_pairs[u]:
-            # check if relation holds: mag[jk] == mag[uj]+mag[uk] ??? Use additive condition
-            # Need mag indices
-            def srt(a,b): return (a,b) if a&lt;b else (b,a)
-            idx_jk = pair_index[srt(j,k)]
-            idx_uj = pair_index[srt(u,j)]
-            idx_uk = pair_index[srt(u,k)]
-            if mags[idx_jk] == mags[idx_uj] + mags[idx_uk]:
+            jk = mags[pair_index[(j,k)]]
+            uj = mags[pair_index[srt(u,j)]]
+            uk = mags[pair_index[srt(u,k)]]
+            # additive relation t_jk = t_uj + t_uk, exact for generic alpha, beta
+            if jk == (uj[0] + uk[0], uj[1] + uk[1]):
                 covered.add(j); covered.add(k)
         # survivors are vertices in V\{u} not covered
         survivors = [v for v in range(5) if v!=u and v not in covered]
@@ -3395,30 +3621,118 @@ def survivors_for_colouring(mags):
             all_one=False
     return total_survivors, per_vertex_survivors, all_one
 
-min_total=10
+min_total=None
 count_one_survivor=0
-total=3**10
-# Brute force 59049 feasible
-for code in range(total):
-    mags=[]
-    tmp=code
-    for _ in range(10):
-        mags.append(tmp%3)
-        tmp//=3
-    # We restrict to 0,1,2 where 2 represents alpha+beta (1+1) etc. Allow 0 not allowed for t&gt;0, but colouring includes 0 as small magnitude.
-    # For strict positivity we require mag&gt;=0, but we count.
-    tot, per, all_one = survivors_for_colouring(mags)
-    if tot &lt; min_total:
+enumerated=0
+for colours in itertools.product(range(3), repeat=10):
+    enumerated+=1
+    tot, per, all_one = survivors_for_colouring(colours)
+    if min_total is None or tot &lt; min_total:
         min_total=tot
     if all_one:
         count_one_survivor+=1
 
-print(f"Enumerated {total} colourings")
+print(f"Enumerated {enumerated} colourings")
 print(f"Minimum total survivors: {min_total} (expected 8)")
 print(f"Colourings with exactly one survivor at every vertex: {count_one_survivor} (expected 0)")
 </code></pre>
 <p></p>
-<h2 id="app-recheck">Appendix E. Independent recomputation of the numerical claims</h2>
+<h2 id="app-code-peo">Appendix E. Source of <code>peo_insufficiency.py</code></h2>
+<p></p>
+<p></p>
+<pre><code>"""
+peo_insufficiency.py — a 2-path of 5 triangles on which no fill-free ordering is clean
+Tests Remark 4.6: an SPD realization with zero clean simplicial vertices, so that a pure
+PEO strategy, which never creates fill, fails.
+
+The pattern is the 2-path strip on 0..6 (edges {i,i+1} and {i,i+2}), whose triangles are
+{i,i+1,i+2}, i = 0..4. Its simplicial vertices are the ends 0 and 6. The matrix below makes
+each end zero the opposite edge of its triangle: A00*A12 = A01*A02 and A66*A45 = A64*A65
+(Definition 2.19), so neither end is a clean pivot at the empty level. Arithmetic is exact
+(fractions), so every zero test is exact. The script checks that the matrix is SPD with this
+pattern, then runs all 7! orderings through the elimination game and the Schur updates of
+Definition 2.6: an ordering is clean (Definition 2.24) if every position committed to L is
+nonzero, and it is a perfect elimination ordering (PEO) if it creates no fill.
+"""
+import itertools
+from fractions import Fraction as F
+
+N = 7
+h = F(1, 2)
+A = [[2, 1, 1, 0, 0, 0, 0],
+     [1, 3, h, h, 0, 0, 0],
+     [1, h, 3, h, h, 0, 0],
+     [0, h, h, 3, h, h, 0],
+     [0, 0, h, h, 3, h, 1],
+     [0, 0, 0, h, h, 3, 1],
+     [0, 0, 0, 0, 1, 1, 2]]
+A = [[F(x) for x in row] for row in A]
+STRIP = {frozenset((i, i + d)) for d in (1, 2) for i in range(N - d)}
+
+def is_spd(M):
+    """Symmetric, and every pivot of Gaussian elimination in natural order is positive."""
+    if any(M[i][j] != M[j][i] for i in range(N) for j in range(N)):
+        return False
+    M = [row[:] for row in M]
+    for p in range(N):
+        if M[p][p] &lt;= 0:
+            return False
+        for j in range(p + 1, N):
+            f = M[j][p] / M[p][p]
+            for k in range(p, N):
+                M[j][k] -= f * M[p][k]
+    return True
+
+def eliminate(order):
+    """Run `order` through the elimination game and the Schur updates.
+    Returns (clean, fill_free)."""
+    M = {j: {k: A[j][k] for k in range(N)} for j in range(N)}
+    adj = {v: {u for u in range(N) if u != v and A[u][v] != 0} for v in range(N)}
+    clean, fill_free = True, True
+    for p in order:
+        if any(M[p][x] == 0 for x in adj[p]):   # a committed position of L is zero
+            clean = False
+        nbrs = adj[p]
+        for a, b in itertools.combinations(nbrs, 2):
+            if b not in adj[a]:                 # the pivot creates a fill edge
+                fill_free = False
+                adj[a].add(b); adj[b].add(a)
+        for v in nbrs:
+            adj[v].discard(p)
+        del adj[p]
+        rest = [v for v in M if v != p]
+        M = {j: {k: M[j][k] - M[j][p] * M[k][p] / M[p][p] for k in rest} for j in rest}
+    return clean, fill_free
+
+pattern = {frozenset((i, j)) for i in range(N) for j in range(i + 1, N) if A[i][j] != 0}
+assert is_spd(A), "matrix is not SPD"
+assert pattern == STRIP, "pattern is not the 2-path of 5 triangles"
+nbr = {v: {u for u in range(N) if frozenset((u, v)) in pattern} for v in range(N)}
+simplicial = [v for v in range(N)
+              if all(frozenset((a, b)) in pattern for a, b in itertools.combinations(nbr[v], 2))]
+# C_v at the empty level: pairs {j,k} with A_vv A_jk = A_vj A_vk (Definition 2.19)
+clean_simplicial = [v for v in simplicial
+                    if not any(A[v][v] * A[j][k] == A[v][j] * A[v][k]
+                               for j, k in itertools.combinations(range(N), 2)
+                               if v not in (j, k) and frozenset((j, k)) in pattern)]
+
+orders = clean_count = peo_count = clean_peo_count = 0
+for order in itertools.permutations(range(N)):
+    orders += 1
+    clean, fill_free = eliminate(order)
+    clean_count += clean
+    peo_count += fill_free
+    clean_peo_count += clean and fill_free
+
+print(f"Matrix is SPD with the pattern of the 2-path of 5 triangles on {N} vertices")
+print(f"Simplicial vertices: {simplicial} (expected [0, 6])")
+print(f"Clean simplicial vertices at the empty level: {len(clean_simplicial)} (expected 0)")
+print(f"Enumerated {orders} orderings: {peo_count} perfect elimination orderings, "
+      f"{clean_peo_count} of them clean (expected 0)")
+print(f"Clean orderings: {clean_count} (expected &gt; 0; each creates fill)")
+</code></pre>
+<p></p>
+<h2 id="app-recheck">Appendix F. Independent recomputation of the numerical claims</h2>
 <p>Every numerical and combinatorial assertion of the paper has been recomputed
 independently, in exact arithmetic, by an independent implementation written from the
 statements alone (no shared code with the primary verification of

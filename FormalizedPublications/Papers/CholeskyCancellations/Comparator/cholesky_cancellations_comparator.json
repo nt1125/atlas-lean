@@ -38,6 +38,8 @@
     "CholeskyCancellations.IsPerfectEliminationOrdering",
     "CholeskyCancellations.IsChordal",
     "CholeskyCancellations.IsCutVertex",
+    "CholeskyCancellations.IsBlock",
+    "CholeskyCancellations.blockCutGraph",
     "CholeskyCancellations.IsCliqueSumAlong",
     "CholeskyCancellations.IsIrreducible",
     "CholeskyCancellations.Zeroes",
