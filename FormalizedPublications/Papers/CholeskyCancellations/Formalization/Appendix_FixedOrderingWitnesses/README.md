@@ -4,4 +4,4 @@ This appendix contains fixed_ordering_witnesses.py, the script that checks the w
 
 Reading order:
 
-1. fixed_ordering_witnesses.py — the fixed-ordering script: in exact arithmetic, the three SPD realizations of the triangle defeat all 6 orderings, and the five SPD realizations of E defeat all 120 orderings when the witness is chosen by whether the pendant precedes the earlier end of the zeroed pair; choosing by whether the pendant precedes the first triangle vertex leaves 20 orderings clean.
+1. Papers/Script/fixed_ordering_witnesses.py — the fixed-ordering script: in exact arithmetic, the three SPD realizations of the triangle defeat all 6 orderings, and the five SPD realizations of E defeat all 120 orderings when the witness is chosen by whether the pendant precedes the earlier end of the zeroed pair; choosing by whether the pendant precedes the first triangle vertex leaves 20 orderings clean.
