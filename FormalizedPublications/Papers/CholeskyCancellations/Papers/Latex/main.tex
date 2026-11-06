@@ -80,6 +80,8 @@
 % Python code listings: read from the ancillary .py file rather than pasted inline. The
 % scripts live in Papers/Script/.
 \newcommand{\ancillary}[1]{../Script/#1}
+% Listing helper tolerant of the upload layout: repo (../Script/), Overleaf root (Script/), or flat.
+\newcommand{\lstancillary}[2][]{\IfFileExists{../Script/#2}{\lstinputlisting[#1]{../Script/#2}}{\IfFileExists{Script/#2}{\lstinputlisting[#1]{Script/#2}}{\lstinputlisting[#1]{#2}}}}
 \lstdefinestyle{pycode}{
   language=Python,
   basicstyle=\scriptsize\ttfamily,
@@ -2328,57 +2330,57 @@ $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=1, lastline=58, firstnumber=1]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=1, lastline=58, firstnumber=1]{verify_cholesky.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=59, lastline=111, firstnumber=59]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=59, lastline=111, firstnumber=59]{verify_cholesky.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=112, lastline=170, firstnumber=112]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=112, lastline=170, firstnumber=112]{verify_cholesky.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=171, lastline=219, firstnumber=171]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=171, lastline=219, firstnumber=171]{verify_cholesky.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=220, lastline=275, firstnumber=220]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=220, lastline=275, firstnumber=220]{verify_cholesky.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=276, lastline=330, firstnumber=276]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=276, lastline=330, firstnumber=276]{verify_cholesky.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=331, lastline=389, firstnumber=331]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=331, lastline=389, firstnumber=331]{verify_cholesky.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=390, lastline=434, firstnumber=390]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=390, lastline=434, firstnumber=390]{verify_cholesky.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=435, lastline=490, firstnumber=435]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=435, lastline=490, firstnumber=435]{verify_cholesky.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=491, lastline=534, firstnumber=491]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=491, lastline=534, firstnumber=491]{verify_cholesky.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=535, lastline=569, firstnumber=535]{\ancillary{verify_cholesky.py}}
+\lstancillary[style=pycode, firstline=535, lastline=569, firstnumber=535]{verify_cholesky.py}
 \end{aiblock}
 
 
@@ -2390,12 +2392,12 @@ $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=1, lastline=46, firstnumber=1]{\ancillary{enum-pairing-4vert.py}}
+\lstancillary[style=pycode, firstline=1, lastline=46, firstnumber=1]{enum-pairing-4vert.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=47, lastline=83, firstnumber=47]{\ancillary{enum-pairing-4vert.py}}
+\lstancillary[style=pycode, firstline=47, lastline=83, firstnumber=47]{enum-pairing-4vert.py}
 \end{aiblock}
 
 \section{Source of \texttt{three-mag-59049.py}}\label{app:code-threemag}
@@ -2405,7 +2407,7 @@ $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=1, lastline=61, firstnumber=1]{\ancillary{three-mag-59049.py}}
+\lstancillary[style=pycode, firstline=1, lastline=61, firstnumber=1]{three-mag-59049.py}
 \end{aiblock}
 
 \section{Source of \texttt{peo\_insufficiency.py}}\label{app:code-peo}
@@ -2416,12 +2418,12 @@ $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=1, lastline=43, firstnumber=1]{\ancillary{peo_insufficiency.py}}
+\lstancillary[style=pycode, firstline=1, lastline=43, firstnumber=1]{peo_insufficiency.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=44, lastline=90, firstnumber=44]{\ancillary{peo_insufficiency.py}}
+\lstancillary[style=pycode, firstline=44, lastline=90, firstnumber=44]{peo_insufficiency.py}
 \end{aiblock}
 
 \section{Source of \texttt{fixed\_ordering\_witnesses.py}}\label{app:code-fixed}
@@ -2432,17 +2434,17 @@ $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=1, lastline=50, firstnumber=1]{\ancillary{fixed_ordering_witnesses.py}}
+\lstancillary[style=pycode, firstline=1, lastline=50, firstnumber=1]{fixed_ordering_witnesses.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=51, lastline=114, firstnumber=51]{\ancillary{fixed_ordering_witnesses.py}}
+\lstancillary[style=pycode, firstline=51, lastline=114, firstnumber=51]{fixed_ordering_witnesses.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=115, lastline=143, firstnumber=115]{\ancillary{fixed_ordering_witnesses.py}}
+\lstancillary[style=pycode, firstline=115, lastline=143, firstnumber=115]{fixed_ordering_witnesses.py}
 \end{aiblock}
 
 
@@ -2454,12 +2456,12 @@ $A=(-3+\sqrt{73})/8$, so that $B(1-A)=11/16-\sqrt{73}/16\approx0.1534997659$.
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=1, lastline=28, firstnumber=1]{\ancillary{slot_counts.py}}
+\lstancillary[style=pycode, firstline=1, lastline=28, firstnumber=1]{slot_counts.py}
 \end{aiblock}
 
 \begin{aiblock}
 \mbox{}
-\lstinputlisting[style=pycode, firstline=29, lastline=120, firstnumber=29]{\ancillary{slot_counts.py}}
+\lstancillary[style=pycode, firstline=29, lastline=120, firstnumber=29]{slot_counts.py}
 \end{aiblock}
 
 
