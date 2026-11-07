@@ -1,5 +1,5 @@
 \documentclass[11pt]{article}
-\usepackage{amsmath,amssymb,amsthm,booktabs,graphicx,enumitem,tikz,float}
+\usepackage{amsmath,amssymb,amsthm,booktabs,graphicx,tikz,float}
 \usepackage[margin=1in]{geometry}
 \usepackage[export]{adjustbox}
 \usepackage{caption}
@@ -8,19 +8,14 @@
 
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage{amssymb, amsmath, amsthm}
 \usepackage{mathtools}
-\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
 \usepackage{lipsum}
 \usepackage{comment}
-\usepackage{enumitem}
 \usepackage{tikz-cd}
-\usepackage{tikz}
 \usetikzlibrary{shapes,arrows,positioning,shadows}
 \usepackage{xcolor}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage{caption}
 
 \usepackage{verbatim}
 
@@ -47,7 +42,25 @@
 % Custom packages
 \usepackage{flexart}
 \input{stylelibrary}
+
+% \flexset values are calibrated; see the paper template README (Spacing).
+% parindent restores flexart's indent (stylelibrary sets 15pt).
+\flexset{
+  parindent     = 1.5em,
+  abovesecondary = 16.13pt,
+  betweenauthorgroups = 7.65pt,
+  thmdefinitionheadfont = {\normalfont\bfseries},
+  thmremarkheadfont = {\normalfont\bfseries},
+  thmremarkindent = 0pt,
+}
+
 \input{macros.tex}
+
+% Colors not already defined by stylelibrary, and opacity (template values).
+\definecolor{aiassistedcolor}{HTML}{003300}
+\definecolor{othercolor}{HTML}{7A3E9D}
+\renewcommand{\opacityFrame}{0.5}
+\renewcommand{\opacityText}{0.7}
 
 %GAP Code boxes
 \definecolor{codebg}{RGB}{245,245,245}
@@ -106,6 +119,9 @@
   literate={—}{{---}}1 {–}{{--}}1 {‘}{{`}}1 {’}{{'}}1
 }
 
+% hyperref last, as in the paper template.
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -115,15 +131,26 @@
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
-\newtheorem{remark}[theorem]{Remark}
 \newtheorem{question}[theorem]{Question}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
 
-\title{Accidental Cancellations in Cholesky Factorization}
+\title[Accidental Cancellations]{Accidental Cancellations in Cholesky Factorization}
+
+% Lean note (the only fanote); mark forced to \dagger.
+\newfanote{lean}{Lean formalization: \href{https://github.com/nt1125/atlas-lean/tree/main/FormalizedPublications/Papers/CholeskyCancellations}{github.com/\allowbreak nt1125/\allowbreak atlas-lean}}
+\makeatletter
+\renewcommand{\fa@notemark}[1]{\ensuremath{\dagger}}
+\makeatother
+
 \primaryauthors{{\scshape Nam Trang} \\ \Muse}
 
+\secondaryauthorlabel{Reviewed by}
 \secondaryauthors{{\scshape Paul Bendich} \and {\scshape Patrick Tam}}
 
 \subjclass[2020]{65F50; 15A23, 05C50, 15B48, 05C75, 62H22}
+
+\keywords{sparse Cholesky factorization, fill pattern, clean ordering, accidental cancellation, Schur complement}
 
 \flexabstract{
 Sparse Cholesky factorization allocates storage from the symbolic fill pattern $G^+$ alone, assuming that no position predicted nonzero ever cancels. Over-allocation never threatens correctness, so the assumption is safe in practice, but it leaves open an existential question, recorded by the first author in unpublished notes circulated in 2021 as two conjectures. Call an ordering $\sigma$ clean for an SPD matrix $A$ if every position predicted nonzero in $G^+_\sigma$ is nonzero in the factor $L$. Conjecture~1: every irreducible SPD matrix admits a clean ordering. Conjecture~2: every irreducible SPD matrix admits an ordering whose first Schur complement has no cancellation at a predicted-nonzero position.
@@ -132,6 +159,8 @@ We refute both. Conjecture~1 fails at every even order $n\ge6$, via an explicit 
 
 Positively, Conjecture~1 holds for every irreducible SPD matrix of order at most~$4$, by an elementary argument; order five we leave open, and we settle no further order exhaustively. At order six the complete graph $K_6$ fails, by the family above. Forests are clean in the strong form that every ordering is clean --- recovering, in factorization language, a covariance-faithfulness theorem of Malouche and Rajaratnam --- and so are $2$-path strips and dominating-vertex fans, chordal graphs with exactly one triangle, and chordal graphs of clique number at most $3$ with pairwise edge-disjoint triangles; on the last four classes the clean ordering must adapt to the matrix, since no fixed ordering suffices. Odd orders $n\ge7$ remain open, and we explain why the pairing argument that settles the even orders
 does not extend to them.
+
+This paper is published alongside a Lean formalization of the results\fanote{lean}. We remark on the use of AI in this research, see Statement of AI Use.
 }
 
 
@@ -2513,7 +2542,7 @@ and $633$; the certificates are not included in the ancillary material. This cor
 part of its proof, which is elementary.
 \end{humanblock}
 
-\bibliographystyle{alpha}
+\bibliographystyle{alphaurl}
 \bibliography{bib}
 \end{document}
 

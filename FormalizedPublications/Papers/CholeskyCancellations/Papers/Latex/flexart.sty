@@ -6,7 +6,7 @@
 %% or, preferably, with \flexset{key=value,...}.
 %% ---------------------------------------------------------------
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{flexart}[2026/09/16 v2.3 Appendix levels, part subtitles, parskip-relative display maths, contents control]
+\ProvidesPackage{flexart}[2026/11/06 v2.5.2 Appendix group name singular when one appendix; otherwise v2.5.1]
 
 \RequirePackage{xkeyval}
 \RequirePackage{etoolbox}
@@ -50,6 +50,7 @@
 \newlength{\fa@abovekeywords}  \setlength{\fa@abovekeywords}{0.8em}
 \newlength{\fa@belowkeywords}  \setlength{\fa@belowkeywords}{0pt}
 \newlength{\fa@abovesecondarylabel}\setlength{\fa@abovesecondarylabel}{1.5em}
+\newlength{\fa@betweenauthorgroups}\setlength{\fa@betweenauthorgroups}{7.65pt}
 \newlength{\fa@belowsecondarylabel}\setlength{\fa@belowsecondarylabel}{0em}
 \newlength{\fa@abovethanks}    \setlength{\fa@abovethanks}{1em}
 \newlength{\fa@belowthanks}    \setlength{\fa@belowthanks}{0pt}
@@ -81,7 +82,7 @@
 %% ===============================================================
 %% 2. FORMAT HOOKS
 %% ===============================================================
-\newcommand{\fa@titlefont}{\normalfont\bfseries\spaceskip1.3\fontdimen2\font plus1.3\fontdimen3\font\relax}
+\newcommand{\fa@titlefont}{\large\bfseries\spaceskip1.3\fontdimen2\font plus1.3\fontdimen3\font\relax}
 \newcommand{\fa@subtitlefont}{\normalfont\footnotesize\itshape}
 \newcommand{\fa@primaryfont}{\normalfont\normalsize}
 \newcommand{\fa@secondaryfont}{\normalfont\footnotesize}
@@ -92,8 +93,23 @@
 \newcommand{\fa@keywordsnamefont}{\normalfont\small}
 \newcommand{\fa@keywordsfont}{\normalfont\small\itshape}
 \newcommand{\fa@thanksfont}{\normalfont\footnotesize}
-\newcommand{\fa@secondarylabel}{Reviewed by}
+%% The label between the two author lines is declared like the other front-matter items
+%% -- \secondaryauthorlabel{...}, alongside \title, \subtitle and \primaryauthors -- and
+%% is EMPTY by default, so \maketitle prints no label unless a document asks for one.
+%% There is deliberately no `secondarylabel' key: the command is the only route, so the
+%% two cannot disagree (in v2.3 the key overwrote the hook without touching the macro).
+\newcommand{\fa@secondarylabel}{}
+\newcommand{\secondaryauthorlabel}[1]{\renewcommand{\fa@secondarylabel}{#1}}
 \newcommand{\fa@secondarylabelfont}{\normalfont\footnotesize\itshape}
+%% Orchestrator / retrieved label text (retrieved is a title footnote).
+%% Defaults are the printed words "Orchestrator" / "Retrieved".  Override
+%% with \orchestratorlabel{...} / \retrievedlabel{...}.  An empty label
+%% prints no label line.  Label font/spacing are the secondary defaults
+%% (see below); only the label text differs.
+\newcommand{\fa@orchestratorlabel}{Orchestrated by}
+\newcommand{\orchestratorlabel}[1]{\renewcommand{\fa@orchestratorlabel}{#1}}
+\newcommand{\fa@retrievedlabel}{Retrieved}
+\newcommand{\retrievedlabel}[1]{\renewcommand{\fa@retrievedlabel}{#1}}
 
 \newcommand{\fa@titlealign}{\centering}
 %% Defaults to whatever titlealign is, so setting titlealign alone still moves the
@@ -134,6 +150,7 @@
 \fa@deflen{abovekeywords}{\fa@abovekeywords}
 \fa@deflen{belowkeywords}{\fa@belowkeywords}
 \fa@deflen{abovesecondarylabel}{\fa@abovesecondarylabel}
+\fa@deflen{betweenauthorgroups}{\fa@betweenauthorgroups}
 \fa@deflen{belowsecondarylabel}{\fa@belowsecondarylabel}
 \fa@deflen{abovethanks}{\fa@abovethanks}
 \fa@deflen{abovenotes}{\fa@abovethanks}
@@ -168,7 +185,6 @@
 \fa@defcmd{keywordsfont}{\fa@keywordsfont}
 \fa@defcmd{thanksfont}{\fa@thanksfont}
 \fa@defcmd{notesfont}{\fa@thanksfont}
-\fa@defcmd{secondarylabel}{\fa@secondarylabel}
 \fa@defcmd{secondarylabelfont}{\fa@secondarylabelfont}
 \fa@defcmd{titlealign}{\fa@titlealign}
 \fa@defcmd{subtitlealign}{\fa@subtitlealign}
@@ -193,6 +209,29 @@
 \define@key{flexart}{indentfirstpar}[true]{\csname fa@indentfirst#1\endcsname}
 \define@key{flexart}{showdate}[true]{\csname fa@showdate#1\endcsname}
 \define@key{flexart}{showsecondarylabel}[true]{\csname fa@showseclabel#1\endcsname}
+\newif\iffa@showorchlabel  \fa@showorchlabeltrue
+\newif\iffa@showretlabel   \fa@showretlabeltrue
+\define@key{flexart}{showorchestratorlabel}[true]{\csname fa@showorchlabel#1\endcsname}
+\define@key{flexart}{showretrievedlabel}[true]{\csname fa@showretlabel#1\endcsname}
+%% Orchestrator + reviewer on separate lines by default.
+%% combineauthorgroups=true puts them on one line (labels inline,
+%% separator + space between).
+\newif\iffa@combinegroups \fa@combinegroupsfalse
+\define@key{flexart}{combineauthorgroups}[true]{\csname fa@combinegroups#1\endcsname}
+%% Separator and space between the two groups of
+%% the combined line.  The separator defaults to a math-mode cdot; set
+%% combineauthorgroupseparator to any other separator (e.g. {|}, {;}, {})
+%% and combineauthorgroupspace to the horizontal space placed on each side
+%% of it.  Both apply only to the combined (same-line) rendering.
+\newlength{\fa@combineauthorgroupspace}\setlength{\fa@combineauthorgroupspace}{0.5em}
+\define@key{flexart}{combineauthorgroupspace}{\setlength{\fa@combineauthorgroupspace}{#1}}
+\newcommand{\fa@combineauthorgroupseparator}{$\cdot$}
+\define@key{flexart}{combineauthorgroupseparator}{\renewcommand{\fa@combineauthorgroupseparator}{#1}}
+%% Inline group labels ("Label: content") and the
+%% scratch flag a caller sets before each \fa@authorgroup call.
+\newif\iffa@inlinegrouplabels \fa@inlinegrouplabelsfalse
+\define@key{flexart}{inlineauthorgrouplabels}[true]{\csname fa@inlinegrouplabels#1\endcsname}
+\newif\iffa@showgrouplabel \fa@showgrouplabeltrue
 
 \newcommand{\flexset}[1]{\setkeys{flexart}{#1}}
 \DeclareOptionX*{\setkeys{flexart}{\CurrentOption}}
@@ -217,6 +256,14 @@
 \newcommand{\primaryauthors}[1]{\renewcommand{\fa@primaryauthors}{#1}}
 \newcommand{\fa@secondaryauthors}{}
 \newcommand{\secondaryauthors}[1]{\renewcommand{\fa@secondaryauthors}{#1}}
+%% Content storage.  \orchestrator and \retrieved take the same
+%% kind of argument as \secondaryauthors (an author list with \and and
+%% \fanote marks).  \retrieved also accepts plain free text (no \and):
+%% it is then printed as a single item.
+\newcommand{\fa@orchestrator}{}
+\newcommand{\orchestrator}[1]{\renewcommand{\fa@orchestrator}{#1}}
+\newcommand{\fa@retrieved}{}
+\newcommand{\retrieved}[1]{\renewcommand{\fa@retrieved}{#1}}
 
 \newcommand{\fa@affiliation}{}
 \providecommand{\affiliation}{}
@@ -267,13 +314,18 @@
     \csxdef{fa@noteidx@#1}{\the\value{fa@note}}%
     \listgadd{\fa@notelabels}{#1}}%
 }
+%% Every footnote mark is set in footnotesize,
+%% so the mark in the title, the marks in the author lists, and the marks in
+%% the footnote block all have the same font size and height.  (Before, the
+%% mark took the surrounding size: 8pt in a normalsize list, 7pt in a
+%% footnotesize list, 10pt after a \Large title.)
 \newcommand{\fa@marknote}[1]{%
   \iffa@thanksfn
     \begingroup\renewcommand{\thefootnote}{\fa@notemark{\value{footnote}}}%
-      \footnotemark[#1]%
+      {\normalfont\footnotesize\footnotemark[#1]}%
     \endgroup
   \else
-    \textsuperscript{\fa@notemark{#1}}%
+    {\normalfont\footnotesize\textsuperscript{\fa@notemark{#1}}}%
   \fi}
 
 \newcommand{\fathanks}[1]{\fa@declarenote{}{#1}\fa@marknote{\value{fa@note}}}
@@ -303,19 +355,33 @@
     \iffa@thanksfn
       \begingroup\renewcommand{\thefootnote}{\fa@notemark{\value{footnote}}}%
         \setcounter{fa@notei}{0}%
+        %% The retrieved footnote is always the
+        %% first after the MSC note: emit it first, then the rest in order.
+        \ifnum\value{fa@retrievednoteidx}>0\relax
+          \footnotetext[\value{fa@retrievednoteidx}]{\csuse{fa@notetext@\the\value{fa@retrievednoteidx}}}%
+        \fi
         \loop\ifnum\value{fa@notei}<\value{fa@note}
           \stepcounter{fa@notei}%
-          \footnotetext[\value{fa@notei}]{\csuse{fa@notetext@\the\value{fa@notei}}}%
+          \ifnum\value{fa@notei}=\value{fa@retrievednoteidx}\else
+            \footnotetext[\value{fa@notei}]{\csuse{fa@notetext@\the\value{fa@notei}}}%
+          \fi
         \repeat
       \endgroup
     \else
       \vspace{\fa@abovethanks}%
       {\fa@thanksfont\setlength{\parindent}{0pt}%
        \setcounter{fa@notei}{0}%
+       %% Retrieved first (see above).
+       \ifnum\value{fa@retrievednoteidx}>0\relax
+         \textsuperscript{\fa@notemark{\value{fa@retrievednoteidx}}}\,%
+         \csuse{fa@notetext@\the\value{fa@retrievednoteidx}}\par
+       \fi
        \loop\ifnum\value{fa@notei}<\value{fa@note}
          \stepcounter{fa@notei}%
-         \textsuperscript{\fa@notemark{\value{fa@notei}}}\,%
-         \csuse{fa@notetext@\the\value{fa@notei}}\par
+         \ifnum\value{fa@notei}=\value{fa@retrievednoteidx}\else
+           \textsuperscript{\fa@notemark{\value{fa@notei}}}\,%
+           \csuse{fa@notetext@\the\value{fa@notei}}\par
+         \fi
        \repeat}%
       \vspace{\fa@belowthanks}%
     \fi
@@ -326,6 +392,9 @@
 %% 5. AUTHOR-LIST BUILDER  (names separated by \and)
 %% ===============================================================
 \newcounter{fa@nauthors}
+\newcounter{fa@ngroups}
+\newcounter{fa@retrievednoteidx}
+\newcounter{fa@groupidx}
 \newcounter{fa@authidx}
 \newcommand{\fa@authlist}{}
 \def\fa@endmarkmacro{\fa@endmark}
@@ -394,17 +463,107 @@
 \newcommand{\fa@block}[4]{%
   {#1\begin{minipage}{#2}#1#3#4\par\end{minipage}\par}}
 
+%% The text of the \retrieved footnote from the title.
+%% The label prefix follows \retrievedlabel / showretrievedlabel; the content
+%% is plain text (no \and, no \fanote -- it is a footnote, not an author list).
+\newcommand{\fa@retrievedfootnotetext}{%
+  \iffa@showretlabel\ifdefempty{\fa@retrievedlabel}{}{%
+    \fa@retrievedlabel:\space}\fi
+  \fa@retrieved}
+
+%% Print one author group.  #1 = label macro,
+%% #2 = content macro.  The caller sets \iffa@showgrouplabel beforehand.
+%% Spacing is governed by fa@ngroups / fa@groupidx (set in \maketitle):
+%% first group of a multi-group block gets \abovesecondary, later groups get
+%% \betweenauthorgroups; \belowsecondary is emitted once after all groups.
+\newcommand{\fa@authorgroup}[2]{%
+  \ifnum\value{fa@groupidx}=0\relax
+    \ifnum\value{fa@ngroups}>1\relax
+      \vspace{\fa@abovesecondary}%
+    \else
+      \iffa@inlinegrouplabels
+        \vspace{\fa@abovesecondary}%
+      \else
+        \iffa@showgrouplabel\ifdefempty{#1}{}{%
+          \vspace{\fa@abovesecondarylabel}}\fi
+      \fi
+    \fi
+  \else
+    \vspace{\fa@betweenauthorgroups}%
+  \fi
+  \iffa@inlinegrouplabels
+    \fa@block{\fa@authoralign}{\fa@authorwidth}
+      {\fa@secondaryfont\ifdim\fa@authorleading>0pt\setlength{\baselineskip}{\fa@authorleading}\fi}
+      {\iffa@showgrouplabel\ifdefempty{#1}{}{%
+        %% v2.5.1: no colon after the label -- it prints exactly as given.
+        {\fa@secondarylabelfont #1}~}\fi\fa@dolist#2}%
+  \else
+    \iffa@showgrouplabel\ifdefempty{#1}{}{%
+      \fa@block{\fa@authoralign}{\fa@authorwidth}{\fa@secondarylabelfont}{#1}%
+      \vspace{\fa@belowsecondarylabel}}\fi
+    \ifnum\value{fa@groupidx}=0\relax\ifnum\value{fa@ngroups}=1\relax
+      \vspace{\fa@abovesecondary}%
+    \fi\fi
+    \fa@block{\fa@authoralign}{\fa@authorwidth}
+      {\fa@secondaryfont\ifdim\fa@authorleading>0pt\setlength{\baselineskip}{\fa@authorleading}\fi}
+      {\fa@dolist#2}%
+  \fi
+  \stepcounter{fa@groupidx}%
+}
+
+%% The two separate author groups.
+%% Used when only one group is present, or when combineauthorgroups=false.
+\newcommand{\fa@twogroupblocks}{%
+  \ifdefempty{\fa@orchestrator}{}{%
+    \iffa@showorchlabel\fa@showgrouplabeltrue\else\fa@showgrouplabelfalse\fi
+    \fa@authorgroup{\fa@orchestratorlabel}{\fa@orchestrator}}%
+  \ifdefempty{\fa@secondaryauthors}{}{%
+    \iffa@showseclabel\fa@showgrouplabeltrue\else\fa@showgrouplabelfalse\fi
+    \fa@authorgroup{\fa@secondarylabel}{\fa@secondaryauthors}}}%
+
+%% Orchestrator + reviewer on ONE line (combineauthorgroups=true):
+%% "Orchestrated by <orchestrator list> <sep> Reviewed by <secondary list>"
+%% with no periods: <sep> is combineauthorgroupseparator (default $\cdot$)
+%% with combineauthorgroupspace on each side.
+%% One block, \abovesecondary above it (\belowsecondary is emitted once
+%% after all groups, as before).  Labels keep their own font and show keys.
+\newcommand{\fa@combinedauthorgroup}{%
+  \vspace{\fa@abovesecondary}%
+  \fa@block{\fa@authoralign}{\fa@authorwidth}
+    {\fa@secondaryfont\ifdim\fa@authorleading>0pt\setlength{\baselineskip}{\fa@authorleading}\fi}
+    {\iffa@showorchlabel\ifdefempty{\fa@orchestratorlabel}{}{%
+      {\fa@secondarylabelfont\fa@orchestratorlabel}~}\fi
+     \fa@dolist\fa@orchestrator
+     \hspace{\fa@combineauthorgroupspace}%
+     \fa@combineauthorgroupseparator
+     \hspace{\fa@combineauthorgroupspace}%
+     \iffa@showseclabel\ifdefempty{\fa@secondarylabel}{}{%
+      {\fa@secondarylabelfont\fa@secondarylabel}~}\fi
+     \fa@dolist\fa@secondaryauthors}%
+}
+
 \renewcommand{\maketitle}{%
   \par                      % close any open paragraph (safe for a 2nd \maketitle)
   \iffa@header\iffa@firstheader\else\thispagestyle{plain}\fi\fi % title page: folio only
   \begingroup
   \fa@mpinheritfalse        % the front-matter minipages keep their own tight shape
   \setlength{\parindent}{0pt}\setlength{\parskip}{0pt}%
+  %% ---- \retrieved as a footnote from the title ----
+  %% Declared here, before the title is typeset, so its note index is known
+  %% when the title mark is placed.  It is flushed with the other title notes
+  %% by \fa@flushthanks at the end of \maketitle.
+  \setcounter{fa@retrievednoteidx}{0}%
+  \ifdefempty{\fa@retrieved}{}{%
+    \fa@declarenote{}{\fa@retrievedfootnotetext}%
+    \setcounter{fa@retrievednoteidx}{\value{fa@note}}}%
   %% ---- title ----
   \vspace*{\fa@abovetitle}%
   \fa@block{\fa@titlealign}{\fa@titlewidth}
     {\fa@titlefont\ifdim\fa@titleleading>0pt\setlength{\baselineskip}{\fa@titleleading}\fi}
-    {\iffa@titlecase\expandafter\MakeUppercase\expandafter{\@title}\else\@title\fi}%
+    {\iffa@titlecase\expandafter\MakeUppercase\expandafter{\@title}\else\@title\fi
+     \ifnum\value{fa@retrievednoteidx}>0\relax
+       \fa@marknote{\value{fa@retrievednoteidx}}%
+     \fi}%
   \vspace{\fa@belowtitle}%
   %% ---- subtitle ----
   \ifdefempty{\fa@subtitle}{}{%
@@ -420,17 +579,24 @@
       {\fa@primaryfont\ifdim\fa@authorleading>0pt\setlength{\baselineskip}{\fa@authorleading}\fi}
       {\fa@dolist\fa@primaryauthors}%
     \vspace{\fa@belowprimary}}%
-  %% ---- secondary authors (line below) ----
-  \ifdefempty{\fa@secondaryauthors}{}{%
-    \iffa@showseclabel\ifdefempty{\fa@secondarylabel}{}{%
-      \vspace{\fa@abovesecondarylabel}%
-      \fa@block{\fa@authoralign}{\fa@authorwidth}{\fa@secondarylabelfont}{\fa@secondarylabel}%
-      \vspace{\fa@belowsecondarylabel}}\fi
-    \vspace{\fa@abovesecondary}%
-    \fa@block{\fa@authoralign}{\fa@authorwidth}
-      {\fa@secondaryfont\ifdim\fa@authorleading>0pt\setlength{\baselineskip}{\fa@authorleading}\fi}
-      {\fa@dolist\fa@secondaryauthors}%
-    \vspace{\fa@belowsecondary}}%
+  %% ---- orchestrator / secondary (retrieved is a title footnote) ----
+  %% With both groups present (the usual case) they print on separate lines
+  %% by default (separate groups, spaced by \betweenauthorgroups).
+  %% combineauthorgroups=true puts them on ONE line:
+  %% "Orchestrated by <orchestrator list> <sep> Reviewed by <secondary list>."
+  %% A single group keeps the separate-group path:
+  %% stacked label-above by default, or "Label: content" with
+  %% inlineauthorgrouplabels=true.  \belowsecondary is emitted once after
+  %% all groups.
+  \setcounter{fa@ngroups}{0}\setcounter{fa@groupidx}{0}%
+  \ifdefempty{\fa@orchestrator}{}{\stepcounter{fa@ngroups}}%
+  \ifdefempty{\fa@secondaryauthors}{}{\stepcounter{fa@ngroups}}%
+  \ifnum\value{fa@ngroups}=2\relax
+    \iffa@combinegroups\fa@combinedauthorgroup\else\fa@twogroupblocks\fi
+  \else
+    \fa@twogroupblocks
+  \fi
+  \ifnum\value{fa@ngroups}>0\relax\vspace{\fa@belowsecondary}\fi
   %% ---- affiliation ----
   \ifdefempty{\fa@affiliation}{}{%
     \vspace{\fa@aboveaffil}%
@@ -651,9 +817,33 @@
 %% emitted by \@seccntformat just before the number, so "Appendix A." falls out of
 %% the ordinary number machinery instead of needing a bespoke heading macro
 \csdef{fa@appendix@numberprefix}{\iffa@appendixprefix\fa@appendixname\fa@appendixnamesep\fi}
-%% --- the "Appendices" line that opens the appendix block in the contents -------
+%% --- the "Appendices"/"Appendix" line that opens the appendix block in the contents ---
+%% (singular when one appendix section; see the v2.5.2 note below) -------
 \newcommand{\fa@appendixgroupname}{Appendices}
 \fa@defcmd{appendixgroupname}{\fa@appendixgroupname}
+%% v2.5.2: the appendix group name is singular ("Appendix") when the document
+%% has exactly one appendix section, plural ("Appendices") otherwise.  The
+%% count is carried in the .aux file, so the TOC needs the usual two passes
+%% to settle (the standard three-pdflatex build converges).  An explicit
+%% appendixgroupname=... always wins.  Only numbered appendix sections are
+%% counted (starred ones do not step the section counter).
+\newif\iffa@appendixused \fa@appendixusedfalse
+%% At \begin{document} the previous run's .aux has been read, so the saved
+%% count is available here; the group line itself is emitted later, by
+%% \flexappendix, using whatever name is in force by then.
+\AtBeginDocument{%
+  \ifcsdef{fa@userset@appendixgroupname}{}{%
+    \ifcsdef{fa@appendixcount@saved}{%
+      \ifnum\csuse{fa@appendixcount@saved}=1\relax
+        \renewcommand{\fa@appendixgroupname}{Appendix}%
+      \fi}{}}}
+%% At the end of the document the section counter holds the number of
+%% appendix sections (\flexappendix reset it to 0 and each appendix \section
+%% stepped it); record it for the next run.
+\AtEndDocument{%
+  \iffa@appendixused
+    \immediate\write\@auxout{\string\gdef\string\fa@appendixcount@saved{\the\value{section}}}%
+  \fi}
 \newif\iffa@appendixgrouptoc \fa@appendixgrouptoctrue
 \define@key{flexart}{appendixgrouptoc}[true]{\csname fa@appendixgrouptoc#1\endcsname}
 \newcommand{\fa@tocappendixgroupfont}{\normalfont\scshape}
@@ -725,6 +915,7 @@
 
 \newcommand{\flexappendix}{%
   \par
+  \global\fa@appendixusedtrue
   \iffa@appendixpagebreak\clearpage\fi
   \iffa@appendixgrouptoc
     \phantomsection
@@ -1004,10 +1195,10 @@
   \define@key{flexart}{#1parindent}{\expandafter\setlength\csname fa@#1@parindent\endcsname{##1}}%
 }
 %% defaults reproduce amsthm's built-in styles
-\fa@newthmstyle{thmplain}{0.3em}{0.5em}{\itshape}{}{\bfseries}{.}{5pt}
-\fa@newthmstyle{thmdefinition}{0.3em}{0.5em}{\normalfont}{}{\bfseries\scshape}{.}%
+\fa@newthmstyle{thmplain}{0.6em}{0em}{\itshape}{}{\bfseries}{.}{5pt}
+\fa@newthmstyle{thmdefinition}{0.6em}{0em}{\normalfont}{}{\bfseries\scshape}{.}%
   {5pt \@plus 1pt \@minus 1pt}
-\fa@newthmstyle{thmremark}{0.3em}{0.5em}{\normalfont}{10pt}{\itshape}{:}%
+\fa@newthmstyle{thmremark}{0.6em}{0em}{\normalfont}{10pt}{\itshape}{:}%
   {5pt \@plus 1pt \@minus 1pt}
 
 %% The arguments must reach \newtheoremstyle as LITERAL values, not as
@@ -1054,7 +1245,7 @@
 %% proofabove and the space BELOW from proofbelow.  A trivlist takes its closing
 %% space from \@topsepadd, fixed when the list opens, so the below value is
 %% assigned just before \endtrivlist rather than by changing \topsep again.
-\newlength{\fa@proofabove} \setlength{\fa@proofabove}{-0.5em}
+\newlength{\fa@proofabove} \setlength{\fa@proofabove}{0em}
 \newlength{\fa@proofbelow} \setlength{\fa@proofbelow}{0em}
 \newcommand{\fa@proofheadfont}{\itshape}
 %% v2.0: paragraph shape inside the proof body, same idea as the theorem styles.

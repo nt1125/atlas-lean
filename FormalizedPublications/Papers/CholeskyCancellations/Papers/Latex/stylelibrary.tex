@@ -1,3 +1,4 @@
+% stylelibrary v2.3.1 (transparent box backgrounds by default: \opacityBack=0; see README.md).
 \usepackage[many]{tcolorbox} %box environment
 \usepackage[normalem]{ulem} %custom underline
 
@@ -13,14 +14,14 @@
 \setlength{\boxparskip}{\parskip}
 
 %Define colors
-% https://davidmathlogic.com/colorblind/#%23038DFC-%232B65C6-%2322AA22-%23003300
-\definecolor{aicolor}{HTML}{038DFC} 
+\definecolor{aicolor}{HTML}{038DFC}
 \definecolor{editedaicolor}{HTML}{2B65C6}
-\definecolor{humancolor}{HTML}{22AA22}  
-\definecolor{aiassistedcolor}{HTML}{003300}
+\definecolor{humancolor}{HTML}{22AA22}
+\definecolor{humanaicolor}{HTML}{5700FF}
 \definecolor{defaultcolback}{HTML}{FFFFFF}  % white
 \newcommand{\opacityFrame}{0.5} %Opacity Percentage for the Frame
 \newcommand{\opacityText}{0.7} %Opacity Percentage for the Label Text
+\newcommand{\opacityBack}{0} %Opacity Percentage for the Background (0 = fully transparent)
 
 %Define footenote commands: Creates an aux file for the footnotes inside the boxes
 \newif\iffootaux
@@ -34,10 +35,10 @@
 \let\footnotetext=\footaux
 \let\footnote=\footnoteaux
 }
-  
+
 \def\footnoteaux{\@ifnextchar[\@xfootnoteaux{\stepcounter{footnote}%
   \footnotemark[\thefootnote]\@footaux[\thefootnote]}}
-  
+
 \def\@xfootnoteaux[#1]{\footnotemark[#1]\@footaux[#1]}
 
 \def\footaux{\@ifnextchar[\@footaux{\@footaux[\thefootnote]}}
@@ -90,23 +91,24 @@
   },
   rectanglebox/.style={
     % Box Options
-    sharp corners,  
+    sharp corners,
     boxrule=\framelinewidth
   },
     linemargin/.style={
     % Box Options
     % Make frame with 1 line
-    sharp corners,   
+    sharp corners,
     leftrule=\framelinewidth,    % Thickness of the left line
     rightrule=-0.1mm,            % Removes right frame
     toprule=-0.1mm,              % Removes top frame
     bottomrule=-0.125mm,         % Removes bottom frame
     % % make white background
-    colback=white,  
+    colback=white,
+    opacityback=\opacityBack,
     % Oversize makes bigger, so that text alings with rest of the document
     oversize,
-    % box margins 
-    left=\marginsep,                                
+    % box margins
+    left=\marginsep,
     right=\marginsep,
     top=0.5pt,
     bottom=0.5pt,
@@ -114,8 +116,8 @@
     after skip=0.5\baselineskip
   },
   alignoptions/.style={
-    % box margins 
-    left=\marginsep, 
+    % box margins
+    left=\marginsep,
     right=\marginsep,
     top=0.5pt,
     bottom=0.5pt,
@@ -137,7 +139,7 @@
   enhancebreak/.style={
     % Box Options
     enhanced,
-    breakable,    
+    breakable,
     skin first=enhanced,
     skin middle=enhanced,
     skin last=enhanced,
@@ -146,79 +148,159 @@
   },
 }
 
+% Label-to-bar separation (default 0.7pt; see README for usage).
+% The overlay adds the fixed 2.65pt node-edge-to-glyph inset
+% (default inner sep at \tiny) to this value for the node xshift.
+\newcommand{\labelsepvalue}{0.7pt}
+% `labeltopleft` (off) puts the label horizontally at the top-left
+% corner, at the start of the block, instead of the rotated label.
+\newif\iflabeltopleft
+\tcbset{labeltopleft/.is if=labeltopleft}
+% Per-box label text and color (set by each box env).
+\newcommand{\boxlabeltext}{}
+\newcommand{\boxlabelcolor}{black}
+\tcbset{
+  boxlabel/.store in=\boxlabeltext,
+  boxlabelcolor/.store in=\boxlabelcolor,
+  labeltopleftlayout/.code={%
+    \iflabeltopleft \tcbset{top=12pt} \fi
+  }
+}
+\tcbset{labelsep/.store in=\labelsepvalue}
+
+% `extendbar` (on) extends the bar past the label glyphs by
+% `barextend` (default 1pt); see README for usage. The floor is the
+% label-node width + barextend − 7.19pt (calibrated node-to-glyph offset).
+\newif\ifextendbar
+\extendbartrue
+\tcbset{extendbar/.is if=extendbar}
+\newcommand{\barextendvalue}{1pt}
+\tcbset{barextend/.store in=\barextendvalue}
+\newcommand{\barextendoffset}{7.19pt}
+\newsavebox{\extendbarbox}
+\tcbset{
+  extendbarmeasure/.code={%
+    \iflabeltopleft\else
+    \ifextendbar
+      \sbox{\extendbarbox}{\tikz{\node[font=\tiny\bfseries\sffamily, align=right]{#1};}}%
+      \tcbset{height=\dimexpr\wd\extendbarbox + \barextendvalue - \barextendoffset\relax, height plus=10000pt}%
+    \fi
+    \fi
+  }
+}
+
 % Define Tcolorbox environments
 %% Args: #1 additional options, #2 color, #3 Side text label
 \newtcolorbox{labeledblock}[3][]{
     colframe=#2,opacityframe=\opacityFrame,
-    enhancebreak, alignoptions, linemargin, 
+    enhancebreak, alignoptions, linemargin,
     colback=white,
+    frame hidden,
+    borderline west={\framelinewidth}{0pt}{#2, opacity=\opacityFrame},
     overlay={
+    \iflabeltopleft
+    \node[anchor=north west, inner sep=0pt, font=\scriptsize\bfseries\sffamily, text=\boxlabelcolor, text opacity=\opacityText] at ([xshift=7.5pt, yshift=-2pt]frame.north west) {\boxlabeltext};
+    \else
     \node[
-    #2, font=\tiny\bfseries\sffamily, 
-    rotate=90, anchor=east, align=right,
+    #2, font=\tiny\bfseries\sffamily,
+    rotate=90, anchor=south east, align=right,
     text opacity=\opacityText
       ]
-      at ([xshift=-\marginsep-\framelinewidth/2, yshift=3pt]frame.north west) {#3};
+      at ([xshift=2.65pt-\labelsepvalue, yshift=3.8pt]frame.north west) {#3};
+    \fi
     }, footnoteformat,
-    #1
+    boxlabel={#3}, boxlabelcolor=#2,
+    #1,
+    labeltopleftlayout, extendbarmeasure={#3}
 }
 
 \newtcolorbox{humanblock}[1][]{
     colframe=humancolor, opacityframe=\opacityFrame,
     enhancebreak, alignoptions, linemargin,
     colback=white,
+    frame hidden,
+    borderline west={\framelinewidth}{0pt}{humancolor, opacity=\opacityFrame},
     overlay={
+    \iflabeltopleft
+    \node[anchor=north west, inner sep=0pt, font=\scriptsize\bfseries\sffamily, text=\boxlabelcolor, text opacity=\opacityText] at ([xshift=7.5pt, yshift=-2pt]frame.north west) {\boxlabeltext};
+    \else
     \node[
-    humancolor, font=\tiny\bfseries\sffamily, 
-    rotate=90, anchor=east, align=right, 
+    humancolor, font=\tiny\bfseries\sffamily,
+    rotate=90, anchor=south east, align=right,
     text opacity=\opacityText
       ]
-      at ([xshift=-\marginsep-\framelinewidth/2, yshift=3pt]frame.north west) {Human};
+      at ([xshift=2.65pt-\labelsepvalue, yshift=3.8pt]frame.north west) {Human};
+    \fi
     }, footnoteformat,
-    #1
+    boxlabel=Human, boxlabelcolor=humancolor,
+    #1,
+    labeltopleftlayout, extendbarmeasure={Human}
 }
 
-\newtcolorbox{aiassistedblock}[1][]{
-    colframe=aiassistedcolor, opacityframe=\opacityFrame,
+\newtcolorbox{humanaiblock}[1][]{
+    colframe=humanaicolor, opacityframe=\opacityFrame,
     enhancebreak, alignoptions, linemargin,
     colback=white,
+    frame hidden,
+    borderline west={\framelinewidth}{0pt}{humanaicolor, opacity=\opacityFrame},
     overlay={
-    \node[aiassistedcolor, font=\tiny\bfseries\sffamily, rotate=90, anchor=east, align=right,
+    \iflabeltopleft
+    \node[anchor=north west, inner sep=0pt, font=\scriptsize\bfseries\sffamily, text=\boxlabelcolor, text opacity=\opacityText] at ([xshift=7.5pt, yshift=-2pt]frame.north west) {\boxlabeltext};
+    \else
+    \node[humanaicolor, font=\tiny\bfseries\sffamily, rotate=90, anchor=south east, align=right,
       text opacity=\opacityText
       ]
       at ([
-      xshift=-\marginsep-\framelinewidth/2-4pt, yshift=3pt
-      ]frame.north west) {Human: \\ AI-assisted};
+      xshift=2.65pt-\labelsepvalue, yshift=3.8pt
+      ]frame.north west) {Human + AI};
+    \fi
     }, footnoteformat,
-    #1
+    boxlabel={Human + AI}, boxlabelcolor=humanaicolor,
+    #1,
+    labeltopleftlayout, extendbarmeasure={Human + AI}
 }
 
 \newtcolorbox{aiblock}[1][]{
     colframe=aicolor, opacityframe=\opacityFrame,
-    enhancebreak, alignoptions, linemargin, 
+    enhancebreak, alignoptions, linemargin,
     colback=white,
+    frame hidden,
+    borderline west={\framelinewidth}{0pt}{aicolor, opacity=\opacityFrame},
     overlay={
-    \node[aicolor, font=\tiny\bfseries\sffamily, rotate=90, anchor=east, align=right,
+    \iflabeltopleft
+    \node[anchor=north west, inner sep=0pt, font=\scriptsize\bfseries\sffamily, text=\boxlabelcolor, text opacity=\opacityText] at ([xshift=7.5pt, yshift=-2pt]frame.north west) {\boxlabeltext};
+    \else
+    \node[aicolor, font=\tiny\bfseries\sffamily, rotate=90, anchor=south east, align=right,
       text opacity=\opacityText
       ]
-      at ([xshift=-\marginsep-\framelinewidth/2, yshift=3pt]frame.north west) {AI};
+      at ([xshift=2.65pt-\labelsepvalue, yshift=3.8pt]frame.north west) {AI};
+    \fi
     }, footnoteformat,
-    #1
+    boxlabel=AI, boxlabelcolor=aicolor,
+    #1,
+    labeltopleftlayout, extendbarmeasure={AI}
 }
 
 \newtcolorbox{editedaiblock}[1][]{
     colframe=editedaicolor, opacityframe=\opacityFrame,
     enhancebreak, alignoptions, linemargin,
     colback=white,
+    frame hidden,
+    borderline west={\framelinewidth}{0pt}{editedaicolor, opacity=\opacityFrame},
     overlay={
-    \node[
-    editedaicolor, font=\tiny\bfseries\sffamily, 
-    rotate=90, anchor=east, align=right, 
-    text opacity=\opacityText
+    \iflabeltopleft
+    \node[anchor=north west, inner sep=0pt, font=\scriptsize\bfseries\sffamily, text=\boxlabelcolor, text opacity=\opacityText] at ([xshift=7.5pt, yshift=-2pt]frame.north west) {\boxlabeltext};
+    \else
+    \node[editedaicolor, font=\tiny\bfseries\sffamily, rotate=90, anchor=south east, align=right,
+      text opacity=\opacityText
       ]
-      at ([xshift=-\marginsep-\framelinewidth/2, yshift=3pt]frame.north west) {Edited AI};
+      at ([
+      xshift=2.65pt-\labelsepvalue, yshift=3.8pt]frame.north west) {Edited AI};
+    \fi
     }, footnoteformat,
-    #1
+    boxlabel={Edited AI}, boxlabelcolor=editedaicolor,
+    #1,
+    labeltopleftlayout, extendbarmeasure={Edited AI}
 }
 
 
