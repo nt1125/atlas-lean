@@ -315,7 +315,7 @@ For theoretical computer science, the covering problem over slots and the intege
 \section*{Statement of AI Use}
 
 \begin{humanblock}
-This paper was developed through collaboration between researchers and Muse Spark (AI model) via the \href{http://meta.ai}{meta.ai} chat interface. The model helped explore ideas, develop candidate arguments, and draft material. Researchers guided the work, checked and corrected the mathematics, and take ownership for the final manuscript. Following \cite{schmitt2025extremal}, margin markers identify human-drafted \!\!\HumanLabel and AI-assisted material \!\!\AILabel separately.
+This paper was developed through collaboration between researchers and Muse Spark (AI model) via the \href{http://meta.ai}{meta.ai} chat interface. The model helped explore ideas, develop candidate arguments, and draft material. Researchers guided the work, checked and corrected the mathematics, and take ownership for the final manuscript. Margin markers identify primarily human \!\!\HumanLabel\!\!, primarily AI \!\!\AILabel\!\!, and highly collaborative\HumanAILabel\!\! material.
 \end{humanblock}
 
 \section*{Concurrent Work}
@@ -326,7 +326,7 @@ We are not aware of any concurrent work at the time of publication.
 
 
 \section{Setting, vocabulary, and conjectures}\label{sec:setting}
-\begin{humanblock}
+\begin{humanaiblock}
 This section fixes every notion used in Sections~\ref{sec:core}--\ref{sec:even}. It is meant to be
 read once and consulted thereafter; Table~\ref{tab:notation} collects the notation. Three points are
 worth flagging before the formal definitions. First, we work with two graphs at once: a
@@ -505,7 +505,7 @@ $(A/A_{\{1\}})_{02}=-A_{01}A_{12}/A_{11}\neq0$, so the fill edge is nonzero at c
 (Lemma~\ref{lem:fresh}); at larger levels it may still cancel. Symbolic fill is an upper bound for
 numeric fill, never a lower one.
 \end{example}
-\end{humanblock}
+\end{humanaiblock}
 
 \begin{aiblock}
 \subsection{Graph vocabulary}
@@ -896,7 +896,7 @@ $C_v(S)$. Figure~\ref{fig:refill} shows the mechanism: a zero entry is overwritt
 update, while the pivot simultaneously creates the zeros of $C_v(S)$.
 \end{proof}
 \end{humanblock}
-\begin{aiblock}
+\begin{humanaiblock}
 \begin{figure}[H]
 \centering
 \begin{adjustbox}{max width=\textwidth}
@@ -1135,7 +1135,7 @@ of $H$ is in particular a slot of $H'$ and is therefore active for $A$ as well. 
 thus witnesses that $H$ is realizable for $G$, the pattern being the same on both sides. Hence $H'$
 realizable for $G$ implies $H$ realizable for $G$, which is what was required.
 \end{proof}
-\end{aiblock}
+\end{humanaiblock}
 
 \section{Positive results}\label{sec:positive}
 
@@ -1207,11 +1207,13 @@ small forest. No accidental zero ever occurs, irrespective of ordering \cite{Mal
 \caption[Forest path formula]{Forest path formula: $j$--$k$ with interior $S$, $I\subseteq S$. Unique path in forest gives product $\prod A_e$. Every nonzero term routes $j$ to $k$ along that path, remaining indices permute among $S\setminus I$, contributing $\det A_{S\setminus I}$ collecting off-path matchings $A_{xy}^2$. Vertices of $S$ off path accounted via that determinant, only pivots affected.}
 \label{fig:forest-path}
 \end{figure}
-
+\end{aiblock}
+\begin{humanblock}
 \begin{remark}
     In the statement of the theorem, $A$ is not assumed to be irreducible. If $A$ is irreducible, $G_A$ is a forest if and only if $G_A$ is a tree. Malouche and Rajaratnam's covariance-faithfulness theorem is the tree case; the forest statement follows block-wise. The corresponding statement for concentration graphs, rather than covariance graphs, is due to Becker, Geiger and Meek~\cite{Becker}.
 \end{remark}
-
+\end{humanblock}
+\begin{aiblock}
 \begin{definition}[2-path strip]\label{def:strip}
 For $k\ge3$, the $2$-path strip on vertices $v_1,\dots,v_k$ is the graph $P$ whose edge set is exactly
 \[
@@ -1432,6 +1434,8 @@ Consider a leaf block $B$ in this tree. If $B$ is an edge $\{c,x\}$ where $c$ is
 
 If $B$ is a triangle $\{c,a,b\}$ where $c$ is the cut vertex (or $B$ is isolated triangle when $G$ itself is a triangle), then $a,b$ are simplicial and $N(a)=\{c,b\}$, $N(b)=\{c,a\}$ are edges. By Lemma~\ref{lem:tri} at most one of the three vertices of $B$ is dirty (zeroes a pair of $B$), so at least one of the two simplicial vertices $a,b$ is clean — pigeonhole. Choose a clean apex among $a,b$, say $a$. Then $a$ zeroes no pair of its triangle, its neighbourhood is exactly the opposite edge $\{c,b\}$ because $\omega\le3$ and edge-disjointness, so eliminating $a$ creates no fill and zeroes no pair of $B$. The remaining graph is still chordal with $\omega\le3$ and edge-disjoint triangles, with $|V|$ reduced by one (the triangle block $\{c,a,b\}$ becomes the edge block $\{c,b\}$, so the number of blocks is unchanged). Induction on $|V|$ (equivalently $|E|$) closes.
 \end{proof}
+\end{aiblock}
+\begin{humanaiblock}
 \begin{remark}\label{rem:no-fixed}
     In the proof of (iii), the naive block tree that connects blocks directly fails for a star of three bridges sharing a central cut vertex: the three bridge-blocks are pairwise adjacent through the hub, so they do not form a tree; the bipartite incidence tree fixes this.
 
@@ -1526,7 +1530,7 @@ committed rather than by the position of $u$. The script \texttt{fixed\_ordering
 (Appendix~\ref{app:code-fixed}) checks the three matrices for $K_3$ against all $6$ orderings and
 this choice of witness for $E$ against all $120$.
 \end{remark}
-\end{aiblock}
+\end{humanaiblock}
 
 \section{Even counterexamples and order four}\label{sec:even}
 \begin{aiblock}
@@ -2110,11 +2114,11 @@ theorem.
 \label{fig:pairing}
 \end{figure}
 \end{aiblock}
-\begin{humanblock}
+\begin{humanaiblock}
 \begin{remark}\label{rem:astar-family}
 The matrix $A^*$ in Theorem \ref{thm:Astar} has the shape of the $M_{2m}$ family at order four. Normalized to unit diagonal, $|r_{03}|=|r_{12}|=1/4$ and all four cross entries have modulus $1/2$. Hence, after relabeling $(0,3,1,2)$ and conjugating by the diagonal sign matrix $D=\operatorname{diag}(-1,1,1,1)$ --- which preserves positive definiteness and leaves every $t^{(S)}_{jk}=-\log|r^{(S)}_{jk}|$ unchanged, so it preserves the entire cancellation structure --- $A^*$ becomes the matrix $M_4$ of Theorem~\ref{thm:M2m} with $m=2$, $A=B=1/2$, $AB=1/4$. This parameter point is off the curve, since $A^2+(1-B^2)A-1=-3/8\neq0$, but the curve is not what makes $A^*$ fail only the First-Schur Conjecture. For $m=2$ and any $0<A,B<1$ the matrix $M_4$ is positive definite, with eigenvalues $1+AB+A+B$, $(1+A)(1-B)$, $(1-A)(1-B)$ and $(1-A)(1+B)$. Step~1 of the proof of Theorem~\ref{thm:M2m}, which holds for all parameters, shows that every first pivot zeroes the within-pair entry of the other pair, so Conjecture~\ref{conj:2} fails, while Conjecture~\ref{conj:1} holds by Theorem~\ref{thm:leq4}. The curve enters only in step~5, which needs $m\ge3$.
 \end{remark}
-\end{humanblock}
+\end{humanaiblock}
 
 \section{Consequences for solver authors}\label{sec:practical}
 \begin{humanblock}
